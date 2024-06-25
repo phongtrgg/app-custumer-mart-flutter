@@ -41,7 +41,10 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
   @override
   void initState() {
     super.initState();
-
+    // ignore: avoid_print
+    print('~~~~~~~~~~~~~~~~~~~~CHECK RES~~~~~~~~~~~~~~~~~~~~~~~~');
+    print(Get.find<RestaurantController>().restaurant?.logo);
+    print('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
     _initDataCall();
   }
 
@@ -561,21 +564,21 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                                                           fit: BoxFit.cover),
                                                     ),
                                                   ),
-                                            restController.type.isNotEmpty
-                                                ? VegFilterWidget(
-                                                    type: restController.type,
-                                                    onSelected: (String type) {
-                                                      restController
-                                                          .getRestaurantProductList(
-                                                              restController
-                                                                  .restaurant!
-                                                                  .id,
-                                                              1,
-                                                              type,
-                                                              true);
-                                                    },
-                                                  )
-                                                : const SizedBox(),
+                                            // restController.type.isNotEmpty
+                                            //     ? VegFilterWidget(
+                                            //         type: restController.type,
+                                            //         onSelected: (String type) {
+                                            //           restController
+                                            //               .getRestaurantProductList(
+                                            //                   restController
+                                            //                       .restaurant!
+                                            //                       .id,
+                                            //                   1,
+                                            //                   type,
+                                            //                   true);
+                                            //         },
+                                            //       )
+                                            //     : const SizedBox(),
                                           ]),
                                         ),
                                         const Divider(

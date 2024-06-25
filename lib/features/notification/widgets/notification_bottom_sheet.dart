@@ -19,61 +19,71 @@ class NotificationBottomSheet extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
         borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(20), topRight: Radius.circular(20),
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
         ),
       ),
       child: Column(mainAxisSize: MainAxisSize.min, children: [
-
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           const SizedBox(),
-
           Container(
-            height: 5, width: 35,
+            height: 5,
+            width: 35,
             decoration: BoxDecoration(
               color: Theme.of(context).disabledColor.withOpacity(0.2),
               borderRadius: BorderRadius.circular(5),
             ),
           ),
-
           Padding(
-            padding: const EdgeInsets.only(right: Dimensions.paddingSizeDefault),
+            padding:
+                const EdgeInsets.only(right: Dimensions.paddingSizeDefault),
             child: InkWell(
               onTap: () => Get.back(),
-              child: Icon(Icons.close, color: Theme.of(context).disabledColor.withOpacity(0.4), size: 25),
+              child: Icon(Icons.close,
+                  color: Theme.of(context).disabledColor.withOpacity(0.4),
+                  size: 25),
             ),
           ),
         ]),
-
         Flexible(
           child: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeLarge, vertical: Dimensions.paddingSizeDefault),
+              padding: const EdgeInsets.symmetric(
+                  horizontal: Dimensions.paddingSizeLarge,
+                  vertical: Dimensions.paddingSizeDefault),
               child: Column(children: [
-
-                notificationModel.data!.image!.isNotEmpty ? ClipRRect(
-                  borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-                  child: CustomImageWidget(
-                    placeholder: Images.placeholderPng,
-                    image: '${Get.find<SplashController>().configModel!.baseUrls!.notificationImageUrl}'
-                        '/${notificationModel.data!.image}',
-                    height: 140, width: MediaQuery.of(context).size.width, fit: BoxFit.cover,
-                  ),
-                ) : const SizedBox(),
-                SizedBox(height: notificationModel.data!.image!.isNotEmpty ? Dimensions.paddingSizeDefault : 0),
-
-                Text(notificationModel.data!.title ?? '', style: robotoBold.copyWith(fontSize: Dimensions.fontSizeLarge), textAlign: TextAlign.center),
+                notificationModel.data!.image!.isNotEmpty
+                    ? ClipRRect(
+                        borderRadius:
+                            BorderRadius.circular(Dimensions.radiusSmall),
+                        child: CustomImageWidget(
+                          placeholder: Images.placeholderPng,
+                          image: '${notificationModel.data!.image}',
+                          height: 140,
+                          width: MediaQuery.of(context).size.width,
+                          fit: BoxFit.cover,
+                        ),
+                      )
+                    : const SizedBox(),
+                SizedBox(
+                    height: notificationModel.data!.image!.isNotEmpty
+                        ? Dimensions.paddingSizeDefault
+                        : 0),
+                Text(notificationModel.data!.title ?? '',
+                    style:
+                        robotoBold.copyWith(fontSize: Dimensions.fontSizeLarge),
+                    textAlign: TextAlign.center),
                 const SizedBox(height: Dimensions.paddingSizeExtraSmall),
-
-                Text(notificationModel.data!.description ?? '', style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall), textAlign: TextAlign.center),
+                Text(notificationModel.data!.description ?? '',
+                    style: robotoRegular.copyWith(
+                        fontSize: Dimensions.fontSizeSmall),
+                    textAlign: TextAlign.center),
                 const SizedBox(height: Dimensions.paddingSizeSmall),
-
               ]),
             ),
           ),
         ),
-
       ]),
-
     );
   }
 }

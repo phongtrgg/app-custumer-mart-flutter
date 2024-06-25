@@ -48,12 +48,15 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   @override
   void initState() {
     super.initState();
-    _countryDialCode = CountryCode.fromCountryCode(Get.find<SplashController>().configModel!.country!).dialCode;
+    _countryDialCode = CountryCode.fromCountryCode(
+            Get.find<SplashController>().configModel!.country!)
+        .dialCode;
     _initCall();
   }
 
-  void _initCall(){
-    if(Get.find<AuthController>().isLoggedIn() && Get.find<ProfileController>().userInfoModel == null) {
+  void _initCall() {
+    if (Get.find<AuthController>().isLoggedIn() &&
+        Get.find<ProfileController>().userInfoModel == null) {
       Get.find<ProfileController>().getUserInfo();
     }
     Get.find<ProfileController>().initData();
@@ -72,7 +75,8 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   void _splitPhoneNumber(String number) async {
     PhoneValid phoneNumber = await CustomValidator.isPhoneValid(number);
     _countryDialCode = '+${phoneNumber.countryCode}';
-    _phoneController.text = phoneNumber.phone.replaceFirst('+${phoneNumber.countryCode}', '');
+    _phoneController.text =
+        phoneNumber.phone.replaceFirst('+${phoneNumber.countryCode}', '');
   }
 
   @override
@@ -80,160 +84,306 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     bool isLoggedIn = Get.find<AuthController>().isLoggedIn();
     return Scaffold(
       backgroundColor: Theme.of(context).cardColor,
-      appBar: ResponsiveHelper.isDesktop(context) ? const WebMenuBar() : AppBar(
-        title: Text('update_profile'.tr, style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge)),
-        centerTitle: true,
-        leading: IconButton(
-          onPressed: () => Get.back(),
-          icon: Icon(Icons.arrow_back_ios, color: Theme.of(context).textTheme.bodyLarge!.color),
-        ),
-        elevation: 0, backgroundColor: Theme.of(context).cardColor, actions: const [SizedBox()],),
-      endDrawer: const MenuDrawerWidget(), endDrawerEnableOpenDragGesture: false,
+      appBar: ResponsiveHelper.isDesktop(context)
+          ? const WebMenuBar()
+          : AppBar(
+              title: Text('update_profile'.tr,
+                  style: robotoMedium.copyWith(
+                      fontSize: Dimensions.fontSizeLarge)),
+              centerTitle: true,
+              leading: IconButton(
+                onPressed: () => Get.back(),
+                icon: Icon(Icons.arrow_back_ios,
+                    color: Theme.of(context).textTheme.bodyLarge!.color),
+              ),
+              elevation: 0,
+              backgroundColor: Theme.of(context).cardColor,
+              actions: const [SizedBox()],
+            ),
+      endDrawer: const MenuDrawerWidget(),
+      endDrawerEnableOpenDragGesture: false,
       body: Column(
         children: [
-
           GetBuilder<ProfileController>(builder: (profileController) {
-            if(profileController.userInfoModel != null && _phoneController.text.isEmpty) {
+            if (profileController.userInfoModel != null &&
+                _phoneController.text.isEmpty) {
               _splitPhoneNumber(profileController.userInfoModel!.phone!);
-              _firstNameController.text = profileController.userInfoModel!.fName ?? '';
-              _lastNameController.text = profileController.userInfoModel!.lName ?? '';
-              _emailController.text = profileController.userInfoModel!.email ?? '';
+              _firstNameController.text =
+                  profileController.userInfoModel!.fName ?? '';
+              _lastNameController.text =
+                  profileController.userInfoModel!.lName ?? '';
+              _emailController.text =
+                  profileController.userInfoModel!.email ?? '';
             }
 
             return Expanded(
-              child: isLoggedIn ? profileController.userInfoModel != null ? ResponsiveHelper.isDesktop(context) ? webView(profileController, isLoggedIn) : Container(
-                color: Theme.of(context).primaryColor.withOpacity(0.1),
-                child: Column(children: [
-                  const SizedBox(height: 70),
-
-                  Expanded(
-                    child: Stack(clipBehavior: Clip.none, children: [
-
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).cardColor,
-                          borderRadius: const BorderRadius.only(topLeft: Radius.circular(Dimensions.radiusExtraLarge), topRight: Radius.circular(Dimensions.radiusExtraLarge)),
-                          boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.1), spreadRadius: 1, blurRadius: 10, offset: const Offset(0, 1))],
-                        ),
-                        child: Column(children: [
-
-                          Expanded(child: SingleChildScrollView(
-                            physics: const BouncingScrollPhysics(),
-                            padding: const EdgeInsets.all(Dimensions.paddingSizeSmall),
-                            child: Center(child: SizedBox(width: Dimensions.webMaxWidth, child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                              const SizedBox(height: 70),
-
-                              CustomTextFieldWidget(
-                                titleText: 'write_first_name'.tr,
-                                controller: _firstNameController,
-                                capitalization: TextCapitalization.words,
-                                inputType: TextInputType.name,
-                                focusNode: _firstNameFocus,
-                                nextFocus: _lastNameFocus,
-                                prefixIcon: CupertinoIcons.person_alt_circle_fill,
-                                labelText: 'first_name'.tr,
-                                required: true,
-                                validator: (value) => ValidateCheck.validateEmptyText(value, "first_name_field_is_required".tr),
-                              ),
-                              const SizedBox(height: Dimensions.paddingSizeExtraOverLarge),
-
-                              CustomTextFieldWidget(
-                                titleText: 'write_last_name'.tr,
-                                controller: _lastNameController,
-                                capitalization: TextCapitalization.words,
-                                inputType: TextInputType.name,
-                                focusNode: _lastNameFocus,
-                                nextFocus: _emailFocus,
-                                prefixIcon: CupertinoIcons.person_alt_circle_fill,
-                                labelText: 'last_name'.tr,
-                                required: true,
-                                validator: (value) => ValidateCheck.validateEmptyText(value, "last_name_field_is_required".tr),
-                              ),
-                              const SizedBox(height: Dimensions.paddingSizeExtraOverLarge),
-
-                              CustomTextFieldWidget(
-                                titleText: ResponsiveHelper.isDesktop(context) ? 'phone'.tr : 'write_phone_number'.tr,
-                                controller: _phoneController,
-                                focusNode: _phoneFocus,
-                                inputType: TextInputType.phone,
-                                isPhone: true,
-                                isEnabled: false,
-                                onCountryChanged: (CountryCode countryCode) {
-                                  _countryDialCode = countryCode.dialCode;
-                                },
-                                countryDialCode: _countryDialCode != null ? CountryCode.fromCountryCode(Get.find<SplashController>().configModel!.country!).code
-                                    : Get.find<LocalizationController>().locale.countryCode,
-                                labelText: 'phone'.tr,
-                                required: true,
-                              ),
-                              const SizedBox(height: Dimensions.paddingSizeExtraOverLarge),
-
-                              CustomTextFieldWidget(
-                                titleText: 'write_email'.tr,
-                                controller: _emailController,
-                                focusNode: _emailFocus,
-                                inputType: TextInputType.emailAddress,
-                                prefixIcon: CupertinoIcons.mail_solid,
-                                labelText: 'email'.tr,
-                                required: true,
-                                validator: (value) => ValidateCheck.validateEmail(value),
-                              ),
-
-                            ]))),
-                          )),
-
-                          SafeArea(
-                            child: CustomButtonWidget(
-                              isLoading: profileController.isLoading,
-                              onPressed: () => _updateProfile(profileController),
-                              margin: const EdgeInsets.all(Dimensions.paddingSizeSmall),
-                              buttonText: 'update'.tr,
-                            ),
-                          ),
-
-                        ]),
-                      ),
-
-                      Positioned(
-                        top: -50, left: 0, right: 0,
-                        child: Center(child: Stack(children: [
-                          ClipOval(child: profileController.pickedFile != null ? GetPlatform.isWeb ? Image.network(
-                            profileController.pickedFile!.path, width: 100, height: 100, fit: BoxFit.cover) : Image.file(
-                            File(profileController.pickedFile!.path), width: 100, height: 100, fit: BoxFit.cover) : CustomImageWidget(
-                            image: '${Get.find<SplashController>().configModel!.baseUrls!.customerImageUrl}/${profileController.userInfoModel!.image}',
-                            height: 100, width: 100, fit: BoxFit.cover, placeholder: isLoggedIn ? Images.profilePlaceholder : Images.guestIcon, imageColor: isLoggedIn ? Theme.of(context).hintColor : null,
-                          )),
-
-                          Positioned(
-                            bottom: 0, right: 0, top: 0, left: 0,
-                            child: InkWell(
-                              onTap: () => profileController.pickImage(),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.black.withOpacity(0.3), shape: BoxShape.circle,
-                                  border: Border.all(width: 1, color: Theme.of(context).primaryColor),
+              child: isLoggedIn
+                  ? profileController.userInfoModel != null
+                      ? ResponsiveHelper.isDesktop(context)
+                          ? webView(profileController, isLoggedIn)
+                          : Container(
+                              color: Theme.of(context)
+                                  .primaryColor
+                                  .withOpacity(0.1),
+                              child: Column(children: [
+                                const SizedBox(height: 70),
+                                Expanded(
+                                  child:
+                                      Stack(clipBehavior: Clip.none, children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: Theme.of(context).cardColor,
+                                        borderRadius: const BorderRadius.only(
+                                            topLeft: Radius.circular(
+                                                Dimensions.radiusExtraLarge),
+                                            topRight: Radius.circular(
+                                                Dimensions.radiusExtraLarge)),
+                                        boxShadow: [
+                                          BoxShadow(
+                                              color:
+                                                  Colors.grey.withOpacity(0.1),
+                                              spreadRadius: 1,
+                                              blurRadius: 10,
+                                              offset: const Offset(0, 1))
+                                        ],
+                                      ),
+                                      child: Column(children: [
+                                        Expanded(
+                                            child: SingleChildScrollView(
+                                          physics:
+                                              const BouncingScrollPhysics(),
+                                          padding: const EdgeInsets.all(
+                                              Dimensions.paddingSizeSmall),
+                                          child: Center(
+                                              child: SizedBox(
+                                                  width: Dimensions.webMaxWidth,
+                                                  child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        const SizedBox(
+                                                            height: 70),
+                                                        CustomTextFieldWidget(
+                                                          titleText:
+                                                              'write_first_name'
+                                                                  .tr,
+                                                          controller:
+                                                              _firstNameController,
+                                                          capitalization:
+                                                              TextCapitalization
+                                                                  .words,
+                                                          inputType:
+                                                              TextInputType
+                                                                  .name,
+                                                          focusNode:
+                                                              _firstNameFocus,
+                                                          nextFocus:
+                                                              _lastNameFocus,
+                                                          prefixIcon: CupertinoIcons
+                                                              .person_alt_circle_fill,
+                                                          labelText:
+                                                              'first_name'.tr,
+                                                          required: true,
+                                                          validator: (value) =>
+                                                              ValidateCheck
+                                                                  .validateEmptyText(
+                                                                      value,
+                                                                      "first_name_field_is_required"
+                                                                          .tr),
+                                                        ),
+                                                        const SizedBox(
+                                                            height: Dimensions
+                                                                .paddingSizeExtraOverLarge),
+                                                        CustomTextFieldWidget(
+                                                          titleText:
+                                                              'write_last_name'
+                                                                  .tr,
+                                                          controller:
+                                                              _lastNameController,
+                                                          capitalization:
+                                                              TextCapitalization
+                                                                  .words,
+                                                          inputType:
+                                                              TextInputType
+                                                                  .name,
+                                                          focusNode:
+                                                              _lastNameFocus,
+                                                          nextFocus:
+                                                              _emailFocus,
+                                                          prefixIcon: CupertinoIcons
+                                                              .person_alt_circle_fill,
+                                                          labelText:
+                                                              'last_name'.tr,
+                                                          required: true,
+                                                          validator: (value) =>
+                                                              ValidateCheck
+                                                                  .validateEmptyText(
+                                                                      value,
+                                                                      "last_name_field_is_required"
+                                                                          .tr),
+                                                        ),
+                                                        const SizedBox(
+                                                            height: Dimensions
+                                                                .paddingSizeExtraOverLarge),
+                                                        CustomTextFieldWidget(
+                                                          titleText: ResponsiveHelper
+                                                                  .isDesktop(
+                                                                      context)
+                                                              ? 'phone'.tr
+                                                              : 'write_phone_number'
+                                                                  .tr,
+                                                          controller:
+                                                              _phoneController,
+                                                          focusNode:
+                                                              _phoneFocus,
+                                                          inputType:
+                                                              TextInputType
+                                                                  .phone,
+                                                          isPhone: true,
+                                                          isEnabled: false,
+                                                          onCountryChanged:
+                                                              (CountryCode
+                                                                  countryCode) {
+                                                            _countryDialCode =
+                                                                countryCode
+                                                                    .dialCode;
+                                                          },
+                                                          countryDialCode: _countryDialCode != null
+                                                              ? CountryCode.fromCountryCode(Get
+                                                                          .find<
+                                                                              SplashController>()
+                                                                      .configModel!
+                                                                      .country!)
+                                                                  .code
+                                                              : Get.find<
+                                                                      LocalizationController>()
+                                                                  .locale
+                                                                  .countryCode,
+                                                          labelText: 'phone'.tr,
+                                                          required: true,
+                                                        ),
+                                                        const SizedBox(
+                                                            height: Dimensions
+                                                                .paddingSizeExtraOverLarge),
+                                                        CustomTextFieldWidget(
+                                                          titleText:
+                                                              'write_email'.tr,
+                                                          controller:
+                                                              _emailController,
+                                                          focusNode:
+                                                              _emailFocus,
+                                                          inputType:
+                                                              TextInputType
+                                                                  .emailAddress,
+                                                          prefixIcon:
+                                                              CupertinoIcons
+                                                                  .mail_solid,
+                                                          labelText: 'email'.tr,
+                                                          required: true,
+                                                          validator: (value) =>
+                                                              ValidateCheck
+                                                                  .validateEmail(
+                                                                      value),
+                                                        ),
+                                                      ]))),
+                                        )),
+                                        SafeArea(
+                                          child: CustomButtonWidget(
+                                            isLoading:
+                                                profileController.isLoading,
+                                            onPressed: () => _updateProfile(
+                                                profileController),
+                                            margin: const EdgeInsets.all(
+                                                Dimensions.paddingSizeSmall),
+                                            buttonText: 'update'.tr,
+                                          ),
+                                        ),
+                                      ]),
+                                    ),
+                                    Positioned(
+                                      top: -50,
+                                      left: 0,
+                                      right: 0,
+                                      child: Center(
+                                          child: Stack(children: [
+                                        ClipOval(
+                                            child: profileController
+                                                        .pickedFile !=
+                                                    null
+                                                ? GetPlatform.isWeb
+                                                    ? Image.network(
+                                                        profileController
+                                                            .pickedFile!.path,
+                                                        width: 100,
+                                                        height: 100,
+                                                        fit: BoxFit.cover)
+                                                    : Image.file(
+                                                        File(profileController
+                                                            .pickedFile!.path),
+                                                        width: 100,
+                                                        height: 100,
+                                                        fit: BoxFit.cover)
+                                                : CustomImageWidget(
+                                                    image:
+                                                        '${profileController.userInfoModel!.image}',
+                                                    height: 100,
+                                                    width: 100,
+                                                    fit: BoxFit.cover,
+                                                    placeholder: isLoggedIn
+                                                        ? Images
+                                                            .profilePlaceholder
+                                                        : Images.guestIcon,
+                                                    imageColor: isLoggedIn
+                                                        ? Theme.of(context)
+                                                            .hintColor
+                                                        : null,
+                                                  )),
+                                        Positioned(
+                                          bottom: 0,
+                                          right: 0,
+                                          top: 0,
+                                          left: 0,
+                                          child: InkWell(
+                                            onTap: () =>
+                                                profileController.pickImage(),
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                color: Colors.black
+                                                    .withOpacity(0.3),
+                                                shape: BoxShape.circle,
+                                                border: Border.all(
+                                                    width: 1,
+                                                    color: Theme.of(context)
+                                                        .primaryColor),
+                                              ),
+                                              child: Container(
+                                                margin:
+                                                    const EdgeInsets.all(25),
+                                                decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                      width: 2,
+                                                      color: Colors.white),
+                                                  shape: BoxShape.circle,
+                                                ),
+                                                child: const Icon(
+                                                    Icons.camera_alt,
+                                                    color: Colors.white),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ])),
+                                    ),
+                                  ]),
                                 ),
-                                child: Container(
-                                  margin: const EdgeInsets.all(25),
-                                  decoration: BoxDecoration(
-                                    border: Border.all(width: 2, color: Colors.white),
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: const Icon(Icons.camera_alt, color: Colors.white),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ])),
-                      ),
-
-                    ]),
-                  ),
-                ]),
-              ) : const Center(child: CircularProgressIndicator()) : NotLoggedInScreen(callBack: (value){
-                _initCall();
-                setState(() {});
-              }),
+                              ]),
+                            )
+                      : const Center(child: CircularProgressIndicator())
+                  : NotLoggedInScreen(callBack: (value) {
+                      _initCall();
+                      setState(() {});
+                    }),
             );
           }),
         ],
@@ -246,75 +396,106 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       controller: scrollController,
       child: FooterViewWidget(
         child: Stack(children: [
-
           SizedBox(height: 520, width: context.width),
-
           Container(
-            height: 200, width: context.width,
+            height: 200,
+            width: context.width,
             color: Theme.of(context).primaryColor.withOpacity(0.05),
             child: Align(
               alignment: Alignment.topCenter,
               child: Padding(
-                padding: const EdgeInsets.only(top: Dimensions.paddingSizeDefault),
-                child: Text('edit_profile'.tr, style: robotoBold.copyWith(fontSize: Dimensions.fontSizeLarge)),
+                padding:
+                    const EdgeInsets.only(top: Dimensions.paddingSizeDefault),
+                child: Text('edit_profile'.tr,
+                    style: robotoBold.copyWith(
+                        fontSize: Dimensions.fontSizeLarge)),
               ),
             ),
           ),
-
           Positioned(
-            top: 120, left: 0, right: 0,
+            top: 120,
+            left: 0,
+            right: 0,
             child: Center(
-              child: Stack(clipBehavior : Clip.none, children: [
-
+              child: Stack(clipBehavior: Clip.none, children: [
                 Container(
                   alignment: Alignment.topCenter,
-                  height: 400, width: Dimensions.webMaxWidth,
+                  height: 400,
+                  width: Dimensions.webMaxWidth,
                   decoration: BoxDecoration(
                     color: Theme.of(context).cardColor,
-                    borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
-                    boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.1), spreadRadius: 1, blurRadius: 10, offset: const Offset(0, 1))],
+                    borderRadius:
+                        BorderRadius.circular(Dimensions.radiusDefault),
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.grey.withOpacity(0.1),
+                          spreadRadius: 1,
+                          blurRadius: 10,
+                          offset: const Offset(0, 1))
+                    ],
                   ),
                 ),
-
                 Positioned(
-                  top: -50, left: 0, right: 0,
+                  top: -50,
+                  left: 0,
+                  right: 0,
                   child: Align(
                     alignment: Alignment.topCenter,
                     child: Stack(children: [
-
-                      ClipOval(child: profileController.pickedFile != null ? GetPlatform.isWeb ? Image.network(
-                        profileController.pickedFile!.path, width: 100, height: 100, fit: BoxFit.cover) : Image.file(
-                        File(profileController.pickedFile!.path), width: 100, height: 100, fit: BoxFit.cover) : CustomImageWidget(
-                        image: '${Get.find<SplashController>().configModel!.baseUrls!.customerImageUrl}/${profileController.userInfoModel!.image}',
-                        height: 100, width: 100, fit: BoxFit.cover,
-                        placeholder: isLoggedIn ? Images.profilePlaceholder : Images.guestIcon, imageColor: isLoggedIn ? Theme.of(context).hintColor : null,
-                      )),
-
+                      ClipOval(
+                          child: profileController.pickedFile != null
+                              ? GetPlatform.isWeb
+                                  ? Image.network(
+                                      profileController.pickedFile!.path,
+                                      width: 100,
+                                      height: 100,
+                                      fit: BoxFit.cover)
+                                  : Image.file(
+                                      File(profileController.pickedFile!.path),
+                                      width: 100,
+                                      height: 100,
+                                      fit: BoxFit.cover)
+                              : CustomImageWidget(
+                                  image:
+                                      '${profileController.userInfoModel!.image}',
+                                  height: 100,
+                                  width: 100,
+                                  fit: BoxFit.cover,
+                                  placeholder: isLoggedIn
+                                      ? Images.profilePlaceholder
+                                      : Images.guestIcon,
+                                  imageColor: isLoggedIn
+                                      ? Theme.of(context).hintColor
+                                      : null,
+                                )),
                       Positioned(
-                        bottom: 0, right: 0, top: 0, left: 0,
+                        bottom: 0,
+                        right: 0,
+                        top: 0,
+                        left: 0,
                         child: InkWell(
                           onTap: () => profileController.pickImage(),
                           child: Container(
                             decoration: BoxDecoration(
-                              color: Colors.black.withOpacity(0.3), shape: BoxShape.circle,
+                              color: Colors.black.withOpacity(0.3),
+                              shape: BoxShape.circle,
                             ),
                             child: Container(
                               margin: const EdgeInsets.all(25),
                               decoration: BoxDecoration(
-                                border: Border.all(width: 2, color: Colors.white),
+                                border:
+                                    Border.all(width: 2, color: Colors.white),
                                 shape: BoxShape.circle,
                               ),
-                              child: const Icon(Icons.camera_alt, color: Colors.white),
+                              child: const Icon(Icons.camera_alt,
+                                  color: Colors.white),
                             ),
                           ),
                         ),
                       ),
-
                     ]),
                   ),
                 ),
-
-
                 Positioned(
                   top: 80,
                   child: SizedBox(
@@ -322,9 +503,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 90),
                       child: Column(children: [
-
                         Row(children: [
-
                           Expanded(
                             child: CustomTextFieldWidget(
                               titleText: 'write_first_name'.tr,
@@ -336,11 +515,12 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                               prefixIcon: CupertinoIcons.person_alt_circle_fill,
                               labelText: 'first_name'.tr,
                               required: true,
-                              validator: (value) => ValidateCheck.validateEmptyText(value, "first_name_field_is_required".tr),
+                              validator: (value) =>
+                                  ValidateCheck.validateEmptyText(
+                                      value, "first_name_field_is_required".tr),
                             ),
                           ),
                           const SizedBox(width: Dimensions.paddingSizeLarge),
-
                           Expanded(
                             child: CustomTextFieldWidget(
                               titleText: 'write_last_name'.tr,
@@ -352,15 +532,15 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                               prefixIcon: CupertinoIcons.person_alt_circle_fill,
                               labelText: 'last_name'.tr,
                               required: true,
-                              validator: (value) => ValidateCheck.validateEmptyText(value, "last_name_field_is_required".tr),
+                              validator: (value) =>
+                                  ValidateCheck.validateEmptyText(
+                                      value, "last_name_field_is_required".tr),
                             ),
                           ),
-
                         ]),
-                        const SizedBox(height: Dimensions.paddingSizeExtraOverLarge),
-
+                        const SizedBox(
+                            height: Dimensions.paddingSizeExtraOverLarge),
                         Row(children: [
-
                           Expanded(
                             child: CustomTextFieldWidget(
                               titleText: 'write_email'.tr,
@@ -370,14 +550,16 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                               prefixIcon: CupertinoIcons.mail_solid,
                               labelText: 'email'.tr,
                               required: true,
-                              validator: (value) => ValidateCheck.validateEmail(value),
+                              validator: (value) =>
+                                  ValidateCheck.validateEmail(value),
                             ),
                           ),
                           const SizedBox(width: Dimensions.paddingSizeLarge),
-
                           Expanded(
                             child: CustomTextFieldWidget(
-                              titleText: ResponsiveHelper.isDesktop(context) ? 'phone'.tr : 'write_phone_number'.tr,
+                              titleText: ResponsiveHelper.isDesktop(context)
+                                  ? 'phone'.tr
+                                  : 'write_phone_number'.tr,
                               controller: _phoneController,
                               focusNode: _phoneFocus,
                               inputType: TextInputType.phone,
@@ -386,36 +568,41 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                               onCountryChanged: (CountryCode countryCode) {
                                 _countryDialCode = countryCode.dialCode;
                               },
-                              countryDialCode: _countryDialCode != null ? CountryCode.fromCountryCode(Get.find<SplashController>().configModel!.country!).code
-                                  : Get.find<LocalizationController>().locale.countryCode,
+                              countryDialCode: _countryDialCode != null
+                                  ? CountryCode.fromCountryCode(
+                                          Get.find<SplashController>()
+                                              .configModel!
+                                              .country!)
+                                      .code
+                                  : Get.find<LocalizationController>()
+                                      .locale
+                                      .countryCode,
                               labelText: 'phone'.tr,
                               required: true,
                             ),
                           ),
-
                         ]),
                         const SizedBox(height: 100),
-
-                        Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                          CustomButtonWidget(
-                            width: 200,
-                            buttonText: 'update_profile'.tr,
-                            fontSize: Dimensions.fontSizeDefault,
-                            isBold: false,
-                            radius: Dimensions.radiusSmall,
-                            onPressed: () => _updateProfile(profileController),
-                          ),
-                        ]),
-
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              CustomButtonWidget(
+                                width: 200,
+                                buttonText: 'update_profile'.tr,
+                                fontSize: Dimensions.fontSizeDefault,
+                                isBold: false,
+                                radius: Dimensions.radiusSmall,
+                                onPressed: () =>
+                                    _updateProfile(profileController),
+                              ),
+                            ]),
                       ]),
                     ),
                   ),
                 ),
-
               ]),
             ),
           ),
-
         ]),
       ),
     );
@@ -428,27 +615,34 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     String phoneNumber = _phoneController.text.trim();
     String phoneNumberWithCode = _countryDialCode! + phoneNumber;
     if (profileController.userInfoModel!.fName == firstName &&
-        profileController.userInfoModel!.lName == lastName && profileController.userInfoModel!.phone == phoneNumberWithCode &&
-        profileController.userInfoModel!.email == _emailController.text && profileController.pickedFile == null) {
+        profileController.userInfoModel!.lName == lastName &&
+        profileController.userInfoModel!.phone == phoneNumberWithCode &&
+        profileController.userInfoModel!.email == _emailController.text &&
+        profileController.pickedFile == null) {
       showCustomSnackBar('change_something_to_update'.tr);
-    }else if (firstName.isEmpty) {
+    } else if (firstName.isEmpty) {
       showCustomSnackBar('enter_your_first_name'.tr);
-    }else if (lastName.isEmpty) {
+    } else if (lastName.isEmpty) {
       showCustomSnackBar('enter_your_last_name'.tr);
-    }else if (email.isEmpty) {
+    } else if (email.isEmpty) {
       showCustomSnackBar('enter_email_address'.tr);
-    }else if (!GetUtils.isEmail(email)) {
+    } else if (!GetUtils.isEmail(email)) {
       showCustomSnackBar('enter_a_valid_email_address'.tr);
-    }else if (phoneNumber.isEmpty) {
+    } else if (phoneNumber.isEmpty) {
       showCustomSnackBar('enter_phone_number'.tr);
-    }else if (phoneNumber.length < 6) {
+    } else if (phoneNumber.length < 6) {
       showCustomSnackBar('enter_a_valid_phone_number'.tr);
     } else {
-      UserInfoModel updatedUser = UserInfoModel(fName: firstName, lName: lastName, email: email, phone: phoneNumberWithCode);
-      ResponseModel responseModel = await profileController.updateUserInfo(updatedUser, Get.find<AuthController>().getUserToken());
-      if(responseModel.isSuccess) {
+      UserInfoModel updatedUser = UserInfoModel(
+          fName: firstName,
+          lName: lastName,
+          email: email,
+          phone: phoneNumberWithCode);
+      ResponseModel responseModel = await profileController.updateUserInfo(
+          updatedUser, Get.find<AuthController>().getUserToken());
+      if (responseModel.isSuccess) {
         showCustomSnackBar('profile_updated_successfully'.tr, isError: false);
-      }else {
+      } else {
         showCustomSnackBar(responseModel.message);
       }
     }

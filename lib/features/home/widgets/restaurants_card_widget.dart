@@ -87,9 +87,7 @@ class RestaurantsCardWidget extends StatelessWidget {
                               borderRadius:
                                   BorderRadius.circular(Dimensions.radiusSmall),
                               child: CustomImageWidget(
-                                image:
-                                    '${Get.find<SplashController>().configModel!.baseUrls!.restaurantImageUrl}'
-                                    '/${restaurant.logo}',
+                                image: '${restaurant.logo}',
                                 fit: BoxFit.cover,
                                 height: isNewOnStackFood! ? 95 : 65,
                                 width: isNewOnStackFood! ? 95 : 65,

@@ -15,58 +15,70 @@ class HistoryCartWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Row(children: [
-
-              data![index].transactionType == 'order_place' || data![index].transactionType == 'partial_payment'
-                  ? Image.asset(Images.debitIconWallet, height: 15, width: 15)
-                  : Image.asset(Images.creditIconWallet, height: 15, width: 15),
-              const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-
-              Text(data![index].transactionType == 'order_place' || data![index].transactionType == 'partial_payment'
+      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Row(children: [
+            data![index].transactionType == 'order_place' ||
+                    data![index].transactionType == 'partial_payment'
+                ? Image.asset(Images.debitIconWallet, height: 15, width: 15)
+                : Image.asset(Images.creditIconWallet, height: 15, width: 15),
+            const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+            Text(
+              data![index].transactionType == 'order_place' ||
+                      data![index].transactionType == 'partial_payment'
                   ? '- ${PriceConverter.convertPrice(data![index].debit! + data![index].adminBonus!)}'
                   : '+ ${PriceConverter.convertPrice(data![index].credit! + data![index].adminBonus!)}',
-                style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeDefault), maxLines: 1, overflow: TextOverflow.ellipsis, textDirection: TextDirection.ltr,
-              ),
-            ]),
-            const SizedBox(height: Dimensions.paddingSizeExtraSmall),
-
-            Text(
-              data![index].transactionType == 'add_fund' ? '${'added_via'.tr} ${data![index].reference!.replaceAll('_', ' ')} ${data![index].adminBonus != 0 ? '(${'bonus'.tr} = ${data![index].adminBonus})' : '' }'
-                  : data![index].transactionType == 'partial_payment' ? '${'spend_on_order'.tr} # ${data![index].reference}'
-                  : data![index].transactionType == 'loyalty_point' ? 'converted_from_loyalty_point'.tr
-                  : data![index].transactionType == 'referrer' ? 'earned_by_referral'.tr
-                  : data![index].transactionType == 'order_place' ? '${'order_place'.tr} # ${data![index].reference}'
-                  : data![index].transactionType!.tr,
-              style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall,color: Theme.of(context).hintColor),
-              maxLines: 1, overflow: TextOverflow.ellipsis,
+              style:
+                  robotoMedium.copyWith(fontSize: Dimensions.fontSizeDefault),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              textDirection: TextDirection.ltr,
             ),
           ]),
-
-          Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
-            Text(
-              DateConverter.onlyDate(data![index].createdAt!),
-              style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall,color: Theme.of(context).hintColor),
-              maxLines: 1, overflow: TextOverflow.ellipsis,
-            ),
-            const SizedBox(height: Dimensions.paddingSizeExtraSmall),
-
-            Text(
-              data![index].transactionType == 'order_place' ? 'debit'.tr : 'credit'.tr,
-              style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: data![index].transactionType == 'order_place'
-                  ? Colors.red : Colors.green),
-              maxLines: 1, overflow: TextOverflow.ellipsis,
-            ),
-          ]),
-
+          const SizedBox(height: Dimensions.paddingSizeExtraSmall),
+          Text(
+            data![index].transactionType == 'add_fund'
+                ? '${'added_via'.tr} ${data![index].reference!.replaceAll('_', ' ')} ${data![index].adminBonus != 0 ? '(${'bonus'.tr} = ${data![index].adminBonus})' : ''}'
+                : data![index].transactionType == 'partial_payment'
+                    ? '${'spend_on_order'.tr} # ${data![index].reference}'
+                    : data![index].transactionType == 'loyalty_point'
+                        ? 'converted_from_loyalty_point'.tr
+                        : data![index].transactionType == 'referrer'
+                            ? 'earned_by_referral'.tr
+                            : data![index].transactionType == 'order_place'
+                                ? '${'order_place'.tr} # ${data![index].reference}'
+                                : data![index].transactionType!.tr,
+            style: robotoRegular.copyWith(
+                fontSize: Dimensions.fontSizeSmall,
+                color: Theme.of(context).hintColor),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
         ]),
-
-      Padding(
-        padding: const EdgeInsets.only(top: Dimensions.paddingSizeDefault),
-        child: Divider(color: Theme.of(context).disabledColor),
-      ),
+        Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
+          Text(
+            DateConverter.onlyDate(data![index].createdAt!),
+            style: robotoRegular.copyWith(
+                fontSize: Dimensions.fontSizeSmall,
+                color: Theme.of(context).hintColor),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          const SizedBox(height: Dimensions.paddingSizeExtraSmall),
+          Text(
+            data![index].transactionType == 'order_place'
+                ? 'debit'.tr
+                : 'credit'.tr,
+            style: robotoRegular.copyWith(
+                fontSize: Dimensions.fontSizeSmall,
+                color: data![index].transactionType == 'order_place'
+                    ? Colors.red
+                    : Colors.green),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ]),
+      ]),
     ]);
   }
 }

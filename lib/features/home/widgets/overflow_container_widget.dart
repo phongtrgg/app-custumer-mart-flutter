@@ -11,16 +11,19 @@ class OverFlowContainerWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(2),
-      height: 30, width: 30,
-      decoration:  BoxDecoration(
+      height: 30,
+      width: 30,
+      decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
         shape: BoxShape.circle,
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(50),
         child: CustomImageWidget(
-          image: '${Get.find<SplashController>().configModel!.baseUrls!.productImageUrl}/$image',
-          fit: BoxFit.cover, height: 30, width: 30,
+          image: '$image',
+          fit: BoxFit.cover,
+          height: 30,
+          width: 30,
         ),
       ),
     );

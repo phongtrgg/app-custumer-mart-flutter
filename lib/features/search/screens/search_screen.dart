@@ -553,7 +553,7 @@ class SearchScreenState extends State<SearchScreen> {
                                                                                 SizedBox(
                                                                               height: 130,
                                                                               child: CuisineCardWidget(
-                                                                                image: '${Get.find<SplashController>().configModel!.baseUrls!.cuisineImageUrl}/${cuisineController.cuisineModel!.cuisines![index].image}',
+                                                                                image: '${cuisineController.cuisineModel!.cuisines![index].image}',
                                                                                 name: cuisineController.cuisineModel!.cuisines![index].name!,
                                                                                 fromSearchPage: true,
                                                                               ),

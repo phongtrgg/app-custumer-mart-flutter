@@ -16,49 +16,76 @@ class ItemCampaignWidget1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<CampaignController>(builder: (campaignController) {
-      return (campaignController.itemCampaignList != null && campaignController.itemCampaignList!.isEmpty) ? const SizedBox() : Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(10, 15, 10, 10),
-            child: TitleWidget(title: 'trending_food_offers'.tr, onTap: () => Get.toNamed(RouteHelper.getItemCampaignRoute())),
-          ),
-
-          SizedBox(
-            height: 150,
-            child: campaignController.itemCampaignList != null ? ListView.builder(
-              controller: ScrollController(),
-              physics: const BouncingScrollPhysics(),
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.only(left: Dimensions.paddingSizeSmall),
-              itemCount: campaignController.itemCampaignList!.length > 10 ? 10 : campaignController.itemCampaignList!.length,
-              itemBuilder: (context, index){
-                return Padding(
-                  padding: const EdgeInsets.only(right: Dimensions.paddingSizeSmall, bottom: 5),
-                  child: InkWell(
-                    onTap: () {
-                      ResponsiveHelper.isMobile(context) ? Get.bottomSheet(
-                        ProductBottomSheetWidget(product: campaignController.itemCampaignList![index], isCampaign: true),
-                        backgroundColor: Colors.transparent, isScrollControlled: true,
-                      ) : Get.dialog(
-                        Dialog(child: ProductBottomSheetWidget(product: campaignController.itemCampaignList![index], isCampaign: true)),
-                      );
-                    },
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-                      child: CustomImageWidget(
-                        image: '${Get.find<SplashController>().configModel!.baseUrls!.campaignImageUrl}'
-                            '/${campaignController.itemCampaignList![index].image}',
-                        height: 150, width: 150, fit: BoxFit.cover,
-                        isFood: true,
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ) : ItemCampaignShimmer(campaignController: campaignController),
-          ),
-        ],
-      );
+      return (campaignController.itemCampaignList != null &&
+              campaignController.itemCampaignList!.isEmpty)
+          ? const SizedBox()
+          : Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 15, 10, 10),
+                  child: TitleWidget(
+                      title: 'trending_food_offers'.tr,
+                      onTap: () =>
+                          Get.toNamed(RouteHelper.getItemCampaignRoute())),
+                ),
+                SizedBox(
+                  height: 150,
+                  child: campaignController.itemCampaignList != null
+                      ? ListView.builder(
+                          controller: ScrollController(),
+                          physics: const BouncingScrollPhysics(),
+                          scrollDirection: Axis.horizontal,
+                          padding: const EdgeInsets.only(
+                              left: Dimensions.paddingSizeSmall),
+                          itemCount:
+                              campaignController.itemCampaignList!.length > 10
+                                  ? 10
+                                  : campaignController.itemCampaignList!.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.only(
+                                  right: Dimensions.paddingSizeSmall,
+                                  bottom: 5),
+                              child: InkWell(
+                                onTap: () {
+                                  ResponsiveHelper.isMobile(context)
+                                      ? Get.bottomSheet(
+                                          ProductBottomSheetWidget(
+                                              product: campaignController
+                                                  .itemCampaignList![index],
+                                              isCampaign: true),
+                                          backgroundColor: Colors.transparent,
+                                          isScrollControlled: true,
+                                        )
+                                      : Get.dialog(
+                                          Dialog(
+                                              child: ProductBottomSheetWidget(
+                                                  product: campaignController
+                                                      .itemCampaignList![index],
+                                                  isCampaign: true)),
+                                        );
+                                },
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(
+                                      Dimensions.radiusSmall),
+                                  child: CustomImageWidget(
+                                    image:
+                                        '${campaignController.itemCampaignList![index].image}',
+                                    height: 150,
+                                    width: 150,
+                                    fit: BoxFit.cover,
+                                    isFood: true,
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        )
+                      : ItemCampaignShimmer(
+                          campaignController: campaignController),
+                ),
+              ],
+            );
     });
   }
 }
@@ -75,14 +102,16 @@ class ItemCampaignShimmer extends StatelessWidget {
       scrollDirection: Axis.horizontal,
       padding: const EdgeInsets.only(left: Dimensions.paddingSizeSmall),
       itemCount: 10,
-      itemBuilder: (context, index){
+      itemBuilder: (context, index) {
         return Padding(
-          padding: const EdgeInsets.only(right: Dimensions.paddingSizeSmall, bottom: 5),
+          padding: const EdgeInsets.only(
+              right: Dimensions.paddingSizeSmall, bottom: 5),
           child: Shimmer(
             duration: const Duration(seconds: 2),
             enabled: campaignController.itemCampaignList == null,
             child: Container(
-              height: 150, width: 150,
+              height: 150,
+              width: 150,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
                 color: Colors.grey[300],
@@ -94,4 +123,3 @@ class ItemCampaignShimmer extends StatelessWidget {
     );
   }
 }
-

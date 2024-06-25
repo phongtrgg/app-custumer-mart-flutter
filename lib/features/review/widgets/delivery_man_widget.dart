@@ -18,25 +18,35 @@ class DeliveryManWidget extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-        boxShadow: [BoxShadow(
-          color: Colors.grey[Get.isDarkMode ? 700 : 300]!,
-          blurRadius: 5, spreadRadius: 1,
-        )],
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey[Get.isDarkMode ? 700 : 300]!,
+            blurRadius: 5,
+            spreadRadius: 1,
+          )
+        ],
       ),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text('delivery_man'.tr, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeExtraSmall)),
+        Text('delivery_man'.tr,
+            style: robotoRegular.copyWith(
+                fontSize: Dimensions.fontSizeExtraSmall)),
         ListTile(
           leading: ClipOval(
             child: CustomImageWidget(
-              image: '${Get.find<SplashController>().configModel!.baseUrls!.deliveryManImageUrl}/${deliveryMan!.image}',
-              height: 40, width: 40, fit: BoxFit.cover,
+              image: '${deliveryMan!.image}',
+              height: 40,
+              width: 40,
+              fit: BoxFit.cover,
             ),
           ),
           title: Text(
             '${deliveryMan!.fName} ${deliveryMan!.lName}',
             style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeLarge),
           ),
-          subtitle: RatingBarWidget(rating: deliveryMan!.avgRating, size: 15, ratingCount: deliveryMan!.ratingCount ?? 0),
+          subtitle: RatingBarWidget(
+              rating: deliveryMan!.avgRating,
+              size: 15,
+              ratingCount: deliveryMan!.ratingCount ?? 0),
         ),
       ]),
     );

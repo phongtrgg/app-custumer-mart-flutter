@@ -25,8 +25,6 @@ class SplashController extends GetxController implements GetxService {
   bool _hasConnection = true;
   bool get hasConnection => _hasConnection;
 
-
-
   bool _savedCookiesData = false;
   bool get savedCookiesData => _savedCookiesData;
 
@@ -44,6 +42,12 @@ class SplashController extends GetxController implements GetxService {
     Response response = await splashServiceInterface.getConfigData();
     bool isSuccess = false;
     _configModel = splashServiceInterface.prepareConfigData(response);
+    // ignore: avoid_print
+    print(
+        '~~~~~~~~~~~~~~~~~~~~~~~~~~~CHECK RESPOENE CONFIG~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
+    print(_configModel?.baseUrls!.categoryImageUrl);
+    print(
+        '~~~~~~~~~~~~~~~~~~~~~~~~~~~CHECK RESPOENE CONFIG~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
     isSuccess = _configModel != null;
     update();
     return isSuccess;
@@ -93,53 +97,69 @@ class SplashController extends GetxController implements GetxService {
     return isSuccess;
   }
 
-  Future<void> navigateToLocationScreen(String page, {bool offNamed = false, bool offAll = false}) async {
+  Future<void> navigateToLocationScreen(String page,
+      {bool offNamed = false, bool offAll = false}) async {
     bool fromSignup = page == RouteHelper.signUp;
     bool fromHome = page == 'home';
-    if(!fromHome && AddressHelper.getAddressFromSharedPref() != null) {
+    if (!fromHome && AddressHelper.getAddressFromSharedPref() != null) {
       Get.dialog(const CustomLoaderWidget(), barrierDismissible: false);
       Get.find<LocationController>().autoNavigate(
-          AddressHelper.getAddressFromSharedPref(), fromSignup, null, false, ResponsiveHelper.isDesktop(Get.context)
-      );
-    }else if(Get.find<AuthController>().isLoggedIn()) {
+          AddressHelper.getAddressFromSharedPref(),
+          fromSignup,
+          null,
+          false,
+          ResponsiveHelper.isDesktop(Get.context));
+    } else if (Get.find<AuthController>().isLoggedIn()) {
       Get.dialog(const CustomLoaderWidget(), barrierDismissible: false);
       await Get.find<AddressController>().getAddressList();
       Get.back();
-      if(Get.find<AddressController>().addressList != null && Get.find<AddressController>().addressList!.isEmpty) {
-        if(ResponsiveHelper.isDesktop(Get.context)) {
-          showGeneralDialog(context: Get.context!, pageBuilder: (_,__,___) {
-            return SizedBox(
-              height: 300, width: 300,
-              child: PickMapDialog(
-                fromSignUp: (page == RouteHelper.signUp), canRoute: false, fromAddAddress: false, route: null,
-              ),
-            );
-          });
+      if (Get.find<AddressController>().addressList != null &&
+          Get.find<AddressController>().addressList!.isEmpty) {
+        if (ResponsiveHelper.isDesktop(Get.context)) {
+          showGeneralDialog(
+              context: Get.context!,
+              pageBuilder: (_, __, ___) {
+                return SizedBox(
+                  height: 300,
+                  width: 300,
+                  child: PickMapDialog(
+                    fromSignUp: (page == RouteHelper.signUp),
+                    canRoute: false,
+                    fromAddAddress: false,
+                    route: null,
+                  ),
+                );
+              });
         } else {
           Get.toNamed(RouteHelper.getPickMapRoute(page, false));
         }
-      }else {
-        if(offNamed) {
+      } else {
+        if (offNamed) {
           Get.offNamed(RouteHelper.getAccessLocationRoute(page));
-        }else if(offAll) {
+        } else if (offAll) {
           Get.offAllNamed(RouteHelper.getAccessLocationRoute(page));
-        }else {
+        } else {
           Get.toNamed(RouteHelper.getAccessLocationRoute(page));
         }
       }
-    }else {
-      if(ResponsiveHelper.isDesktop(Get.context)) {
-        showGeneralDialog(context: Get.context!, pageBuilder: (_,__,___) {
-          return SizedBox(
-            height: 300, width: 300,
-            child: PickMapDialog(
-                fromSignUp: (page == RouteHelper.signUp), canRoute: false, fromAddAddress: false, route: null),
-          );
-        });
+    } else {
+      if (ResponsiveHelper.isDesktop(Get.context)) {
+        showGeneralDialog(
+            context: Get.context!,
+            pageBuilder: (_, __, ___) {
+              return SizedBox(
+                height: 300,
+                width: 300,
+                child: PickMapDialog(
+                    fromSignUp: (page == RouteHelper.signUp),
+                    canRoute: false,
+                    fromAddAddress: false,
+                    route: null),
+              );
+            });
       } else {
         Get.toNamed(RouteHelper.getPickMapRoute(page, false));
       }
     }
   }
-
 }

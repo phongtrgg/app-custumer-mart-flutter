@@ -154,8 +154,7 @@ class ProductWidget extends StatelessWidget {
                                 BorderRadius.circular(Dimensions.radiusDefault),
                             child: CustomImageWidget(
                               image:
-                                  '${isCampaign ? baseUrls!.campaignImageUrl : isRestaurant ? baseUrls!.restaurantImageUrl : baseUrls!.productImageUrl}'
-                                  '/${isRestaurant ? restaurant!.logo : product!.image}',
+                                  '${isRestaurant ? restaurant!.logo : product!.image}',
                               height: desktop
                                   ? 120
                                   : length == null

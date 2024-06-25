@@ -17,132 +17,178 @@ class WebCampaignScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return campaignController.campaign != null ? SingleChildScrollView(
-      child: FooterViewWidget(
-        child: Center(child: Container(
-          width: Dimensions.webMaxWidth,
-          decoration: BoxDecoration(
-            color: Theme.of(context).cardColor,
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(Dimensions.radiusExtraLarge)),
-          ),
-          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-
-            const SizedBox(height: Dimensions.paddingSizeExtraOverLarge),
-
-            Row(children: [
-
-              ClipRRect(
-                borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
-                child: CustomImageWidget(
-                  image: '${Get.find<SplashController>().configModel!.baseUrls!.campaignImageUrl}/${campaignController.campaign?.image ?? ''}',
-                  height: 190, width: 420,
-                  fit: BoxFit.cover, isFood: true,
-                ),
-              ),
-              const SizedBox(width: Dimensions.paddingSizeOverLarge),
-
-              Expanded(
-                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-
-                  Text(
-                    campaignController.campaign?.title ?? '', style: robotoBold,
-                    maxLines: 1, overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: Dimensions.paddingSizeSmall),
-
-                  Text(
-                    campaignController.campaign?.description ?? '', maxLines:  2, overflow: TextOverflow.ellipsis,
-                    style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).disabledColor),
-                  ),
-                  const SizedBox(height: Dimensions.paddingSizeSmall),
-
-                  campaignController.campaign!.startTime != null ? Row(children: [
-                    Icon(Icons.access_time_filled, size: 20, color: Theme.of(context).disabledColor),
-                    const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-
-                    Text('${'daily'.tr} - ', style: robotoRegular.copyWith(
-                      fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).disabledColor,
-                    )),
-
-                    Text(
-                      '${DateConverter.convertTimeToTime(campaignController.campaign!.startTime!)}'
-                          ' ${'to'.tr} ${DateConverter.convertTimeToTime(campaignController.campaign!.endTime!)}',
-                      style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).primaryColor),
-                    ),
-
-                  ]) : const SizedBox(),
-
-                ]),
-              ),
-              const SizedBox(width: 150),
-
-              Container(
-                height: 150, width: 180,
-                padding: const EdgeInsets.all(Dimensions.paddingSizeDefault),
+    return campaignController.campaign != null
+        ? SingleChildScrollView(
+            child: FooterViewWidget(
+              child: Center(
+                  child: Container(
+                width: Dimensions.webMaxWidth,
                 decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor.withOpacity(0.05),
-                  borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
+                  color: Theme.of(context).cardColor,
+                  borderRadius: const BorderRadius.vertical(
+                      top: Radius.circular(Dimensions.radiusExtraLarge)),
                 ),
-                child: Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-
-                  Text(
-                    'end_date'.tr, style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).primaryColor),
-                  ),
-                  const SizedBox(height: Dimensions.paddingSizeDefault),
-
-                  Container(
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(Dimensions.radiusSmall)),
-                      image: DecorationImage(
-                        image: AssetImage(Images.calender),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    child: Container(
-                      padding: const EdgeInsets.all(Dimensions.paddingSizeSmall),
-                      margin: const EdgeInsets.only(top: Dimensions.paddingSizeExtraSmall),
-                      decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(Dimensions.radiusSmall),
-                          bottomRight: Radius.circular(Dimensions.radiusSmall),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(
+                          height: Dimensions.paddingSizeExtraOverLarge),
+                      Row(children: [
+                        ClipRRect(
+                          borderRadius:
+                              BorderRadius.circular(Dimensions.radiusDefault),
+                          child: CustomImageWidget(
+                            image:
+                                '${campaignController.campaign?.image ?? ''}',
+                            height: 190,
+                            width: 420,
+                            fit: BoxFit.cover,
+                            isFood: true,
+                          ),
                         ),
-                      ),
-                      child: Column(children: [
-
-                        const SizedBox(height: Dimensions.paddingSizeSmall),
-
-                        Text(
-                          DateConverter.stringToLocalDateDayOnly(campaignController.campaign!.availableDateEnds!),
-                          style: robotoBold.copyWith(fontSize: Dimensions.fontSizeExtraLarge), textAlign: TextAlign.center,
+                        const SizedBox(width: Dimensions.paddingSizeOverLarge),
+                        Expanded(
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  campaignController.campaign?.title ?? '',
+                                  style: robotoBold,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                const SizedBox(
+                                    height: Dimensions.paddingSizeSmall),
+                                Text(
+                                  campaignController.campaign?.description ??
+                                      '',
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: robotoRegular.copyWith(
+                                      fontSize: Dimensions.fontSizeSmall,
+                                      color: Theme.of(context).disabledColor),
+                                ),
+                                const SizedBox(
+                                    height: Dimensions.paddingSizeSmall),
+                                campaignController.campaign!.startTime != null
+                                    ? Row(children: [
+                                        Icon(Icons.access_time_filled,
+                                            size: 20,
+                                            color: Theme.of(context)
+                                                .disabledColor),
+                                        const SizedBox(
+                                            width: Dimensions
+                                                .paddingSizeExtraSmall),
+                                        Text('${'daily'.tr} - ',
+                                            style: robotoRegular.copyWith(
+                                              fontSize:
+                                                  Dimensions.fontSizeExtraSmall,
+                                              color: Theme.of(context)
+                                                  .disabledColor,
+                                            )),
+                                        Text(
+                                          '${DateConverter.convertTimeToTime(campaignController.campaign!.startTime!)}'
+                                          ' ${'to'.tr} ${DateConverter.convertTimeToTime(campaignController.campaign!.endTime!)}',
+                                          style: robotoMedium.copyWith(
+                                              fontSize:
+                                                  Dimensions.fontSizeExtraSmall,
+                                              color: Theme.of(context)
+                                                  .primaryColor),
+                                        ),
+                                      ])
+                                    : const SizedBox(),
+                              ]),
                         ),
-
-                        Text(
-                          DateConverter.stringToLocalDateMonthAndYearOnly(campaignController.campaign!.availableDateEnds!),
-                          style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).disabledColor),
+                        const SizedBox(width: 150),
+                        Container(
+                          height: 150,
+                          width: 180,
+                          padding: const EdgeInsets.all(
+                              Dimensions.paddingSizeDefault),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context)
+                                .primaryColor
+                                .withOpacity(0.05),
+                            borderRadius:
+                                BorderRadius.circular(Dimensions.radiusDefault),
+                          ),
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'end_date'.tr,
+                                  style: robotoMedium.copyWith(
+                                      fontSize: Dimensions.fontSizeSmall,
+                                      color: Theme.of(context).primaryColor),
+                                ),
+                                const SizedBox(
+                                    height: Dimensions.paddingSizeDefault),
+                                Container(
+                                  decoration: const BoxDecoration(
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(
+                                            Dimensions.radiusSmall)),
+                                    image: DecorationImage(
+                                      image: AssetImage(Images.calender),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                  child: Container(
+                                    padding: const EdgeInsets.all(
+                                        Dimensions.paddingSizeSmall),
+                                    margin: const EdgeInsets.only(
+                                        top: Dimensions.paddingSizeExtraSmall),
+                                    decoration: const BoxDecoration(
+                                      borderRadius: BorderRadius.only(
+                                        bottomLeft: Radius.circular(
+                                            Dimensions.radiusSmall),
+                                        bottomRight: Radius.circular(
+                                            Dimensions.radiusSmall),
+                                      ),
+                                    ),
+                                    child: Column(children: [
+                                      const SizedBox(
+                                          height: Dimensions.paddingSizeSmall),
+                                      Text(
+                                        DateConverter.stringToLocalDateDayOnly(
+                                            campaignController
+                                                .campaign!.availableDateEnds!),
+                                        style: robotoBold.copyWith(
+                                            fontSize:
+                                                Dimensions.fontSizeExtraLarge),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      Text(
+                                        DateConverter
+                                            .stringToLocalDateMonthAndYearOnly(
+                                                campaignController.campaign!
+                                                    .availableDateEnds!),
+                                        style: robotoMedium.copyWith(
+                                            fontSize: Dimensions.fontSizeSmall,
+                                            color: Theme.of(context)
+                                                .disabledColor),
+                                      ),
+                                    ]),
+                                  ),
+                                ),
+                              ]),
                         ),
-
                       ]),
-                    ),
-
-                  ),
-
-                ]),
-
-              ),
-
-            ]),
-
-            Divider(height: 50, thickness: 0.5, color: Theme.of(context).disabledColor.withOpacity(0.5)),
-
-            Text('restaurants'.tr, style: robotoBold),
-            const SizedBox(height: Dimensions.paddingSizeDefault),
-
-            RestaurantsViewWidget(restaurants: campaignController.campaign?.restaurants),
-
-          ]),
-        )),
-      ),
-    ) : WebCampaignShimmer(campaignController: campaignController);
+                      Divider(
+                          height: 50,
+                          thickness: 0.5,
+                          color:
+                              Theme.of(context).disabledColor.withOpacity(0.5)),
+                      Text('restaurants'.tr, style: robotoBold),
+                      const SizedBox(height: Dimensions.paddingSizeDefault),
+                      RestaurantsViewWidget(
+                          restaurants:
+                              campaignController.campaign?.restaurants),
+                    ]),
+              )),
+            ),
+          )
+        : WebCampaignShimmer(campaignController: campaignController);
   }
 }
 
@@ -157,88 +203,100 @@ class WebCampaignShimmer extends StatelessWidget {
         child: SizedBox(
           width: Dimensions.webMaxWidth,
           child: Column(children: [
-
             Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-
               const SizedBox(height: Dimensions.paddingSizeExtraOverLarge),
-
               Row(children: [
-
                 Shimmer(
                   duration: const Duration(seconds: 2),
                   enabled: true,
                   child: Container(
-                    height: 190, width: 420,
+                    height: 190,
+                    width: 420,
                     decoration: BoxDecoration(
-                      color: Get.isDarkMode ? Colors.white.withOpacity(0.05) : Colors.grey.withOpacity(0.3),
-                      borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
+                      color: Get.isDarkMode
+                          ? Colors.white.withOpacity(0.05)
+                          : Colors.grey.withOpacity(0.3),
+                      borderRadius:
+                          BorderRadius.circular(Dimensions.radiusDefault),
                     ),
                   ),
                 ),
                 const SizedBox(width: Dimensions.paddingSizeOverLarge),
-
                 Expanded(
-                  child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-
-                    Container(
-                      height: 15, width: 300,
-                      decoration: BoxDecoration(
-                        color: Get.isDarkMode ? Colors.white.withOpacity(0.05) : Colors.grey.withOpacity(0.3),
-                        borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
-                      ),
-                    ),
-                    const SizedBox(height: Dimensions.paddingSizeSmall),
-
-                    Container(
-                      height: 15, width: 400,
-                      decoration: BoxDecoration(
-                        color: Get.isDarkMode ? Colors.white.withOpacity(0.05) : Colors.grey.withOpacity(0.3),
-                        borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
-                      ),
-                    ),
-                    const SizedBox(height: Dimensions.paddingSizeSmall),
-
-                    Container(
-                      height: 15, width: 200,
-                      decoration: BoxDecoration(
-                        color: Get.isDarkMode ? Colors.white.withOpacity(0.05) : Colors.grey.withOpacity(0.3),
-                        borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
-                      ),
-                    ),
-
-                  ]),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          height: 15,
+                          width: 300,
+                          decoration: BoxDecoration(
+                            color: Get.isDarkMode
+                                ? Colors.white.withOpacity(0.05)
+                                : Colors.grey.withOpacity(0.3),
+                            borderRadius:
+                                BorderRadius.circular(Dimensions.radiusDefault),
+                          ),
+                        ),
+                        const SizedBox(height: Dimensions.paddingSizeSmall),
+                        Container(
+                          height: 15,
+                          width: 400,
+                          decoration: BoxDecoration(
+                            color: Get.isDarkMode
+                                ? Colors.white.withOpacity(0.05)
+                                : Colors.grey.withOpacity(0.3),
+                            borderRadius:
+                                BorderRadius.circular(Dimensions.radiusDefault),
+                          ),
+                        ),
+                        const SizedBox(height: Dimensions.paddingSizeSmall),
+                        Container(
+                          height: 15,
+                          width: 200,
+                          decoration: BoxDecoration(
+                            color: Get.isDarkMode
+                                ? Colors.white.withOpacity(0.05)
+                                : Colors.grey.withOpacity(0.3),
+                            borderRadius:
+                                BorderRadius.circular(Dimensions.radiusDefault),
+                          ),
+                        ),
+                      ]),
                 ),
                 const SizedBox(width: 150),
-
                 Shimmer(
                   duration: const Duration(seconds: 2),
                   enabled: true,
                   child: Container(
-                    height: 140, width: 180,
-                    padding: const EdgeInsets.all(Dimensions.paddingSizeDefault),
+                    height: 140,
+                    width: 180,
+                    padding:
+                        const EdgeInsets.all(Dimensions.paddingSizeDefault),
                     decoration: BoxDecoration(
-                      color: Get.isDarkMode ? Colors.white.withOpacity(0.05) : Colors.grey.withOpacity(0.3),
-                      borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
+                      color: Get.isDarkMode
+                          ? Colors.white.withOpacity(0.05)
+                          : Colors.grey.withOpacity(0.3),
+                      borderRadius:
+                          BorderRadius.circular(Dimensions.radiusDefault),
                     ),
                   ),
                 ),
-
               ]),
               const SizedBox(height: 50),
-
               Container(
-                height: 15, width: 150,
+                height: 15,
+                width: 150,
                 decoration: BoxDecoration(
-                  color: Get.isDarkMode ? Colors.white.withOpacity(0.05) : Colors.grey.withOpacity(0.3),
+                  color: Get.isDarkMode
+                      ? Colors.white.withOpacity(0.05)
+                      : Colors.grey.withOpacity(0.3),
                   borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
                 ),
               ),
               const SizedBox(height: Dimensions.paddingSizeDefault),
-
-              RestaurantsViewWidget(restaurants: campaignController.campaign?.restaurants),
-
+              RestaurantsViewWidget(
+                  restaurants: campaignController.campaign?.restaurants),
             ]),
-
           ]),
         ),
       ),

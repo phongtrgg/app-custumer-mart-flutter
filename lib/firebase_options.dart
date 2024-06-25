@@ -69,8 +69,10 @@ class DefaultFirebaseOptions {
     messagingSenderId: '1049699819506',
     projectId: 'stackfood-bd3ee',
     storageBucket: 'stackfood-bd3ee.appspot.com',
-    androidClientId: '1049699819506-8dga73jjtr36sd82cd5ijhgcu0p14p3g.apps.googleusercontent.com',
-    iosClientId: '1049699819506-2magqnhq5chvmvj75v287hngt3qb13rr.apps.googleusercontent.com',
+    androidClientId:
+        '1049699819506-8dga73jjtr36sd82cd5ijhgcu0p14p3g.apps.googleusercontent.com',
+    iosClientId:
+        '1049699819506-2magqnhq5chvmvj75v287hngt3qb13rr.apps.googleusercontent.com',
     iosBundleId: 'com.sixamtech.stackFood',
   );
 }

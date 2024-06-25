@@ -22,228 +22,429 @@ import 'package:shimmer_animation/shimmer_animation.dart';
 
 class PopularRestaurantsViewWidget extends StatelessWidget {
   final bool isRecentlyViewed;
-  const PopularRestaurantsViewWidget({super.key, this.isRecentlyViewed = false});
+  const PopularRestaurantsViewWidget(
+      {super.key, this.isRecentlyViewed = false});
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder<RestaurantController>(builder: (restController) {
-      List<Restaurant>? restaurantList = isRecentlyViewed ? restController.recentlyViewedRestaurantList : restController.popularRestaurantList;
-        return (restaurantList != null && restaurantList.isEmpty) ? const SizedBox() : Padding(
-          padding: EdgeInsets.symmetric(vertical: ResponsiveHelper.isMobile(context)  ? Dimensions.paddingSizeDefault : Dimensions.paddingSizeLarge),
-          child: SizedBox(
-            height: 245, width: Dimensions.webMaxWidth,
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-
-                ResponsiveHelper.isDesktop(context) ? Padding(
-                  padding: const EdgeInsets.only(bottom: Dimensions.paddingSizeLarge),
-                  child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                    Text(isRecentlyViewed ? 'recently_viewed_restaurants'.tr : 'popular_restaurants'.tr,
-                      style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge, fontWeight: FontWeight.w600),
-                    ),
-
-                    ArrowIconButtonWidget(onTap: () {
-                      Get.toNamed(RouteHelper.getAllRestaurantRoute(isRecentlyViewed ? 'recently_viewed' : 'popular'));
-                    }),
-                  ]),
-                ) : Padding(
-                  padding: const EdgeInsets.only(left: Dimensions.paddingSizeDefault, right: Dimensions.paddingSizeDefault, bottom: Dimensions.paddingSizeLarge),
-                  child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                    Text(isRecentlyViewed ? 'recently_viewed_restaurants'.tr : 'popular_restaurants'.tr,
-                      style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge, fontWeight: FontWeight.w600),
-                    ),
-                    ArrowIconButtonWidget(onTap: () {
-                      Get.toNamed(RouteHelper.getAllRestaurantRoute(isRecentlyViewed ? 'recently_viewed' : 'popular'));
-                    }),
-                  ]),
-                ),
-
-
-               restaurantList != null ? SizedBox(
-                  height: 185,
-                  child: ListView.builder(
-                    itemCount: restaurantList.length,
-                    padding: EdgeInsets.only(right: ResponsiveHelper.isMobile(context) ? Dimensions.paddingSizeDefault : 0),
-                    scrollDirection: Axis.horizontal,
-                    physics: const BouncingScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      bool isAvailable = restaurantList[index].open == 1 && restaurantList[index].active!;
-                      return Padding(
-                        padding: EdgeInsets.only(left: (ResponsiveHelper.isDesktop(context) && index == 0 && Get.find<LocalizationController>().isLtr) ? 0 : Dimensions.paddingSizeDefault),
-                        child: Container(
-                          height: 185, width: ResponsiveHelper.isDesktop(context) ? 253 : MediaQuery.of(context).size.width * 0.7,
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).cardColor,
-                            borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
-                          ),
-                          child: CustomInkWellWidget(
-                            onTap: () => Get.toNamed(RouteHelper.getRestaurantRoute(restaurantList[index].id),
-                              arguments: RestaurantScreen(restaurant: restaurantList[index]),
-                            ),
-                            radius: Dimensions.radiusDefault,
-                            child: Stack(
-                              clipBehavior: Clip.none,
-                              children: [
-                                Container(
-                                  height: 95, width: ResponsiveHelper.isDesktop(context) ? 253 : MediaQuery.of(context).size.width * 0.7,
-                                  decoration: const BoxDecoration(
-                                    borderRadius: BorderRadius.only(topLeft: Radius.circular(Dimensions.radiusDefault), topRight: Radius.circular(Dimensions.radiusDefault)),
+      List<Restaurant>? restaurantList = isRecentlyViewed
+          ? restController.recentlyViewedRestaurantList
+          : restController.popularRestaurantList;
+      return (restaurantList != null && restaurantList.isEmpty)
+          ? const SizedBox()
+          : Padding(
+              padding: EdgeInsets.symmetric(
+                  vertical: ResponsiveHelper.isMobile(context)
+                      ? Dimensions.paddingSizeDefault
+                      : Dimensions.paddingSizeLarge),
+              child: SizedBox(
+                height: 245,
+                width: Dimensions.webMaxWidth,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ResponsiveHelper.isDesktop(context)
+                        ? Padding(
+                            padding: const EdgeInsets.only(
+                                bottom: Dimensions.paddingSizeLarge),
+                            child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    isRecentlyViewed
+                                        ? 'recently_viewed_restaurants'.tr
+                                        : 'popular_restaurants'.tr,
+                                    style: robotoMedium.copyWith(
+                                        fontSize: Dimensions.fontSizeLarge,
+                                        fontWeight: FontWeight.w600),
                                   ),
-                                  child: ClipRRect(
-                                    borderRadius: const BorderRadius.only(topLeft: Radius.circular(Dimensions.radiusDefault), topRight: Radius.circular(Dimensions.radiusDefault)),
-                                    child: Stack(
-                                      children: [
-                                        CustomImageWidget(
-                                          image: '${Get.find<SplashController>().configModel!.baseUrls!.restaurantCoverPhotoUrl}'
-                                              '/${restaurantList[index].coverPhoto}',
-                                          fit: BoxFit.cover, height: 95, width: ResponsiveHelper.isDesktop(context) ? 253 : MediaQuery.of(context).size.width * 0.7,
-                                          isRestaurant: true,
-                                        ),
-
-                                        !isAvailable ? Positioned(
-                                          top: 0, left: 0, right: 0, bottom: 0,
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              borderRadius: const BorderRadius.only(topLeft: Radius.circular(Dimensions.radiusDefault), topRight: Radius.circular(Dimensions.radiusDefault)),
-                                              color: Colors.black.withOpacity(0.3),
+                                  ArrowIconButtonWidget(onTap: () {
+                                    Get.toNamed(
+                                        RouteHelper.getAllRestaurantRoute(
+                                            isRecentlyViewed
+                                                ? 'recently_viewed'
+                                                : 'popular'));
+                                  }),
+                                ]),
+                          )
+                        : Padding(
+                            padding: const EdgeInsets.only(
+                                left: Dimensions.paddingSizeDefault,
+                                right: Dimensions.paddingSizeDefault,
+                                bottom: Dimensions.paddingSizeLarge),
+                            child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    isRecentlyViewed
+                                        ? 'recently_viewed_restaurants'.tr
+                                        : 'popular_restaurants'.tr,
+                                    style: robotoMedium.copyWith(
+                                        fontSize: Dimensions.fontSizeLarge,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                  ArrowIconButtonWidget(onTap: () {
+                                    Get.toNamed(
+                                        RouteHelper.getAllRestaurantRoute(
+                                            isRecentlyViewed
+                                                ? 'recently_viewed'
+                                                : 'popular'));
+                                  }),
+                                ]),
+                          ),
+                    restaurantList != null
+                        ? SizedBox(
+                            height: 185,
+                            child: ListView.builder(
+                              itemCount: restaurantList.length,
+                              padding: EdgeInsets.only(
+                                  right: ResponsiveHelper.isMobile(context)
+                                      ? Dimensions.paddingSizeDefault
+                                      : 0),
+                              scrollDirection: Axis.horizontal,
+                              physics: const BouncingScrollPhysics(),
+                              itemBuilder: (context, index) {
+                                bool isAvailable =
+                                    restaurantList[index].open == 1 &&
+                                        restaurantList[index].active!;
+                                return Padding(
+                                  padding: EdgeInsets.only(
+                                      left: (ResponsiveHelper.isDesktop(
+                                                  context) &&
+                                              index == 0 &&
+                                              Get.find<LocalizationController>()
+                                                  .isLtr)
+                                          ? 0
+                                          : Dimensions.paddingSizeDefault),
+                                  child: Container(
+                                    height: 185,
+                                    width: ResponsiveHelper.isDesktop(context)
+                                        ? 253
+                                        : MediaQuery.of(context).size.width *
+                                            0.7,
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(context).cardColor,
+                                      borderRadius: BorderRadius.circular(
+                                          Dimensions.radiusDefault),
+                                    ),
+                                    child: CustomInkWellWidget(
+                                      onTap: () => Get.toNamed(
+                                        RouteHelper.getRestaurantRoute(
+                                            restaurantList[index].id),
+                                        arguments: RestaurantScreen(
+                                            restaurant: restaurantList[index]),
+                                      ),
+                                      radius: Dimensions.radiusDefault,
+                                      child: Stack(
+                                        clipBehavior: Clip.none,
+                                        children: [
+                                          Container(
+                                            height: 95,
+                                            width: ResponsiveHelper.isDesktop(
+                                                    context)
+                                                ? 253
+                                                : MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.7,
+                                            decoration: const BoxDecoration(
+                                              borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(
+                                                      Dimensions.radiusDefault),
+                                                  topRight: Radius.circular(
+                                                      Dimensions
+                                                          .radiusDefault)),
+                                            ),
+                                            child: ClipRRect(
+                                              borderRadius: const BorderRadius
+                                                  .only(
+                                                  topLeft: Radius.circular(
+                                                      Dimensions.radiusDefault),
+                                                  topRight: Radius.circular(
+                                                      Dimensions
+                                                          .radiusDefault)),
+                                              child: Stack(
+                                                children: [
+                                                  CustomImageWidget(
+                                                    image:
+                                                        '${restaurantList[index].coverPhoto}',
+                                                    fit: BoxFit.cover,
+                                                    height: 95,
+                                                    width: ResponsiveHelper
+                                                            .isDesktop(context)
+                                                        ? 253
+                                                        : MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.7,
+                                                    isRestaurant: true,
+                                                  ),
+                                                  !isAvailable
+                                                      ? Positioned(
+                                                          top: 0,
+                                                          left: 0,
+                                                          right: 0,
+                                                          bottom: 0,
+                                                          child: Container(
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              borderRadius: const BorderRadius
+                                                                  .only(
+                                                                  topLeft: Radius
+                                                                      .circular(
+                                                                          Dimensions
+                                                                              .radiusDefault),
+                                                                  topRight: Radius
+                                                                      .circular(
+                                                                          Dimensions
+                                                                              .radiusDefault)),
+                                                              color: Colors
+                                                                  .black
+                                                                  .withOpacity(
+                                                                      0.3),
+                                                            ),
+                                                          ),
+                                                        )
+                                                      : const SizedBox(),
+                                                ],
+                                              ),
                                             ),
                                           ),
-                                        ) : const SizedBox(),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-
-                                !isAvailable ? Positioned(top: 30, left: 60, child: Container(
-                                  decoration: BoxDecoration(
-                                      color: Theme.of(context).colorScheme.error.withOpacity(0.5),
-                                      borderRadius: BorderRadius.circular(Dimensions.radiusLarge)
-                                  ),
-                                  padding: EdgeInsets.symmetric(horizontal: Dimensions.fontSizeExtraLarge, vertical: Dimensions.paddingSizeExtraSmall),
-                                  child: Row(children: [
-                                    Icon(Icons.access_time, size: 12, color: Theme.of(context).cardColor),
-                                    const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-
-                                    Text('closed_now'.tr, style: robotoMedium.copyWith(color: Theme.of(context).cardColor, fontSize: Dimensions.fontSizeSmall)),
-                                  ]),
-                                )) : const SizedBox(),
-
-                                Positioned(
-                                  top: 100, left: 85, right: 0,
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(restaurantList[index].name!,
-                                          overflow: TextOverflow.ellipsis, maxLines: 1, style: robotoBold),
-
-                                      Text(restaurantList[index].address!,
-                                          overflow: TextOverflow.ellipsis, maxLines: 1,
-                                          style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).disabledColor)),
-                                    ],
-                                  ),
-                                ),
-
-
-                                Positioned(
-                                  bottom: 15, left: 0, right: 0,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      IconWithTextRowWidget(
-                                        icon: Icons.star_border,
-                                        text: restaurantList[index].avgRating!.toStringAsFixed(1),
-                                        style: robotoBold.copyWith(fontSize: Dimensions.fontSizeSmall),
+                                          !isAvailable
+                                              ? Positioned(
+                                                  top: 30,
+                                                  left: 60,
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .error
+                                                            .withOpacity(0.5),
+                                                        borderRadius: BorderRadius
+                                                            .circular(Dimensions
+                                                                .radiusLarge)),
+                                                    padding: EdgeInsets.symmetric(
+                                                        horizontal: Dimensions
+                                                            .fontSizeExtraLarge,
+                                                        vertical: Dimensions
+                                                            .paddingSizeExtraSmall),
+                                                    child: Row(children: [
+                                                      Icon(Icons.access_time,
+                                                          size: 12,
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .cardColor),
+                                                      const SizedBox(
+                                                          width: Dimensions
+                                                              .paddingSizeExtraSmall),
+                                                      Text('closed_now'.tr,
+                                                          style: robotoMedium.copyWith(
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .cardColor,
+                                                              fontSize: Dimensions
+                                                                  .fontSizeSmall)),
+                                                    ]),
+                                                  ))
+                                              : const SizedBox(),
+                                          Positioned(
+                                            top: 100,
+                                            left: 85,
+                                            right: 0,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                    restaurantList[index].name!,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    maxLines: 1,
+                                                    style: robotoBold),
+                                                Text(
+                                                    restaurantList[
+                                                            index]
+                                                        .address!,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    maxLines: 1,
+                                                    style:
+                                                        robotoRegular.copyWith(
+                                                            fontSize: Dimensions
+                                                                .fontSizeSmall,
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .disabledColor)),
+                                              ],
+                                            ),
+                                          ),
+                                          Positioned(
+                                            bottom: 15,
+                                            left: 0,
+                                            right: 0,
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                IconWithTextRowWidget(
+                                                  icon: Icons.star_border,
+                                                  text: restaurantList[index]
+                                                      .avgRating!
+                                                      .toStringAsFixed(1),
+                                                  style: robotoBold.copyWith(
+                                                      fontSize: Dimensions
+                                                          .fontSizeSmall),
+                                                ),
+                                                const SizedBox(
+                                                    width: Dimensions
+                                                        .paddingSizeDefault),
+                                                restaurantList[index]
+                                                        .freeDelivery!
+                                                    ? ImageWithTextRowWidget(
+                                                        widget: Image.asset(
+                                                            Images.deliveryIcon,
+                                                            height: 20,
+                                                            width: 20),
+                                                        text: 'free'.tr,
+                                                        style: robotoRegular.copyWith(
+                                                            fontSize: Dimensions
+                                                                .fontSizeSmall),
+                                                      )
+                                                    : const SizedBox(),
+                                                restaurantList[index]
+                                                        .freeDelivery!
+                                                    ? const SizedBox(
+                                                        width: Dimensions
+                                                            .paddingSizeDefault)
+                                                    : const SizedBox(),
+                                                IconWithTextRowWidget(
+                                                  icon: Icons
+                                                      .access_time_outlined,
+                                                  text:
+                                                      '${restaurantList[index].deliveryTime}',
+                                                  style: robotoRegular.copyWith(
+                                                      fontSize: Dimensions
+                                                          .fontSizeSmall),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Positioned(
+                                            top: Dimensions.paddingSizeSmall,
+                                            right: Dimensions.paddingSizeSmall,
+                                            child:
+                                                GetBuilder<FavouriteController>(
+                                                    builder:
+                                                        (favouriteController) {
+                                              bool isWished =
+                                                  favouriteController
+                                                      .wishRestIdList
+                                                      .contains(
+                                                          restaurantList[index]
+                                                              .id);
+                                              return CustomFavouriteWidget(
+                                                isWished: isWished,
+                                                isRestaurant: true,
+                                                restaurant:
+                                                    restaurantList[index],
+                                              );
+                                            }),
+                                          ),
+                                          Positioned(
+                                            top: 73,
+                                            right: 15,
+                                            child: Container(
+                                              height: 23,
+                                              decoration: BoxDecoration(
+                                                borderRadius: const BorderRadius
+                                                    .only(
+                                                    topLeft: Radius.circular(
+                                                        Dimensions
+                                                            .radiusDefault),
+                                                    topRight: Radius.circular(
+                                                        Dimensions
+                                                            .radiusDefault)),
+                                                color:
+                                                    Theme.of(context).cardColor,
+                                              ),
+                                              padding: const EdgeInsets
+                                                  .symmetric(
+                                                  horizontal: Dimensions
+                                                      .paddingSizeExtraSmall),
+                                              child: Center(
+                                                child: Text(
+                                                  '${restController.getRestaurantDistance(
+                                                        LatLng(
+                                                            double.parse(
+                                                                restaurantList[
+                                                                        index]
+                                                                    .latitude!),
+                                                            double.parse(
+                                                                restaurantList[
+                                                                        index]
+                                                                    .longitude!)),
+                                                      ).toStringAsFixed(2)} ${'km'.tr}',
+                                                  style: robotoMedium.copyWith(
+                                                      fontSize: Dimensions
+                                                          .fontSizeSmall,
+                                                      color: Theme.of(context)
+                                                          .primaryColor),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Positioned(
+                                            top: 75,
+                                            left: Dimensions.paddingSizeSmall,
+                                            child: Container(
+                                              height: 65,
+                                              width: 65,
+                                              decoration: BoxDecoration(
+                                                color:
+                                                    Theme.of(context).cardColor,
+                                                border: Border.all(
+                                                    color: Theme.of(context)
+                                                        .disabledColor
+                                                        .withOpacity(0.1),
+                                                    width: 3),
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        Dimensions.radiusSmall),
+                                              ),
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        Dimensions.radiusSmall),
+                                                child: CustomImageWidget(
+                                                  image:
+                                                      '${restaurantList[index].logo}',
+                                                  fit: BoxFit.cover,
+                                                  height: 65,
+                                                  width: 65,
+                                                  isRestaurant: true,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                      const SizedBox(width: Dimensions.paddingSizeDefault),
-
-                                      restaurantList[index].freeDelivery! ? ImageWithTextRowWidget(
-                                        widget: Image.asset(Images.deliveryIcon, height: 20, width: 20),
-                                        text: 'free'.tr,
-                                        style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall),
-                                      ): const SizedBox(),
-                                      restaurantList[index].freeDelivery! ? const SizedBox(width: Dimensions.paddingSizeDefault) : const SizedBox(),
-
-                                      IconWithTextRowWidget(
-                                        icon: Icons.access_time_outlined,
-                                        text: '${restaurantList[index].deliveryTime}',
-                                        style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall),
-                                      ),
-
-                                    ],
-                                  ),
-                                ),
-
-
-                                Positioned(
-                                  top: Dimensions.paddingSizeSmall, right: Dimensions.paddingSizeSmall,
-                                  child: GetBuilder<FavouriteController>(builder: (favouriteController) {
-                                    bool isWished = favouriteController.wishRestIdList.contains(restaurantList[index].id);
-                                      return CustomFavouriteWidget(
-                                        isWished: isWished,
-                                        isRestaurant: true,
-                                        restaurant: restaurantList[index],
-                                      );
-                                    }
-                                  ),
-                                ),
-
-                                Positioned(
-                                  top: 73, right: 15,
-                                  child: Container(
-                                    height: 23,
-                                    decoration: BoxDecoration(
-                                      borderRadius: const BorderRadius.only(topLeft: Radius.circular(Dimensions.radiusDefault), topRight: Radius.circular(Dimensions.radiusDefault)),
-                                      color: Theme.of(context).cardColor,
-                                    ),
-                                    padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeExtraSmall),
-                                    child: Center(
-                                      child: Text( '${restController.getRestaurantDistance(
-                                        LatLng(double.parse(restaurantList[index].latitude!), double.parse(restaurantList[index].longitude!)),
-                                      ).toStringAsFixed(2)} ${'km'.tr}',
-                                        style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).primaryColor),
-                                      ),
                                     ),
                                   ),
-                                ),
-
-                                Positioned(
-                                  top: 75, left: Dimensions.paddingSizeSmall,
-                                  child: Container(
-                                    height: 65, width: 65,
-                                    decoration:  BoxDecoration(
-                                      color: Theme.of(context).cardColor,
-                                      border: Border.all(color: Theme.of(context).disabledColor.withOpacity(0.1), width: 3),
-                                      borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-                                    ),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-                                      child: CustomImageWidget(
-                                        image: '${Get.find<SplashController>().configModel!.baseUrls!.restaurantImageUrl}'
-                                            '/${restaurantList[index].logo}',
-                                        fit: BoxFit.cover, height: 65, width: 65,
-                                        isRestaurant: true,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
+                                );
+                              },
                             ),
-                          ),
-
-                        ),
-                      );
-                    },
-                  ),
-                ) : const PopularRestaurantShimmer()
-              ],
-            ),
-
-          ),
-        );
-      }
-    );
+                          )
+                        : const PopularRestaurantShimmer()
+                  ],
+                ),
+              ),
+            );
+    });
   }
 }
-
 
 class PopularRestaurantShimmer extends StatelessWidget {
   const PopularRestaurantShimmer({super.key});
@@ -255,65 +456,82 @@ class PopularRestaurantShimmer extends StatelessWidget {
       child: ListView.builder(
           scrollDirection: Axis.horizontal,
           physics: const NeverScrollableScrollPhysics(),
-          padding: EdgeInsets.only(left: ResponsiveHelper.isMobile(context) ? Dimensions.paddingSizeDefault : 0, right: ResponsiveHelper.isMobile(context) ? Dimensions.paddingSizeDefault : 0),
+          padding: EdgeInsets.only(
+              left: ResponsiveHelper.isMobile(context)
+                  ? Dimensions.paddingSizeDefault
+                  : 0,
+              right: ResponsiveHelper.isMobile(context)
+                  ? Dimensions.paddingSizeDefault
+                  : 0),
           itemCount: 7,
           itemBuilder: (context, index) {
             return Shimmer(
               duration: const Duration(seconds: 2),
               enabled: true,
               child: Container(
-                margin: EdgeInsets.only(left: index == 0 ? 0 : Dimensions.paddingSizeDefault),
-                height: 185, width: 253,
+                margin: EdgeInsets.only(
+                    left: index == 0 ? 0 : Dimensions.paddingSizeDefault),
+                height: 185,
+                width: 253,
                 decoration: BoxDecoration(
                   color: Theme.of(context).cardColor,
                   borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
                 ),
-                child: Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    Container(
-                      height: 85, width: 253,
-                      decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.only(topLeft: Radius.circular(Dimensions.radiusDefault), topRight: Radius.circular(Dimensions.radiusDefault)),
-                      ),
-                      child: ClipRRect(
-                          borderRadius: const BorderRadius.only(topLeft: Radius.circular(Dimensions.radiusDefault), topRight: Radius.circular(Dimensions.radiusDefault)),
-                          child: Container(
-                              height: 85, width: 253,
-                              color: Colors.grey[Get.find<ThemeController>().darkTheme ? 700 : 300],
-
-                          )
-                      ),
+                child: Stack(clipBehavior: Clip.none, children: [
+                  Container(
+                    height: 85,
+                    width: 253,
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(Dimensions.radiusDefault),
+                          topRight: Radius.circular(Dimensions.radiusDefault)),
                     ),
-
-                    Positioned(
-                      top: 90, left: 75, right: 0,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                              height: 15, width: 100,
-                              color: Colors.grey[Get.find<ThemeController>().darkTheme ? 700 : 300],
-
-                          ),
-                          const SizedBox(height: Dimensions.paddingSizeSmall),
-
-                          Container(
-                              height: 15, width: 200,
-                              color: Colors.grey[Get.find<ThemeController>().darkTheme ? 700 : 300],
-                            ),
-
-                          const SizedBox(height: Dimensions.paddingSizeSmall),
-                        ],
-                      ),
+                    child: ClipRRect(
+                        borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(Dimensions.radiusDefault),
+                            topRight:
+                                Radius.circular(Dimensions.radiusDefault)),
+                        child: Container(
+                          height: 85,
+                          width: 253,
+                          color: Colors.grey[
+                              Get.find<ThemeController>().darkTheme
+                                  ? 700
+                                  : 300],
+                        )),
+                  ),
+                  Positioned(
+                    top: 90,
+                    left: 75,
+                    right: 0,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          height: 15,
+                          width: 100,
+                          color: Colors.grey[
+                              Get.find<ThemeController>().darkTheme
+                                  ? 700
+                                  : 300],
+                        ),
+                        const SizedBox(height: Dimensions.paddingSizeSmall),
+                        Container(
+                          height: 15,
+                          width: 200,
+                          color: Colors.grey[
+                              Get.find<ThemeController>().darkTheme
+                                  ? 700
+                                  : 300],
+                        ),
+                        const SizedBox(height: Dimensions.paddingSizeSmall),
+                      ],
                     ),
-                  ]
-                ),
+                  ),
+                ]),
               ),
             );
-          }
-      ),
+          }),
     );
   }
 }
-
