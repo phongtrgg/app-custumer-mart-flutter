@@ -455,7 +455,7 @@ class _ConversationScreenState extends State<ConversationScreen>
                                         height: 50,
                                         width: 50,
                                         image:
-                                            '$baseUrl/${user != null ? user.image : ''}',
+                                            '${user != null ? user.image : ''}',
                                       )),
                                       const SizedBox(
                                           width: Dimensions.paddingSizeSmall),

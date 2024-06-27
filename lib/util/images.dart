@@ -239,7 +239,7 @@ class Images {
   static const String onboardFrame_2 = 'assets/image/onboard_frame_2.svg';
   static const String onboardFrame_3 = 'assets/image/onboard_frame_3.svg';
   static const String languageBg = 'assets/image/language_bg.svg';
-  static const String orderConfirmIcon = 'assets/image/order_confirm_icon.svg';
+  static const String orderConfirmIcon = 'assets/image/push_notification.svg';
   static const String pushNotificationIcon =
       'assets/image/push_notification.svg';
   static const String orderOnTheWaYIcon =
@@ -257,20 +257,19 @@ class Images {
   static const String shopIcon = 'assets/image/shop_icon.svg';
   static const String vatTaxIcon = 'assets/image/vat_tax_icon.svg';
   static const String emptyAddress = 'assets/image/empty_address.svg';
-  static const String emptyCart = 'assets/image/empty_cart.svg';
+  static const String emptyCart = 'assets/image/emptyCart.png';
   static const String emptyChat = 'assets/image/empty_chat.svg';
   static const String emptyCoupon = 'assets/image/empty_coupon.svg';
-  static const String emptyFood = 'assets/image/empty_food.svg';
+  static const String emptyFood = 'assets/image/empty_food.png';
   static const String emptyNotification = 'assets/image/empty_notification.svg';
-  // static const String emptyOrder = 'assets/image/empty_order.svg';
   static const String emptyOrder = 'assets/image/order_menu_icon.png';
-  static const String emptyRestaurant = 'assets/image/empty_restaurant.svg';
+  static const String emptyRestaurant = 'assets/image/restaurant.png';
   static const String emptySearchFood = 'assets/image/empty_serch_food.svg';
   static const String emptyTransaction = 'assets/image/empty_transaction.svg';
-  static const String emptyWishlist = 'assets/image/empty_wishlist.svg';
+  static const String emptyWishlist = 'assets/image/empty_wishlist.png';
   static const String restaurantPlaceholder =
       'assets/image/restaurants_placeholder.svg';
-  static const String foodPlaceholder = 'assets/image/food_placeholder.svg';
+  static const String foodPlaceholder = 'assets/image/empty_food.png';
   static const String profilePlaceholder =
       'assets/image/profile_placeholder.svg';
 }

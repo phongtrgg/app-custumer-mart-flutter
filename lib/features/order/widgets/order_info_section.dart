@@ -659,15 +659,14 @@ class OrderInfoSection extends StatelessWidget {
                                 return Padding(
                                   padding: const EdgeInsets.only(right: 8),
                                   child: InkWell(
-                                    onTap: () => openDialog(context,
-                                        '${order.orderProof![index]}'),
+                                    onTap: () => openDialog(
+                                        context, '${order.orderProof![index]}'),
                                     child: Center(
                                         child: ClipRRect(
                                       borderRadius: BorderRadius.circular(
                                           Dimensions.radiusSmall),
                                       child: CustomImageWidget(
-                                        image:
-                                            '${order.orderProof![index]}',
+                                        image: '${order.orderProof![index]}',
                                         width: 100,
                                         height: 100,
                                       ),
@@ -822,8 +821,7 @@ class OrderInfoSection extends StatelessWidget {
                 ? Row(children: [
                     ClipOval(
                         child: CustomImageWidget(
-                      image:
-                          '${order.restaurant!.logo}',
+                      image: '${order.restaurant!.logo}',
                       height: 35,
                       width: 35,
                       fit: BoxFit.cover,
@@ -1018,8 +1016,7 @@ class OrderInfoSection extends StatelessWidget {
                       Row(children: [
                         ClipOval(
                             child: CustomImageWidget(
-                          image:
-                              '${order.deliveryMan!.image}',
+                          image: '${order.deliveryMan!.image}',
                           height: 35,
                           width: 35,
                           fit: BoxFit.cover,

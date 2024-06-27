@@ -421,55 +421,56 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                         : 0
                                                     : 0),
                                             isLoggedIn
-                                                ? ProfileButtonWidget(
-                                                    icon: Icons.delete,
-                                                    iconImage:
-                                                        Images.profileDelete,
-                                                    title: 'delete_account'.tr,
-                                                    onTap: () {
-                                                      showModalBottomSheet(
-                                                        isScrollControlled:
-                                                            true,
-                                                        useRootNavigator: true,
-                                                        context: Get.context!,
-                                                        backgroundColor:
-                                                            Colors.white,
-                                                        shape:
-                                                            const RoundedRectangleBorder(
-                                                          borderRadius: BorderRadius.only(
-                                                              topLeft: Radius
-                                                                  .circular(
-                                                                      Dimensions
-                                                                          .radiusExtraLarge),
-                                                              topRight: Radius
-                                                                  .circular(
-                                                                      Dimensions
-                                                                          .radiusExtraLarge)),
-                                                        ),
-                                                        builder: (context) {
-                                                          return ConstrainedBox(
-                                                            constraints: BoxConstraints(
-                                                                maxHeight: MediaQuery.of(
-                                                                            context)
-                                                                        .size
-                                                                        .height *
-                                                                    0.8),
-                                                            child:
-                                                                AccountDeletionBottomSheet(
-                                                              profileController:
-                                                                  profileController,
-                                                              isRunningOrderAvailable: orderController
-                                                                          .runningOrderList !=
-                                                                      null &&
-                                                                  orderController
-                                                                      .runningOrderList!
-                                                                      .isNotEmpty,
-                                                            ),
-                                                          );
-                                                        },
-                                                      );
-                                                    },
-                                                  )
+                                                // ? ProfileButtonWidget(
+                                                //     icon: Icons.delete,
+                                                //     iconImage:
+                                                //         Images.profileDelete,
+                                                //     title: 'delete_account'.tr,
+                                                //     onTap: () {
+                                                //       showModalBottomSheet(
+                                                //         isScrollControlled:
+                                                //             true,
+                                                //         useRootNavigator: true,
+                                                //         context: Get.context!,
+                                                //         backgroundColor:
+                                                //             Colors.white,
+                                                //         shape:
+                                                //             const RoundedRectangleBorder(
+                                                //           borderRadius: BorderRadius.only(
+                                                //               topLeft: Radius
+                                                //                   .circular(
+                                                //                       Dimensions
+                                                //                           .radiusExtraLarge),
+                                                //               topRight: Radius
+                                                //                   .circular(
+                                                //                       Dimensions
+                                                //                           .radiusExtraLarge)),
+                                                //         ),
+                                                //         builder: (context) {
+                                                //           return ConstrainedBox(
+                                                //             constraints: BoxConstraints(
+                                                //                 maxHeight: MediaQuery.of(
+                                                //                             context)
+                                                //                         .size
+                                                //                         .height *
+                                                //                     0.8),
+                                                //             child:
+                                                //                 AccountDeletionBottomSheet(
+                                                //               profileController:
+                                                //                   profileController,
+                                                //               isRunningOrderAvailable: orderController
+                                                //                           .runningOrderList !=
+                                                //                       null &&
+                                                //                   orderController
+                                                //                       .runningOrderList!
+                                                //                       .isNotEmpty,
+                                                //             ),
+                                                //           );
+                                                //         },
+                                                //       );
+                                                //     },
+                                                //   )
+                                                ? const SizedBox()
                                                 : const SizedBox(),
                                             SizedBox(
                                                 height: isLoggedIn
