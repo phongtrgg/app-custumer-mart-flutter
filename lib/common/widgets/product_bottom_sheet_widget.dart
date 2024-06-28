@@ -172,7 +172,7 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                                                   .radiusSmall),
                                                       child: CustomImageWidget(
                                                         image:
-                                                            '${widget.isCampaign ? Get.find<SplashController>().configModel!.baseUrls!.campaignImageUrl : Get.find<SplashController>().configModel!.baseUrls!.productImageUrl}/${widget.product!.image}',
+                                                            '${widget.product!.image}',
                                                         width: ResponsiveHelper
                                                                 .isMobile(
                                                                     context)
@@ -351,29 +351,29 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                                                 .isHalalFood!
                                                         ? 30
                                                         : 20),
-                                                widget.product!
-                                                            .isRestaurantHalalActive! &&
-                                                        widget.product!
-                                                            .isHalalFood!
-                                                    ? Padding(
-                                                        padding: const EdgeInsets
-                                                            .all(Dimensions
-                                                                .paddingSizeSmall),
-                                                        child: CustomToolTip(
-                                                          message:
-                                                              'this_is_a_halal_food'
-                                                                  .tr,
-                                                          preferredDirection:
-                                                              AxisDirection.up,
-                                                          tooltipController:
-                                                              tooTipController,
-                                                          child: Image.asset(
-                                                              Images.halalIcon,
-                                                              height: 35,
-                                                              width: 35),
-                                                        ),
-                                                      )
-                                                    : const SizedBox(),
+                                                // widget.product!
+                                                //             .isRestaurantHalalActive! &&
+                                                //         widget.product!
+                                                //             .isHalalFood!
+                                                //     ? Padding(
+                                                //         padding: const EdgeInsets
+                                                //             .all(Dimensions
+                                                //                 .paddingSizeSmall),
+                                                //         child: CustomToolTip(
+                                                //           message:
+                                                //               'this_is_a_halal_food'
+                                                //                   .tr,
+                                                //           preferredDirection:
+                                                //               AxisDirection.up,
+                                                //           tooltipController:
+                                                //               tooTipController,
+                                                //           child: Image.asset(
+                                                //               Images.halalIcon,
+                                                //               height: 35,
+                                                //               width: 35),
+                                                //         ),
+                                                //       )
+                                                //     : const SizedBox(),
                                               ]),
                                         ]),
 
