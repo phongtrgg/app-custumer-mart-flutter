@@ -123,11 +123,11 @@ class OrderProductWidget extends StatelessWidget {
                             orderDetails.foodDetails!.isHalalFood!
                         ? Dimensions.paddingSizeExtraSmall
                         : 0),
-                orderDetails.foodDetails!.isRestaurantHalalActive! &&
-                        orderDetails.foodDetails!.isHalalFood!
-                    ? const CustomAssetImageWidget(Images.halalIcon,
-                        height: 13, width: 13)
-                    : const SizedBox(),
+                // orderDetails.foodDetails!.isRestaurantHalalActive! &&
+                //         orderDetails.foodDetails!.isHalalFood!
+                //     ? const CustomAssetImageWidget(Images.halalIcon,
+                //         height: 13, width: 13)
+                //     : const SizedBox(),
               ]),
             ]),
           ),

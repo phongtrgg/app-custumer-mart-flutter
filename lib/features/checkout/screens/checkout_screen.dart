@@ -159,6 +159,7 @@ class CheckoutScreenState extends State<CheckoutScreen> {
   @override
   void dispose() {
     super.dispose();
+    Get.find<CheckoutController>().removePrescriptionImage();
     // _streetNumberController.dispose();
     // _houseController.dispose();
     // _floorController.dispose();

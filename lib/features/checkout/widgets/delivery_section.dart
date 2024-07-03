@@ -1,8 +1,12 @@
+import 'dart:io';
+
+import 'package:image_picker/image_picker.dart';
 import 'package:stackfood_multivendor/common/widgets/custom_ink_well_widget.dart';
 import 'package:stackfood_multivendor/features/checkout/controllers/checkout_controller.dart';
 import 'package:stackfood_multivendor/features/address/domain/models/address_model.dart';
 import 'package:stackfood_multivendor/features/address/widgets/address_card_widget.dart';
 import 'package:stackfood_multivendor/features/auth/controllers/auth_controller.dart';
+import 'package:stackfood_multivendor/features/checkout/widgets/camera_button_sheet_widget.dart';
 import 'package:stackfood_multivendor/features/checkout/widgets/guest_delivery_address.dart';
 import 'package:stackfood_multivendor/features/location/controllers/location_controller.dart';
 import 'package:stackfood_multivendor/features/location/widgets/permission_dialog.dart';
@@ -26,206 +30,404 @@ class DeliverySection extends StatelessWidget {
   final TextEditingController guestEmailController;
   final FocusNode guestNumberNode;
   final FocusNode guestEmailNode;
-  const DeliverySection({super.key, required this.checkoutController,
-    required this.locationController, required this.guestNameTextEditingController,
-    required this.guestNumberTextEditingController, required this.guestNumberNode, required this.guestEmailController, required this.guestEmailNode});
+  const DeliverySection(
+      {super.key,
+      required this.checkoutController,
+      required this.locationController,
+      required this.guestNameTextEditingController,
+      required this.guestNumberTextEditingController,
+      required this.guestNumberNode,
+      required this.guestEmailController,
+      required this.guestEmailNode});
 
   @override
   Widget build(BuildContext context) {
     bool isGuestLoggedIn = Get.find<AuthController>().isGuestLoggedIn();
     bool takeAway = (checkoutController.orderType == 'take_away');
     bool isDesktop = ResponsiveHelper.isDesktop(context);
-    GlobalKey<CustomDropdownState> dropDownKey = GlobalKey<CustomDropdownState>();
+    GlobalKey<CustomDropdownState> dropDownKey =
+        GlobalKey<CustomDropdownState>();
     AddressModel addressModel;
 
     return Column(children: [
-      isGuestLoggedIn  ? GuestDeliveryAddress(
-        checkoutController: checkoutController, guestNumberNode: guestNumberNode,
-        guestNameTextEditingController: guestNameTextEditingController,
-        guestNumberTextEditingController: guestNumberTextEditingController,
-        guestEmailController: guestEmailController, guestEmailNode: guestEmailNode,
-      ) : !takeAway ? Container(
-        margin: EdgeInsets.symmetric(horizontal: isDesktop ? 0 : Dimensions.fontSizeDefault),
-        padding: EdgeInsets.symmetric(horizontal: isDesktop ? Dimensions.paddingSizeLarge : Dimensions.paddingSizeSmall, vertical: Dimensions.paddingSizeSmall),
-        decoration: BoxDecoration(
-          color: Theme.of(context).cardColor,
-          borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
-          boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.1), spreadRadius: 1, blurRadius: 10, offset: const Offset(0, 1))],
-        ),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Text('deliver_to'.tr, style: robotoMedium),
-            CustomInkWellWidget(
-              onTap: () async{
-                dropDownKey.currentState?.toggleDropdown();
-              },
-              radius: Dimensions.radiusDefault,
-              child: const Padding(
-                padding: EdgeInsets.symmetric(vertical: Dimensions.paddingSizeSmall, horizontal: Dimensions.paddingSizeSmall),
-                child: Icon(Icons.arrow_drop_down_rounded, size: 40),
-              ),
-            ),
-          ]),
+      isGuestLoggedIn
+          ? GuestDeliveryAddress(
+              checkoutController: checkoutController,
+              guestNumberNode: guestNumberNode,
+              guestNameTextEditingController: guestNameTextEditingController,
+              guestNumberTextEditingController:
+                  guestNumberTextEditingController,
+              guestEmailController: guestEmailController,
+              guestEmailNode: guestEmailNode,
+            )
+          : !takeAway
+              ? Container(
+                  margin: EdgeInsets.symmetric(
+                      horizontal: isDesktop ? 0 : Dimensions.fontSizeDefault),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: isDesktop
+                          ? Dimensions.paddingSizeLarge
+                          : Dimensions.paddingSizeSmall,
+                      vertical: Dimensions.paddingSizeSmall),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).cardColor,
+                    borderRadius:
+                        BorderRadius.circular(Dimensions.radiusDefault),
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.grey.withOpacity(0.1),
+                          spreadRadius: 1,
+                          blurRadius: 10,
+                          offset: const Offset(0, 1))
+                    ],
+                  ),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('deliver_to'.tr, style: robotoMedium),
+                              CustomInkWellWidget(
+                                onTap: () async {
+                                  dropDownKey.currentState?.toggleDropdown();
+                                },
+                                radius: Dimensions.radiusDefault,
+                                child: const Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: Dimensions.paddingSizeSmall,
+                                      horizontal: Dimensions.paddingSizeSmall),
+                                  child: Icon(Icons.arrow_drop_down_rounded,
+                                      size: 40),
+                                ),
+                              ),
+                            ]),
+                        Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(
+                                  Dimensions.radiusDefault),
+                              color: Colors.transparent,
+                              border: Border.all(color: Colors.transparent)),
+                          child: CustomDropdown<int>(
+                            key: dropDownKey,
+                            hideIcon: true,
+                            onChange: (int? value, int index) async {
+                              if (value == -1) {
+                                var address = await Get.toNamed(
+                                    RouteHelper.getAddAddressRoute(true,
+                                        checkoutController.restaurant!.zoneId));
+                                if (address != null) {
+                                  checkoutController.insertAddresses(
+                                      Get.context!, address,
+                                      notify: true);
 
+                                  checkoutController.streetNumberController
+                                      .text = address.road ?? '';
+                                  checkoutController.houseController.text =
+                                      address.house ?? '';
+                                  checkoutController.floorController.text =
+                                      address.floor ?? '';
 
-          Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
-                color: Colors.transparent,
-                border: Border.all(color: Colors.transparent)
-            ),
-            child: CustomDropdown<int>(
-              key: dropDownKey,
-              hideIcon: true,
-              onChange: (int? value, int index) async {
+                                  checkoutController.getDistanceInKM(
+                                    LatLng(double.parse(address.latitude),
+                                        double.parse(address.longitude)),
+                                    LatLng(
+                                        double.parse(checkoutController
+                                            .restaurant!.latitude!),
+                                        double.parse(checkoutController
+                                            .restaurant!.longitude!)),
+                                  );
+                                }
+                              } else if (value == -2) {
+                                _checkPermission(() async {
+                                  addressModel = await locationController
+                                      .getCurrentLocation(true,
+                                          mapController: null,
+                                          showSnackBar: true);
 
-                if(value == -1) {
-                  var address = await Get.toNamed(RouteHelper.getAddAddressRoute(true, checkoutController.restaurant!.zoneId));
-                  if(address != null) {
+                                  if (addressModel.zoneIds!.isNotEmpty) {
+                                    checkoutController.insertAddresses(
+                                        Get.context!, addressModel,
+                                        notify: true);
 
-                    checkoutController.insertAddresses(Get.context!, address, notify: true);
+                                    checkoutController.getDistanceInKM(
+                                      LatLng(
+                                        locationController.position.latitude,
+                                        locationController.position.longitude,
+                                      ),
+                                      LatLng(
+                                          double.parse(checkoutController
+                                              .restaurant!.latitude!),
+                                          double.parse(checkoutController
+                                              .restaurant!.longitude!)),
+                                    );
+                                  }
+                                });
+                              } else {
+                                checkoutController.getDistanceInKM(
+                                  LatLng(
+                                    double.parse(checkoutController
+                                        .address[value!].latitude!),
+                                    double.parse(checkoutController
+                                        .address[value].longitude!),
+                                  ),
+                                  LatLng(
+                                      double.parse(checkoutController
+                                          .restaurant!.latitude!),
+                                      double.parse(checkoutController
+                                          .restaurant!.longitude!)),
+                                );
+                                checkoutController.setAddressIndex(value);
 
-                    checkoutController.streetNumberController.text = address.road ?? '';
-                    checkoutController.houseController.text = address.house ?? '';
-                    checkoutController.floorController.text = address.floor ?? '';
-
-                    checkoutController.getDistanceInKM(
-                      LatLng(double.parse(address.latitude), double.parse(address.longitude )),
-                      LatLng(double.parse(checkoutController.restaurant!.latitude!), double.parse(checkoutController.restaurant!.longitude!)),
-                    );
-                  }
-                } else if(value == -2) {
-                  _checkPermission(() async {
-                    addressModel = await locationController.getCurrentLocation(true, mapController: null, showSnackBar: true);
-
-                    if(addressModel.zoneIds!.isNotEmpty) {
-
-                      checkoutController.insertAddresses(Get.context!, addressModel, notify: true);
-
-                      checkoutController.getDistanceInKM(
-                        LatLng(
-                          locationController.position.latitude, locationController.position.longitude,
+                                checkoutController.streetNumberController.text =
+                                    checkoutController.address[value].road ??
+                                        '';
+                                checkoutController.houseController.text =
+                                    checkoutController.address[value].house ??
+                                        '';
+                                checkoutController.floorController.text =
+                                    checkoutController.address[value].floor ??
+                                        '';
+                              }
+                            },
+                            dropdownButtonStyle: DropdownButtonStyle(
+                              height: 0,
+                              width: double.infinity,
+                              padding: EdgeInsets.zero,
+                              backgroundColor: Colors.transparent,
+                              primaryColor:
+                                  Theme.of(context).textTheme.bodyLarge!.color,
+                            ),
+                            dropdownStyle: DropdownStyle(
+                              elevation: 10,
+                              borderRadius: BorderRadius.circular(
+                                  Dimensions.radiusDefault),
+                              padding: const EdgeInsets.all(
+                                  Dimensions.paddingSizeExtraSmall),
+                            ),
+                            items: checkoutController.addressList,
+                            child: const SizedBox(),
+                          ),
                         ),
-                        LatLng(double.parse(checkoutController.restaurant!.latitude!), double.parse(checkoutController.restaurant!.longitude!)),
-                      );
-                    }
-                  });
+                        Container(
+                          constraints: BoxConstraints(
+                              minHeight: ResponsiveHelper.isDesktop(context)
+                                  ? 90
+                                  : 75),
+                          decoration: BoxDecoration(
+                            borderRadius:
+                                BorderRadius.circular(Dimensions.radiusDefault),
+                            color:
+                                Theme.of(context).primaryColor.withOpacity(0.1),
+                            border: Border.all(
+                                color: Theme.of(context).primaryColor,
+                                width: 0.3),
+                          ),
+                          child: AddressCardWidget(
+                            address: (checkoutController.address.length - 1) >=
+                                    checkoutController.addressIndex
+                                ? checkoutController
+                                    .address[checkoutController.addressIndex]
+                                : checkoutController.address[0],
+                            fromAddress: false,
+                            fromCheckout: true,
+                          ),
+                        ),
+                        SizedBox(
+                            height: ResponsiveHelper.isDesktop(context)
+                                ? Dimensions.paddingSizeExtraLarge
+                                : Dimensions.paddingSizeOverLarge),
+                        !ResponsiveHelper.isDesktop(context)
+                            ? CustomTextFieldWidget(
+                                hintText: 'write_street_number'.tr,
+                                labelText: 'street_number'.tr,
+                                inputType: TextInputType.streetAddress,
+                                focusNode: checkoutController.streetNode,
+                                nextFocus: checkoutController.houseNode,
+                                controller:
+                                    checkoutController.streetNumberController,
+                              )
+                            : const SizedBox(),
+                        SizedBox(
+                            height: !ResponsiveHelper.isDesktop(context)
+                                ? Dimensions.paddingSizeOverLarge
+                                : 0),
+                        Row(
+                          children: [
+                            ResponsiveHelper.isDesktop(context)
+                                ? Expanded(
+                                    child: CustomTextFieldWidget(
+                                      hintText: 'write_street_number'.tr,
+                                      labelText: 'street_number'.tr,
+                                      inputType: TextInputType.streetAddress,
+                                      focusNode: checkoutController.streetNode,
+                                      nextFocus: checkoutController.houseNode,
+                                      controller: checkoutController
+                                          .streetNumberController,
+                                      showTitle: false,
+                                    ),
+                                  )
+                                : const SizedBox(),
+                            SizedBox(
+                                width: ResponsiveHelper.isDesktop(context)
+                                    ? Dimensions.paddingSizeSmall
+                                    : 0),
+                            Expanded(
+                              child: CustomTextFieldWidget(
+                                hintText: 'write_house_number'.tr,
+                                labelText: 'house'.tr,
+                                inputType: TextInputType.text,
+                                focusNode: checkoutController.houseNode,
+                                nextFocus: checkoutController.floorNode,
+                                controller: checkoutController.houseController,
+                                showTitle: false,
+                              ),
+                            ),
+                            const SizedBox(width: Dimensions.paddingSizeSmall),
+                            Expanded(
+                              child: CustomTextFieldWidget(
+                                hintText: 'write_floor_number'.tr,
+                                labelText: 'floor'.tr,
+                                inputType: TextInputType.text,
+                                focusNode: checkoutController.floorNode,
+                                inputAction: TextInputAction.done,
+                                controller: checkoutController.floorController,
+                                showTitle: false,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                            height: Dimensions.paddingSizeExtraSmall),
+                        SizedBox(
+                            height: !ResponsiveHelper.isDesktop(context)
+                                ? Dimensions.paddingSizeOverLarge
+                                : 0),
+                        Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('Add delivery location photo'.tr),
+                                InkWell(
+                                  onTap: () {
+                                    if (Get.find<CheckoutController>()
+                                            .pickedPrescriptions
+                                            .length >=
+                                        3) {
+                                      showCustomSnackBar(
+                                          'You can only add up to 3 images'.tr);
+                                    }
+                                    if (Get.find<CheckoutController>()
+                                            .pickedPrescriptions
+                                            .length <
+                                        3) {
+                                      Get.bottomSheet(
+                                          const CameraButtonSheetWidget());
+                                    }
+                                  },
+                                  child: Container(
+                                    height: 60,
+                                    width: 60,
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(
+                                          Dimensions.radiusDefault),
+                                      color: Theme.of(context)
+                                          .primaryColor
+                                          .withOpacity(0.1),
+                                    ),
+                                    child: Icon(Icons.camera_alt_sharp,
+                                        color: Theme.of(context).primaryColor,
+                                        size: 32),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            checkoutController.pickedPrescriptions.isNotEmpty
+                                ? Column(children: [
+                                    Container(
+                                      height: 80,
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical:
+                                              Dimensions.paddingSizeSmall),
+                                      child: ListView.builder(
+                                        scrollDirection: Axis.horizontal,
+                                        physics: const BouncingScrollPhysics(),
+                                        itemCount: checkoutController
+                                                .pickedPrescriptions.length +
+                                            1,
+                                        itemBuilder: (context, index) {
+                                          XFile? file = index ==
+                                                  checkoutController
+                                                      .pickedPrescriptions
+                                                      .length
+                                              ? null
+                                              : checkoutController
+                                                  .pickedPrescriptions[index];
 
-                } else{
-                  checkoutController.getDistanceInKM(
-                    LatLng(
-                      double.parse(checkoutController.address[value!].latitude!),
-                      double.parse(checkoutController.address[value].longitude!),
-                    ),
-                    LatLng(double.parse(checkoutController.restaurant!.latitude!), double.parse(checkoutController.restaurant!.longitude!)),
-                  );
-                  checkoutController.setAddressIndex(value);
+                                          if (index < 5 &&
+                                              index ==
+                                                  checkoutController
+                                                      .pickedPrescriptions
+                                                      .length) {}
 
-                  checkoutController.streetNumberController.text = checkoutController.address[value].road ?? '';
-                  checkoutController.houseController.text = checkoutController.address[value].house ?? '';
-                  checkoutController.floorController.text = checkoutController.address[value].floor ?? '';
-                }
-
-              },
-              dropdownButtonStyle: DropdownButtonStyle(
-                height: 0, width: double.infinity,
-                padding: EdgeInsets.zero,
-                backgroundColor: Colors.transparent,
-                primaryColor: Theme.of(context).textTheme.bodyLarge!.color,
-              ),
-              dropdownStyle: DropdownStyle(
-                elevation: 10,
-                borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
-                padding: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
-              ),
-              items: checkoutController.addressList,
-              child: const SizedBox(),
-
-            ),
-          ),
-          Container(
-            constraints: BoxConstraints(minHeight: ResponsiveHelper.isDesktop(context) ? 90 : 75),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
-              color: Theme.of(context).primaryColor.withOpacity(0.1),
-              border: Border.all(color: Theme.of(context).primaryColor, width: 0.3),
-            ),
-            child: AddressCardWidget(
-              address: (checkoutController.address.length-1) >= checkoutController.addressIndex ? checkoutController.address[checkoutController.addressIndex] : checkoutController.address[0],
-              fromAddress: false, fromCheckout: true,
-            ),
-          ),
-
-          SizedBox(height: ResponsiveHelper.isDesktop(context) ? Dimensions.paddingSizeExtraLarge : Dimensions.paddingSizeOverLarge),
-
-          !ResponsiveHelper.isDesktop(context) ? CustomTextFieldWidget(
-            hintText: 'write_street_number'.tr,
-            labelText: 'street_number'.tr,
-            inputType: TextInputType.streetAddress,
-            focusNode: checkoutController.streetNode,
-            nextFocus: checkoutController.houseNode,
-            controller: checkoutController.streetNumberController,
-          ) : const SizedBox(),
-          SizedBox(height: !ResponsiveHelper.isDesktop(context) ? Dimensions.paddingSizeOverLarge : 0),
-
-          Row(
-            children: [
-              ResponsiveHelper.isDesktop(context) ? Expanded(
-                child: CustomTextFieldWidget(
-                  hintText: 'write_street_number'.tr,
-                  labelText: 'street_number'.tr,
-                  inputType: TextInputType.streetAddress,
-                  focusNode: checkoutController.streetNode,
-                  nextFocus: checkoutController.houseNode,
-                  controller: checkoutController.streetNumberController,
-                  showTitle: false,
-                ),
-              ) : const SizedBox(),
-              SizedBox(width: ResponsiveHelper.isDesktop(context) ? Dimensions.paddingSizeSmall : 0),
-
-              Expanded(
-                child: CustomTextFieldWidget(
-                  hintText: 'write_house_number'.tr,
-                  labelText: 'house'.tr,
-                  inputType: TextInputType.text,
-                  focusNode: checkoutController.houseNode,
-                  nextFocus: checkoutController.floorNode,
-                  controller: checkoutController.houseController,
-                  showTitle: false,
-                ),
-              ),
-              const SizedBox(width: Dimensions.paddingSizeSmall),
-
-              Expanded(
-                child: CustomTextFieldWidget(
-                  hintText: 'write_floor_number'.tr,
-                  labelText: 'floor'.tr,
-                  inputType: TextInputType.text,
-                  focusNode: checkoutController.floorNode,
-                  inputAction: TextInputAction.done,
-                  controller: checkoutController.floorController,
-                  showTitle: false,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: Dimensions.paddingSizeExtraSmall),
-
-        ]),
-      ) : const SizedBox(),
+                                          return file != null
+                                              ? Container(
+                                                  margin: const EdgeInsets.only(
+                                                      right: Dimensions
+                                                          .paddingSizeSmall),
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            Dimensions
+                                                                .radiusDefault),
+                                                  ),
+                                                  child: Stack(children: [
+                                                    ClipRRect(
+                                                      borderRadius: BorderRadius
+                                                          .circular(Dimensions
+                                                              .radiusDefault),
+                                                      child: GetPlatform.isWeb
+                                                          ? Image.network(
+                                                              file.path,
+                                                              width: 60,
+                                                              height: 60,
+                                                              fit: BoxFit.cover,
+                                                            )
+                                                          : Image.file(
+                                                              File(file.path),
+                                                              width: 60,
+                                                              height: 60,
+                                                              fit: BoxFit.cover,
+                                                            ),
+                                                    ),
+                                                  ]),
+                                                )
+                                              : const SizedBox();
+                                        },
+                                      ),
+                                    ),
+                                  ])
+                                : const SizedBox(),
+                          ],
+                        ),
+                      ]),
+                )
+              : const SizedBox(),
     ]);
   }
 
   void _checkPermission(Function onTap) async {
     LocationPermission permission = await Geolocator.checkPermission();
-    if(permission == LocationPermission.denied) {
+    if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
     }
-    if(permission == LocationPermission.denied) {
+    if (permission == LocationPermission.denied) {
       showCustomSnackBar('you_have_to_allow'.tr);
-    }else if(permission == LocationPermission.deniedForever) {
+    } else if (permission == LocationPermission.deniedForever) {
       Get.dialog(const PermissionDialog());
-    }else {
+    } else {
       onTap();
     }
   }

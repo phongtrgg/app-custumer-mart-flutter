@@ -125,17 +125,17 @@ class ItemCardWidget extends StatelessWidget {
                         }),
                       )
                     : const SizedBox(),
-                product.isRestaurantHalalActive! && product.isHalalFood!
-                    ? Positioned(
-                        top: isCampaignItem ? 10 : 40,
-                        right: 9,
-                        child: const CustomAssetImageWidget(
-                          Images.halalIcon,
-                          height: 30,
-                          width: 30,
-                        ),
-                      )
-                    : const SizedBox(),
+                // product.isRestaurantHalalActive! && product.isHalalFood!
+                //     ? Positioned(
+                //         top: isCampaignItem ? 10 : 40,
+                //         right: 9,
+                //         child: const CustomAssetImageWidget(
+                //           Images.halalIcon,
+                //           height: 30,
+                //           width: 30,
+                //         ),
+                //       )
+                //     : const SizedBox(),
                 DiscountTagWidget(
                   discount: product.restaurantDiscount! > 0
                       ? product.restaurantDiscount
