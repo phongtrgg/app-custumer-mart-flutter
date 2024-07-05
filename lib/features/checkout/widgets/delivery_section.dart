@@ -344,72 +344,45 @@ class DeliverySection extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            checkoutController.pickedPrescriptions.isNotEmpty
-                                ? Column(children: [
-                                    Container(
-                                      height: 80,
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical:
-                                              Dimensions.paddingSizeSmall),
-                                      child: ListView.builder(
-                                        scrollDirection: Axis.horizontal,
-                                        physics: const BouncingScrollPhysics(),
-                                        itemCount: checkoutController
-                                                .pickedPrescriptions.length +
-                                            1,
-                                        itemBuilder: (context, index) {
-                                          XFile? file = index ==
-                                                  checkoutController
-                                                      .pickedPrescriptions
-                                                      .length
-                                              ? null
-                                              : checkoutController
-                                                  .pickedPrescriptions[index];
-
-                                          if (index < 5 &&
-                                              index ==
-                                                  checkoutController
-                                                      .pickedPrescriptions
-                                                      .length) {}
-
-                                          return file != null
-                                              ? Container(
-                                                  margin: const EdgeInsets.only(
-                                                      right: Dimensions
-                                                          .paddingSizeSmall),
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            Dimensions
-                                                                .radiusDefault),
-                                                  ),
-                                                  child: Stack(children: [
-                                                    ClipRRect(
-                                                      borderRadius: BorderRadius
-                                                          .circular(Dimensions
-                                                              .radiusDefault),
-                                                      child: GetPlatform.isWeb
-                                                          ? Image.network(
-                                                              file.path,
-                                                              width: 60,
-                                                              height: 60,
-                                                              fit: BoxFit.cover,
-                                                            )
-                                                          : Image.file(
-                                                              File(file.path),
-                                                              width: 60,
-                                                              height: 60,
-                                                              fit: BoxFit.cover,
-                                                            ),
-                                                    ),
-                                                  ]),
-                                                )
-                                              : const SizedBox();
+                              checkoutController.pickedPrescriptions.isNotEmpty
+                                  ? Column(
+                                children: [
+                                  Container(
+                                    height: 80,
+                                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                    child: Center(
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          showImagePopup(checkoutController.pickedPrescriptions[0].path);
                                         },
+                                        child: Container(
+                                          margin: const EdgeInsets.only(right: 8.0),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(8.0),
+                                          ),
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(8.0),
+                                            child: GetPlatform.isWeb
+                                                ? Image.network(
+                                              checkoutController.pickedPrescriptions[0].path,
+                                              width: 60,
+                                              height: 60,
+                                              fit: BoxFit.cover,
+                                            )
+                                                : Image.file(
+                                              File(checkoutController.pickedPrescriptions[0].path),
+                                              width: 60,
+                                              height: 60,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                  ])
-                                : const SizedBox(),
+                                  ),
+                                ],
+                              )
+                                  : const SizedBox(),
                           ],
                         ),
                       ]),
@@ -431,4 +404,21 @@ class DeliverySection extends StatelessWidget {
       onTap();
     }
   }
+}
+
+void showImagePopup(String imagePath) {
+  Get.dialog(
+    AlertDialog(
+      content:  GetPlatform.isWeb
+            ? Image.network(
+          imagePath,
+          fit: BoxFit.cover,
+        )
+            : Image.file(
+          File(imagePath),
+          fit: BoxFit.contain,
+        ),
+
+    ),
+  );
 }

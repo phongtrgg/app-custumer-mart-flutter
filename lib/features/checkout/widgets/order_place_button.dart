@@ -91,8 +91,8 @@ class OrderPlaceButton extends StatelessWidget {
         child: CustomButtonWidget(
             buttonText: checkoutController.isPartialPay
                 ? 'place_order'.tr
-                : checkoutController.paymentMethodIndex == 3
-                    ? 'test'.tr
+                : checkoutController.paymentMethodIndex == -1
+                    ? 'Choose a payment method'.tr
                     : 'confirm_order'.tr,
             radius: Dimensions.radiusDefault,
             isLoading: checkoutController.isLoading,

@@ -109,15 +109,15 @@ class OrderProductWidget extends StatelessWidget {
                   style: robotoMedium,
                   textDirection: TextDirection.ltr,
                 )),
-                Get.find<SplashController>().configModel!.toggleVegNonVeg!
-                    ? CustomAssetImageWidget(
-                        orderDetails.foodDetails!.veg == 0
-                            ? Images.nonVegImage
-                            : Images.vegImage,
-                        height: 11,
-                        width: 11,
-                      )
-                    : const SizedBox(),
+                // Get.find<SplashController>().configModel!.toggleVegNonVeg!
+                //     ? CustomAssetImageWidget(
+                //         orderDetails.foodDetails!.veg == 0
+                //             ? Images.nonVegImage
+                //             : Images.vegImage,
+                //         height: 11,
+                //         width: 11,
+                //       )
+                //     : const SizedBox(),
                 SizedBox(
                     width: orderDetails.foodDetails!.isRestaurantHalalActive! &&
                             orderDetails.foodDetails!.isHalalFood!

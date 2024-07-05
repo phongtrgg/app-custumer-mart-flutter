@@ -104,9 +104,12 @@ class PaymentSection extends StatelessWidget {
                   ) : const SizedBox(),
                 ])
             ),
-            !ResponsiveHelper.isDesktop(context) ? PriceConverter.convertAnimationPrice(
-              total,
-              textStyle: robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge, color: Theme.of(context).primaryColor),
+            !ResponsiveHelper.isDesktop(context) ? Text(
+              PriceConverter.convertPrice(total),
+              style: robotoBold.copyWith(
+                fontSize: Dimensions.fontSizeLarge,
+                color: Theme.of(context).primaryColor,
+              ),
             ) : const SizedBox(),
 
           ]),

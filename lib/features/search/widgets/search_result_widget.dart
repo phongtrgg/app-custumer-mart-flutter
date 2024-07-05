@@ -67,7 +67,7 @@ class SearchResultWidgetState extends State<SearchResultWidget>
                         ),
                         const SizedBox(width: Dimensions.paddingSizeExtraSmall),
                         Text(
-                          truncateText("${widget.searchText}", 28),
+                          truncateText("${widget.searchText}", 24),
                           style: robotoBold.copyWith(
                               color:
                                   Theme.of(context).textTheme.bodyLarge!.color,

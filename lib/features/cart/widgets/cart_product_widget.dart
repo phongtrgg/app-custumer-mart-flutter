@@ -177,26 +177,26 @@ class CartProductWidget extends StatelessWidget {
                                     const SizedBox(
                                         width:
                                             Dimensions.paddingSizeExtraSmall),
-                                    CustomAssetImageWidget(
-                                      cart.product!.veg == 0
-                                          ? Images.nonVegImage
-                                          : Images.vegImage,
-                                      height: 11,
-                                      width: 11,
-                                    ),
+                                    // CustomAssetImageWidget(
+                                    //   cart.product!.veg == 0
+                                    //       ? Images.nonVegImage
+                                    //       : Images.vegImage,
+                                    //   height: 11,
+                                    //   width: 11,
+                                    // ),
                                     SizedBox(
                                         width: cart.product!
                                                     .isRestaurantHalalActive! &&
                                                 cart.product!.isHalalFood!
                                             ? Dimensions.paddingSizeExtraSmall
                                             : 0),
-                                    cart.product!.isRestaurantHalalActive! &&
-                                            cart.product!.isHalalFood!
-                                        ? const CustomAssetImageWidget(
-                                            Images.halalIcon,
-                                            height: 13,
-                                            width: 13)
-                                        : const SizedBox(),
+                                    // cart.product!.isRestaurantHalalActive! &&
+                                    //         cart.product!.isHalalFood!
+                                    //     ? const CustomAssetImageWidget(
+                                    //         Images.halalIcon,
+                                    //         height: 13,
+                                    //         width: 13)
+                                    //     : const SizedBox(),
                                   ]),
                                   const SizedBox(height: 2),
                                   RatingBarWidget(

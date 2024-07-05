@@ -556,23 +556,14 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                                                       color: Theme.of(context)
                                                           .primaryColor),
                                                 ),
-                                                PriceConverter
-                                                    .convertAnimationPrice(
-                                                  total *
-                                                      (checkoutController
-                                                              .subscriptionOrder
-                                                          ? (subscriptionQty ==
-                                                                  0
-                                                              ? 1
-                                                              : subscriptionQty)
-                                                          : 1),
-                                                  textStyle:
-                                                      robotoMedium.copyWith(
-                                                          fontSize: Dimensions
-                                                              .fontSizeLarge,
-                                                          color: Theme.of(
-                                                                  context)
-                                                              .primaryColor),
+                                                Text(
+                                                  PriceConverter.convertPrice(
+                                                      total * (checkoutController.subscriptionOrder ? (subscriptionQty == 0 ? 1 : subscriptionQty) : 1)
+                                                  ),
+                                                  style: robotoBold.copyWith(
+                                                    fontSize: Dimensions.fontSizeLarge,
+                                                    color: Theme.of(context).primaryColor,
+                                                  ),
                                                 ),
                                               ]),
                                         ),

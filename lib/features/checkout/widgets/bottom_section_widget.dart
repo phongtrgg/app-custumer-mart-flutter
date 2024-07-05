@@ -292,6 +292,7 @@ class BottomSectionWidget extends StatelessWidget {
                       total,
                       textStyle: robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge, color: checkoutController.isPartialPay ? Theme.of(context).textTheme.bodyMedium!.color : Theme.of(context).primaryColor),
                     ),
+
                   ]),
                 ],
               ) : const SizedBox(),

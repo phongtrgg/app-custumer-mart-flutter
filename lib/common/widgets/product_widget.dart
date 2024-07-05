@@ -202,32 +202,32 @@ class ProductWidget extends StatelessWidget {
                                 ),
                                 const SizedBox(
                                     width: Dimensions.paddingSizeExtraSmall),
-                                (!isRestaurant &&
-                                        Get.find<SplashController>()
-                                            .configModel!
-                                            .toggleVegNonVeg!)
-                                    ? Image.asset(
-                                        product != null && product!.veg == 0
-                                            ? Images.nonVegImage
-                                            : Images.vegImage,
-                                        height: 10,
-                                        width: 10,
-                                        fit: BoxFit.contain)
-                                    : const SizedBox(),
+                                // (!isRestaurant &&
+                                //         Get.find<SplashController>()
+                                //             .configModel!
+                                //             .toggleVegNonVeg!)
+                                //     ? Image.asset(
+                                //         product != null && product!.veg == 0
+                                //             ? Images.nonVegImage
+                                //             : Images.vegImage,
+                                //         height: 10,
+                                //         width: 10,
+                                //         fit: BoxFit.contain)
+                                //     : const SizedBox(),
                                 SizedBox(
                                     width: !isRestaurant &&
                                             product!.isRestaurantHalalActive! &&
                                             product!.isHalalFood!
                                         ? 5
                                         : 0),
-                                !isRestaurant &&
-                                        product!.isRestaurantHalalActive! &&
-                                        product!.isHalalFood!
-                                    ? const CustomAssetImageWidget(
-                                        Images.halalIcon,
-                                        height: 13,
-                                        width: 13)
-                                    : const SizedBox(),
+                                // !isRestaurant &&
+                                //         product!.isRestaurantHalalActive! &&
+                                //         product!.isHalalFood!
+                                //     ? const CustomAssetImageWidget(
+                                //         Images.halalIcon,
+                                //         height: 13,
+                                //         width: 13)
+                                //     : const SizedBox(),
                                 const SizedBox(
                                     width: Dimensions.paddingSizeLarge),
                               ]),
