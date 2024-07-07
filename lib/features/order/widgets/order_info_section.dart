@@ -1303,27 +1303,27 @@ Widget offlineView(BuildContext context, OrderController orderController,
 void openDialog(BuildContext context, String imageUrl) => showDialog(
       context: context,
       builder: (BuildContext context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(Dimensions.radiusLarge)),
-          child: Stack(children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(Dimensions.radiusLarge),
-              child: PhotoView(
-                tightMode: true,
-                imageProvider: NetworkImage(imageUrl),
-                heroAttributes: PhotoViewHeroAttributes(tag: imageUrl),
-              ),
-            ),
-            Positioned(
-                top: 0,
-                right: 0,
-                child: IconButton(
-                  splashRadius: 5,
-                  onPressed: () => Get.back(),
-                  icon: const Icon(Icons.cancel, color: Colors.red),
-                )),
-          ]),
-        );
+            return Dialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(Dimensions.radiusLarge)),
+              child: Stack(children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(Dimensions.radiusLarge),
+                  child: PhotoView(
+                    tightMode: true,
+                    imageProvider: NetworkImage(imageUrl),
+                    heroAttributes: PhotoViewHeroAttributes(tag: imageUrl),
+                  ),
+                ),
+                Positioned(
+                    top: 0,
+                    right: 0,
+                    child: IconButton(
+                      splashRadius: 5,
+                      onPressed: () => Get.back(),
+                      icon: const Icon(Icons.cancel, color: Colors.red),
+                    )),
+              ]),
+            );
       },
     );
