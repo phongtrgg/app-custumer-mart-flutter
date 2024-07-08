@@ -46,7 +46,7 @@ class CategoryPopUpWidget extends StatelessWidget {
                               onTap: () => Get.toNamed(
                                   RouteHelper.getCategoryProductRoute(
                                 categoryController.categoryList![index].id,
-                                categoryController.categoryList![index].name!,
+                                categoryController.categoryList![index].name!,null
                               )),
                               child: SizedBox(
                                 width: 50,

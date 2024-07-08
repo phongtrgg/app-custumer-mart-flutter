@@ -11,8 +11,8 @@ class AppConstants {
   static const String webHostedUrl = 'https://stackfood-web.6amtech.com';
 
   // static const String baseUrl = 'https://stackfood-admin.6amtech.com';
+  // static const String baseUrl = 'http://192.168.102.31:8000';
   static const String baseUrl = 'http://192.168.102.17:8000';
-  // static const String baseUrl = 'http://127.0.0.1:8000';
   // static const String baseUrl = 'https://shopmart.tomiru.com';
   static const String categoryUri = '/api/v1/categories';
   static const String bannerUri = '/api/v1/banners';
@@ -21,6 +21,7 @@ class AppConstants {
   static const String reviewedProductUri = '/api/v1/products/most-reviewed';
   static const String searchProductUri = '/api/v1/products/details/';
   static const String subCategoryUri = '/api/v1/categories/childes/';
+  static const String subCategoryChildrenUri = '/api/v1/categories/sub-children/';
   static const String categoryProductUri = '/api/v1/categories/products/';
   static const String categoryRestaurantUri = '/api/v1/categories/restaurants/';
   static const String configUri = '/api/v1/config';

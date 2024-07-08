@@ -6,6 +6,7 @@ import 'package:get/get_connect/connect.dart';
 abstract class CategoryServiceInterface{
   Future<List<CategoryModel>?> getCategoryList(bool reload, List<CategoryModel>? fetchedCategoryList);
   Future<List<CategoryModel>?> getSubCategoryList(String? parentID);
+  Future<List<CategoryModel>?> getSubCategoryChildrenList(String? parentID);
   Future<ProductModel?> getCategoryProductList(String? categoryID, int offset, String type);
   Future<RestaurantModel?> getCategoryRestaurantList(String? categoryID, int offset, String type);
   Future<Response> getSearchData(String? query, String? categoryID, bool isRestaurant, String type);

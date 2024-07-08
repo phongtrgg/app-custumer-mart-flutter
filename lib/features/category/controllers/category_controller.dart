@@ -41,6 +41,12 @@ class CategoryController extends GetxController implements GetxService {
   bool _isSearching = false;
   bool get isSearching => _isSearching;
 
+  int _categoryIndex=0;
+  int get categoryIndex => _categoryIndex;
+
+  String? _categoryTitle;
+  String get categoryTitle => _categoryTitle ?? '';
+
   int _subCategoryIndex = 0;
   int get subCategoryIndex => _subCategoryIndex;
 
@@ -55,6 +61,9 @@ class CategoryController extends GetxController implements GetxService {
 
   int _offset = 1;
   int get offset => _offset;
+
+  int _selectedCategoryIndex=0;
+  int get selectedCategoryIndex => _selectedCategoryIndex;
 
   // String? _restResultText = '';
   // String? _foodResultText = '';
@@ -87,7 +96,11 @@ class CategoryController extends GetxController implements GetxService {
       getCategoryProductList(_subCategoryIndex == 0 ? categoryID : _subCategoryList![index].id.toString(), 1, _type, true);
     }
   }
-
+  void setCategoryIndexAndTitle(int index, String? title) {
+    _categoryIndex = index;
+    _categoryTitle = title;
+    update();
+  }
   void getCategoryProductList(String? categoryID, int offset, String type, bool notify) async {
     _offset = offset;
     if(offset == 1) {
@@ -205,4 +218,41 @@ class CategoryController extends GetxController implements GetxService {
     update();
   }
 
+  setSelectedCategoryIndex(int index) {
+    _selectedCategoryIndex = index;
+    update();
+  }
+// category Children 3
+  int _subCategoryChildrenIndex = 0;
+  int get subCategoryChildrenIndex => _subCategoryChildrenIndex;
+  List<CategoryModel>? _subCategoryChildrenList;
+  List<CategoryModel>? get subCategoryChildrenList => _subCategoryChildrenList;
+  int _selectedCategoryChildrenIndex=0;
+  int get selectedCategoryChildrenIndex => _selectedCategoryChildrenIndex;
+
+  void getSubCategoryChildrenList(String? categoryID) async {
+    _subCategoryChildrenIndex = 0;
+    _subCategoryChildrenList = null;
+    _categoryProductList = null;
+    _isRestaurant = false;
+    _subCategoryChildrenList = await categoryServiceInterface.getSubCategoryChildrenList(categoryID);
+    if(_subCategoryChildrenList != null) {
+      getCategoryProductList(categoryID, 1, 'all', false);
+    }
+  }
+
+  void setSubCategoryChildrenIndex(int index, String? categoryID) {
+    _subCategoryChildrenIndex = index;
+    if(_isRestaurant) {
+      getCategoryRestaurantList(_subCategoryChildrenIndex == 0 ? categoryID : _subCategoryChildrenList![index].id.toString(), 1, _type, true);
+    }else {
+      getCategoryProductList(_subCategoryChildrenIndex == 0 ? categoryID : _subCategoryChildrenList![index].id.toString(), 1, _type, true);
+    }
+    update();
+  }
+  setSelectedCategoryChildrenIndex(int index) {
+    _selectedCategoryChildrenIndex = index;
+    update();
+  }
+//end category Children 3
 }

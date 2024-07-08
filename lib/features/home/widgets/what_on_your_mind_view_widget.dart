@@ -127,10 +127,17 @@ class WhatOnYourMindViewWidget extends StatelessWidget {
                         ),
                         child: CustomInkWellWidget(
                           onTap: () =>
-                              Get.toNamed(RouteHelper.getCategoryProductRoute(
-                            categoryController.categoryList![index].id,
-                            categoryController.categoryList![index].name!,
-                          )),
+                          {
+                            categoryController.getSubCategoryList(categoryController.categoryList![index].id.toString()),
+                            categoryController.setCategoryIndexAndTitle(categoryController.categoryList![index].id!, categoryController.categoryList![index].name!),
+                            categoryController.setSelectedCategoryIndex(index),
+                            Get.toNamed(RouteHelper.getCategoryRoute()),
+                            // Get.toNamed(RouteHelper.getCategoryProductRoute(
+                            //     categoryController.categoryList![index].id,
+                            //     categoryController.categoryList![index].name!,
+                            //     null
+                            // )),
+                          },
                           radius: Dimensions.radiusSmall,
                           child: Column(children: [
                             Container(

@@ -52,6 +52,18 @@ class CategoryRepository implements CategoryRepositoryInterface {
   }
 
   @override
+  Future<List<CategoryModel>?> getSubCategoryChildrenList(String? parentID) async {
+    List<CategoryModel>? subCategoryChidrenList;
+    Response response = await apiClient.getData('${AppConstants.subCategoryChildrenUri}$parentID');
+    if (response.statusCode == 200) {
+      subCategoryChidrenList= [];
+      subCategoryChidrenList.add(CategoryModel(id: int.parse(parentID!), name: 'all'.tr));
+      response.body.forEach((category) => subCategoryChidrenList!.add(CategoryModel.fromJson(category)));
+    }
+    return subCategoryChidrenList;
+  }
+
+  @override
   Future<ProductModel?> getCategoryProductList(String? categoryID, int offset, String type) async {
     ProductModel? productModel;
     Response response = await apiClient.getData('${AppConstants.categoryProductUri}$categoryID?limit=10&offset=$offset&type=$type');

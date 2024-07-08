@@ -210,10 +210,10 @@ class RouteHelper {
   }
   static String getHtmlRoute(String page) => '$html?page=$page';
   static String getCategoryRoute() => categories;
-  static String getCategoryProductRoute(int? id, String name) {
+  static String getCategoryProductRoute(int? id, String name,int? sub) {
     List<int> encoded = utf8.encode(name);
     String data = base64Encode(encoded);
-    return '$categoryProduct?id=$id&name=$data';
+    return '$categoryProduct?id=$id&name=$data&sub=$sub';
   }
   static String getPopularFoodRoute(bool isPopular, {bool fromIsRestaurantFood = false, int? restaurantId}) => '$popularFoods?page=${isPopular ? 'popular' : 'reviewed'}&fromIsRestaurantFood=$fromIsRestaurantFood&restaurant_id=$restaurantId';
   static String getItemCampaignRoute() => itemCampaign;
@@ -407,8 +407,9 @@ class RouteHelper {
     GetPage(name: categories, page: () => getRoute(const CategoryScreen())),
     GetPage(name: categoryProduct, page: () {
       List<int> decode = base64Decode(Get.parameters['name']!.replaceAll(' ', '+'));
+      int? subCategoryId = int.tryParse(Get.parameters['sub'] ?? '');
       String data = utf8.decode(decode);
-      return getRoute(CategoryProductScreen(categoryID: Get.parameters['id'], categoryName: data));
+      return getRoute(CategoryProductScreen(categoryID: Get.parameters['id'], categoryName: data, subCategoryID: subCategoryId,));
     }),
     GetPage(name: popularFoods, page: () {
       return getRoute(PopularFoodScreen(

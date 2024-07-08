@@ -14,11 +14,14 @@ import 'package:stackfood_multivendor/common/widgets/web_menu_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../common/widgets/custom_image_widget.dart';
+
 class CategoryProductScreen extends StatefulWidget {
   final String? categoryID;
   final String categoryName;
+  final int? subCategoryID;
   const CategoryProductScreen(
-      {super.key, required this.categoryID, required this.categoryName});
+      {super.key, required this.categoryID, required this.categoryName, this.subCategoryID});
 
   @override
   CategoryProductScreenState createState() => CategoryProductScreenState();
@@ -35,7 +38,7 @@ class CategoryProductScreenState extends State<CategoryProductScreen>
     super.initState();
 
     _tabController = TabController(length: 2, initialIndex: 0, vsync: this);
-    Get.find<CategoryController>().getSubCategoryList(widget.categoryID);
+    // Get.find<CategoryController>().getSubCategoryList(widget.categoryID);
     scrollController.addListener(() {
       if (scrollController.position.pixels ==
               scrollController.position.maxScrollExtent &&
@@ -231,61 +234,153 @@ class CategoryProductScreenState extends State<CategoryProductScreen>
           endDrawer: const MenuDrawerWidget(),
           endDrawerEnableOpenDragGesture: false,
           body: Column(children: [
+            const SizedBox(height:Dimensions.paddingSizeExtraSmall),
             (catController.subCategoryList != null &&
                     !catController.isSearching)
-                ? Center(
-                    child: Container(
-                    height: 40,
-                    width: Dimensions.webMaxWidth,
-                    color: Theme.of(context).cardColor,
-                    padding: const EdgeInsets.symmetric(
-                        vertical: Dimensions.paddingSizeExtraSmall),
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: catController.subCategoryList!.length,
-                      padding: const EdgeInsets.only(
-                          left: Dimensions.paddingSizeSmall),
-                      physics: const BouncingScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        return InkWell(
-                          onTap: () => catController.setSubCategoryIndex(
-                              index, widget.categoryID),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: Dimensions.paddingSizeSmall,
-                                vertical: Dimensions.paddingSizeExtraSmall),
-                            margin: const EdgeInsets.only(
-                                right: Dimensions.paddingSizeSmall),
-                            decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.circular(Dimensions.radiusSmall),
-                              color: index == catController.subCategoryIndex
-                                  ? Theme.of(context)
-                                      .primaryColor
-                                      .withOpacity(0.1)
-                                  : Colors.transparent,
+                ?
+            // sub category
+                  Center(
+                    child: SizedBox(
+                      width: Dimensions.webMaxWidth,
+                      child: GetBuilder<CategoryController>(
+                        builder: (catController) {
+                          return SizedBox(
+                            height: 80,
+                            child: ListView.builder(
+                              controller: scrollController,
+                              scrollDirection: Axis.horizontal,
+                              physics: const BouncingScrollPhysics(),
+                              itemCount: catController.subCategoryList!.length,
+                              itemBuilder: (context, index) {
+                                return InkWell(
+                                  onTap: () {
+                                    catController.setSubCategoryIndex(index, widget.categoryID);
+                                    Get.find<CategoryController>()
+                                        .setSubCategoryChildrenIndex(
+                                        index,
+                                        Get.find<CategoryController>()
+                                            .selectedCategoryIndex
+                                            .toString());
+                                    if(index==0){
+                                      catController.setSelectedCategoryChildrenIndex(0);
+                                    }
+                                  },
+                                  child: Container(
+                                    width: 80,
+                                    height: 80,
+                                    decoration: BoxDecoration(
+                                     color: index == catController.subCategoryIndex
+                                             ? Theme.of(context).primaryColor.withOpacity(0.1)
+                                             : Theme.of(context).cardColor
+                                    ),
+                                    alignment: Alignment.center,
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        ClipRRect(
+                                          borderRadius: BorderRadius.circular(
+                                              Dimensions.radiusSmall),
+                                          child: CustomImageWidget(
+                                            height: 40,
+                                            width: 40,
+                                            fit: BoxFit.cover,
+                                            image: '${catController.subCategoryList![index].image}',
+                                          ),
+                                        ),
+                                        const SizedBox(height: Dimensions.paddingSizeExtraSmall),
+                                        Text(
+                                          catController.subCategoryList![index].name!,
+                                          textAlign: TextAlign.center,
+                                          style: robotoMedium.copyWith(
+                                              fontSize: Dimensions.fontSizeExtraSmall),
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
                             ),
-                            child: Column(
+                          );
+                        },
+                      ),
+                    ),
+                  )
+                : const SizedBox(),
+            const SizedBox(height:Dimensions.paddingSizeExtraSmall),
+            // sub category children
+             (catController.subCategoryChildrenList != null &&
+                !catController.isSearching && catController.subCategoryChildrenList!.length >1&& catController
+                 .subCategoryIndex!=0 )
+                ?
+            Center(
+              child: SizedBox(
+                width: Dimensions.webMaxWidth,
+                child: GetBuilder<CategoryController>(
+                  builder: (catController) {
+                    return SizedBox(
+                      height: 80,
+                      child: ListView.builder(
+                        controller: scrollController,
+                        scrollDirection: Axis.horizontal,
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: catController.subCategoryChildrenList!.length,
+                        itemBuilder: (context, index) {
+                          bool isSelected =
+                              index == catController.selectedCategoryChildrenIndex;
+
+                          return  index !=0 ? InkWell(
+                            onTap: () {
+                              catController.setSubCategoryChildrenIndex(index, widget.categoryID);
+                              catController.setSelectedCategoryChildrenIndex(index);
+                            },
+                            child: Container(
+                              width: 80,
+                              height: 80,
+                              decoration: BoxDecoration(
+                                  color: isSelected
+                                      ? Theme.of(context).primaryColor.withOpacity(0.1)
+                                      : Theme.of(context).cardColor
+                              ),
+                              alignment: Alignment.center,
+                              child:
+
+                              Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text(
-                                    catController.subCategoryList![index].name!,
-                                    style: index ==
-                                            catController.subCategoryIndex
-                                        ? robotoMedium.copyWith(
-                                            fontSize: Dimensions.fontSizeSmall,
-                                            color:
-                                                Theme.of(context).primaryColor)
-                                        : robotoRegular.copyWith(
-                                            fontSize: Dimensions.fontSizeSmall),
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(
+                                        Dimensions.radiusSmall),
+                                    child: CustomImageWidget(
+                                      height: 40,
+                                      width: 40,
+                                      fit: BoxFit.cover,
+                                      image: '${catController.subCategoryChildrenList![index].image}',
+                                    ),
                                   ),
-                                ]),
-                          ),
-                        );
-                      },
-                    ),
-                  ))
+                                  const SizedBox(height: Dimensions.paddingSizeExtraSmall),
+                                  Text(
+                                    catController.subCategoryChildrenList![index].name!,
+                                    textAlign: TextAlign.center,
+                                    style: robotoMedium.copyWith(
+                                        fontSize: Dimensions.fontSizeExtraSmall),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ):const SizedBox();
+                        },
+                      ),
+                    );
+                  },
+                ),
+              ),
+            )
                 : const SizedBox(),
+            const SizedBox(height:Dimensions.paddingSizeExtraSmall),
             Center(
                 child: Container(
               width: Dimensions.webMaxWidth,

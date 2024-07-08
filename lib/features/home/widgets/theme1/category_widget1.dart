@@ -57,7 +57,7 @@ class CategoryWidget1 extends StatelessWidget {
                                         categoryController
                                             .categoryList![index].id,
                                         categoryController
-                                            .categoryList![index].name!,
+                                            .categoryList![index].name!,null
                                       )),
                                       child: SizedBox(
                                         width: 75,
