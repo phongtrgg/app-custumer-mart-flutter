@@ -184,6 +184,14 @@ class _ProductBottomSheetWidgetState extends State<ProductBottomSheetWidget> {
                                                             ? 100
                                                             : 140,
                                                         fit: BoxFit.cover,
+                                                        resize: true,
+                                                        minHeight: ResponsiveHelper.isMobile(context)
+                                                            ? 100
+                                                            : 140,
+                                                        minWidth: ResponsiveHelper.isMobile(context)
+                                                            ? 100
+                                                            : 140,
+                                                        quality: 90,
                                                       ),
                                                     ),
                                                     DiscountTagWidget(

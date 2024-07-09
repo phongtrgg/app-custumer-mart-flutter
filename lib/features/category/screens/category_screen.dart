@@ -164,6 +164,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                   child: SizedBox(
                     width: Dimensions.webMaxWidth,
                     child: GetBuilder<CategoryController>(
+
                       builder: (catController) {
                         return catController.categoryList != null
                             ? catController.subCategoryList != null
@@ -261,7 +262,8 @@ class _CategoryScreenState extends State<CategoryScreen> {
                           },
                         )
                             : NoDataScreen(title: 'no_category_found'.tr)
-                            : const Center(child: CircularProgressIndicator());
+                            // : const Center(child: CircularProgressIndicator());
+                            : const SizedBox();
                       },
                     ),
                   ),

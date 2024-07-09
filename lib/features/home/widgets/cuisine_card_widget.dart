@@ -35,6 +35,10 @@ class CuisineCardWidget extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(50),
                 child: CustomImageWidget(image: image,
+                    quality: 90,
+                    resize: true,
+                    minWidth: 100,
+                    minHeight: 100,
                     fit: BoxFit.cover, height: 100, width: 100),
               ),
             ),

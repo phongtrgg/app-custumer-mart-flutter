@@ -11,7 +11,7 @@ class AppConstants {
   static const String webHostedUrl = 'https://stackfood-web.6amtech.com';
 
   // static const String baseUrl = 'https://stackfood-admin.6amtech.com';
-  // static const String baseUrl = 'http://192.168.102.31:8000';
+  // static const String baseUrl = 'http://192.168.102.17:8000';
   static const String baseUrl = 'http://192.168.102.17:8000';
   // static const String baseUrl = 'https://shopmart.tomiru.com';
   static const String categoryUri = '/api/v1/categories';

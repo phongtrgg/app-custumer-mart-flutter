@@ -30,7 +30,10 @@ class CategoryProductScreen extends StatefulWidget {
 class CategoryProductScreenState extends State<CategoryProductScreen>
     with TickerProviderStateMixin {
   final ScrollController scrollController = ScrollController();
+  final ScrollController subCategoryScrollController = ScrollController();
+  final ScrollController subCategoryChildrenScrollController = ScrollController();
   final ScrollController restaurantScrollController = ScrollController();
+
   TabController? _tabController;
 
   @override
@@ -89,7 +92,12 @@ class CategoryProductScreenState extends State<CategoryProductScreen>
       }
     });
   }
-
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    Get.find<CategoryController>().clearSubCategoryChildrenList;
+  }
   @override
   Widget build(BuildContext context) {
     return GetBuilder<CategoryController>(builder: (catController) {
@@ -183,59 +191,59 @@ class CategoryProductScreenState extends State<CategoryProductScreen>
                           color: Theme.of(context).textTheme.bodyLarge!.color,
                           size: 25),
                     ),
-                    VegFilterWidget(
-                        type: catController.type,
-                        fromAppBar: true,
-                        onSelected: (String type) {
-                          if (catController.isSearching) {
-                            catController.searchData(
-                              catController.subCategoryIndex == 0
-                                  ? widget.categoryID
-                                  : catController
-                                      .subCategoryList![
-                                          catController.subCategoryIndex]
-                                      .id
-                                      .toString(),
-                              '1',
-                              type,
-                            );
-                          } else {
-                            if (catController.isRestaurant) {
-                              catController.getCategoryRestaurantList(
-                                catController.subCategoryIndex == 0
-                                    ? widget.categoryID
-                                    : catController
-                                        .subCategoryList![
-                                            catController.subCategoryIndex]
-                                        .id
-                                        .toString(),
-                                1,
-                                type,
-                                true,
-                              );
-                            } else {
-                              catController.getCategoryProductList(
-                                catController.subCategoryIndex == 0
-                                    ? widget.categoryID
-                                    : catController
-                                        .subCategoryList![
-                                            catController.subCategoryIndex]
-                                        .id
-                                        .toString(),
-                                1,
-                                type,
-                                true,
-                              );
-                            }
-                          }
-                        }),
+                    // VegFilterWidget(
+                    //     type: catController.type,
+                    //     fromAppBar: true,
+                    //     onSelected: (String type) {
+                    //       if (catController.isSearching) {
+                    //         catController.searchData(
+                    //           catController.subCategoryIndex == 0
+                    //               ? widget.categoryID
+                    //               : catController
+                    //                   .subCategoryList![
+                    //                       catController.subCategoryIndex]
+                    //                   .id
+                    //                   .toString(),
+                    //           '1',
+                    //           type,
+                    //         );
+                    //       } else {
+                    //         if (catController.isRestaurant) {
+                    //           catController.getCategoryRestaurantList(
+                    //             catController.subCategoryIndex == 0
+                    //                 ? widget.categoryID
+                    //                 : catController
+                    //                     .subCategoryList![
+                    //                         catController.subCategoryIndex]
+                    //                     .id
+                    //                     .toString(),
+                    //             1,
+                    //             type,
+                    //             true,
+                    //           );
+                    //         } else {
+                    //           catController.getCategoryProductList(
+                    //             catController.subCategoryIndex == 0
+                    //                 ? widget.categoryID
+                    //                 : catController
+                    //                     .subCategoryList![
+                    //                         catController.subCategoryIndex]
+                    //                     .id
+                    //                     .toString(),
+                    //             1,
+                    //             type,
+                    //             true,
+                    //           );
+                    //         }
+                    //       }
+                    //     }),
                   ],
                 ),
           endDrawer: const MenuDrawerWidget(),
           endDrawerEnableOpenDragGesture: false,
           body: Column(children: [
             const SizedBox(height:Dimensions.paddingSizeExtraSmall),
-            (catController.subCategoryList != null &&
+            (catController.subCategoryList != null && catController.subCategoryList!.length>1&&
                     !catController.isSearching)
                 ?
             // sub category
@@ -247,23 +255,23 @@ class CategoryProductScreenState extends State<CategoryProductScreen>
                           return SizedBox(
                             height: 80,
                             child: ListView.builder(
-                              controller: scrollController,
+                              controller: subCategoryScrollController,
                               scrollDirection: Axis.horizontal,
                               physics: const BouncingScrollPhysics(),
                               itemCount: catController.subCategoryList!.length,
                               itemBuilder: (context, index) {
                                 return InkWell(
                                   onTap: () {
-                                    catController.setSubCategoryIndex(index, widget.categoryID);
-                                    Get.find<CategoryController>()
+                                    catController.setSubCategoryIndex(index, catController.subCategoryList![index].id.toString());
+                                    catController
                                         .setSubCategoryChildrenIndex(
                                         index,
                                         Get.find<CategoryController>()
-                                            .selectedCategoryIndex
+                                            .subCategoryIndex
                                             .toString());
-                                    if(index==0){
-                                      catController.setSelectedCategoryChildrenIndex(0);
-                                    }
+                                    // if(index==0){
+                                    //   Get.find<CategoryController>().clearSubCategoryChildrenList;
+                                    // }
                                   },
                                   child: Container(
                                     width: 80,
@@ -310,8 +318,8 @@ class CategoryProductScreenState extends State<CategoryProductScreen>
                 : const SizedBox(),
             const SizedBox(height:Dimensions.paddingSizeExtraSmall),
             // sub category children
-             (catController.subCategoryChildrenList != null &&
-                !catController.isSearching && catController.subCategoryChildrenList!.length >1&& catController
+             (catController.subCategoryChildrenList != null && catController.subCategoryChildrenList!.length>1&&
+                !catController.isSearching && catController
                  .subCategoryIndex!=0 )
                 ?
             Center(
@@ -322,7 +330,7 @@ class CategoryProductScreenState extends State<CategoryProductScreen>
                     return SizedBox(
                       height: 80,
                       child: ListView.builder(
-                        controller: scrollController,
+                        controller: subCategoryChildrenScrollController,
                         scrollDirection: Axis.horizontal,
                         physics: const BouncingScrollPhysics(),
                         itemCount: catController.subCategoryChildrenList!.length,

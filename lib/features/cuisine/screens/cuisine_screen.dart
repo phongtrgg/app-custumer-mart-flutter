@@ -101,6 +101,7 @@ class _CuisineScreenState extends State<CuisineScreen> {
                                       name: cuisineController
                                           .cuisineModel!.cuisines![index].name!,
                                       fromCuisinesPage: true,
+
                                     ),
                                   ),
                                 );

@@ -89,8 +89,12 @@ class WhatOnYourMindViewWidget extends StatelessWidget {
                                   alignment: Alignment.centerRight,
                                   child: InkWell(
                                     hoverColor: Colors.transparent,
-                                    onTap: () => Get.toNamed(
-                                        RouteHelper.getCategoryRoute()),
+                                    onTap: () =>{
+                                      categoryController.getSubCategoryList(categoryController.categoryList![0].id.toString()),
+                                      categoryController.setCategoryIndexAndTitle(categoryController.categoryList![0].id!, categoryController.categoryList![0].name!),
+                                      categoryController.setSelectedCategoryIndex(0),
+                                      Get.toNamed(
+                                        RouteHelper.getCategoryRoute()),},
                                     child: Container(
                                       height: 40,
                                       width: 40,
@@ -161,6 +165,10 @@ class WhatOnYourMindViewWidget extends StatelessWidget {
                                   width: ResponsiveHelper.isMobile(context)
                                       ? 70
                                       : 100,
+                                  resize:ResponsiveHelper.isMobile(context) ?true:false,
+                                  minHeight: 70,
+                                  minWidth: 70,
+                                  quality: 90,
                                   fit: BoxFit.cover,
                                 ),
                               ),

@@ -87,7 +87,9 @@ class CategoryController extends GetxController implements GetxService {
       getCategoryProductList(categoryID, 1, 'all', false);
     }
   }
-
+  void setSubCategorySelector(int index){
+    _subCategoryIndex = index;
+  }
   void setSubCategoryIndex(int index, String? categoryID) {
     _subCategoryIndex = index;
     if(_isRestaurant) {
@@ -95,6 +97,9 @@ class CategoryController extends GetxController implements GetxService {
     }else {
       getCategoryProductList(_subCategoryIndex == 0 ? categoryID : _subCategoryList![index].id.toString(), 1, _type, true);
     }
+    clearSubCategoryChildrenList();
+    getSubCategoryChildrenList(categoryID);
+    update();
   }
   void setCategoryIndexAndTitle(int index, String? title) {
     _categoryIndex = index;
@@ -227,9 +232,10 @@ class CategoryController extends GetxController implements GetxService {
   int get subCategoryChildrenIndex => _subCategoryChildrenIndex;
   List<CategoryModel>? _subCategoryChildrenList;
   List<CategoryModel>? get subCategoryChildrenList => _subCategoryChildrenList;
+  //lưu lại vị trí index đã chọn
   int _selectedCategoryChildrenIndex=0;
   int get selectedCategoryChildrenIndex => _selectedCategoryChildrenIndex;
-
+//call lần đầu để lấy danh sách category 3
   void getSubCategoryChildrenList(String? categoryID) async {
     _subCategoryChildrenIndex = 0;
     _subCategoryChildrenList = null;
@@ -239,10 +245,20 @@ class CategoryController extends GetxController implements GetxService {
     if(_subCategoryChildrenList != null) {
       getCategoryProductList(categoryID, 1, 'all', false);
     }
+    update();
   }
-
+  //chọn sang cate 3 khác sẽ gọi đến hàm này sẽ lọc trong danh sách cate 3 cũ và render đúng theo ID
+  //**lưu ý chỉ sài khi đã có danh sách _subCategoryChildrenList
   void setSubCategoryChildrenIndex(int index, String? categoryID) {
     _subCategoryChildrenIndex = index;
+    if (_subCategoryChildrenList == null || _subCategoryChildrenList!.isEmpty) {
+      return;
+    }
+
+    if (index < 0 || index >= _subCategoryChildrenList!.length) {
+      update();
+      return;
+    }
     if(_isRestaurant) {
       getCategoryRestaurantList(_subCategoryChildrenIndex == 0 ? categoryID : _subCategoryChildrenList![index].id.toString(), 1, _type, true);
     }else {
@@ -250,9 +266,15 @@ class CategoryController extends GetxController implements GetxService {
     }
     update();
   }
+  //lưu lại index đang chọn để style
   setSelectedCategoryChildrenIndex(int index) {
     _selectedCategoryChildrenIndex = index;
     update();
+  }
+  //xoá bỏ category tầng 3
+  void clearSubCategoryChildrenList(){
+    _selectedCategoryChildrenIndex = 0;
+    _subCategoryChildrenList?.clear();
   }
 //end category Children 3
 }

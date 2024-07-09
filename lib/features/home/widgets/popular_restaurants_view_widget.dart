@@ -181,6 +181,11 @@ class PopularRestaurantsViewWidget extends StatelessWidget {
                                                                 .width *
                                                             0.7,
                                                     isRestaurant: true,
+                                                    resize:ResponsiveHelper
+                                                        .isDesktop(context)? false:true,
+                                                    quality: 100,
+                                                    minHeight:95,
+                                                    minWidth: 253,
                                                   ),
                                                   !isAvailable
                                                       ? Positioned(

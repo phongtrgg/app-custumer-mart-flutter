@@ -93,6 +93,7 @@ class CuisineViewWidget extends StatelessWidget {
                                     '${cuisineController.cuisineModel!.cuisines![index].image}',
                                 name: cuisineController
                                     .cuisineModel!.cuisines![index].name!,
+
                               ),
                             );
                           },
