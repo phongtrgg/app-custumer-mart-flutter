@@ -23,6 +23,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
+import '../../country/controller/countryController.dart';
+import '../../country/widgets/country_bottom_sheet.dart';
+import '../../language/widgets/language_selector.dart';
+
 class MenuScreen extends StatefulWidget {
   const MenuScreen({super.key});
 
@@ -57,11 +61,8 @@ class _MenuScreenState extends State<MenuScreen> {
                   padding: const EdgeInsets.all(1),
                   child: ClipOval(
                       child: CustomImageWidget(
-                    placeholder: isLoggedIn
-                        ? Images.profilePlaceholder
-                        : Images.guestIcon,
-                    image:
-                        '${(profileController.userInfoModel != null && isLoggedIn) ? profileController.userInfoModel!.image : ''}',
+                    placeholder: isLoggedIn ? Images.profilePlaceholder : Images.guestIcon,
+                    image: '${(profileController.userInfoModel != null && isLoggedIn) ? profileController.userInfoModel!.image : ''}',
                     height: 70,
                     width: 70,
                     fit: BoxFit.cover,
@@ -70,74 +71,59 @@ class _MenuScreenState extends State<MenuScreen> {
                 ),
                 const SizedBox(width: Dimensions.paddingSizeDefault),
                 Expanded(
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        isLoggedIn && profileController.userInfoModel == null
-                            ? Shimmer(
-                                duration: const Duration(seconds: 2),
-                                enabled: true,
-                                child: Container(
-                                  height: 16,
-                                  width: 200,
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey[
-                                        Get.find<ThemeController>().darkTheme
-                                            ? 700
-                                            : 200],
-                                    borderRadius: BorderRadius.circular(
-                                        Dimensions.radiusSmall),
-                                  ),
-                                ),
-                              )
-                            : Text(
-                                isLoggedIn
-                                    ? '${profileController.userInfoModel?.fName} ${profileController.userInfoModel?.lName}'
-                                    : 'guest_user'.tr,
-                                style: robotoBold.copyWith(
-                                    fontSize: Dimensions.fontSizeExtraLarge,
-                                    color: Theme.of(context).cardColor),
+                  child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    isLoggedIn && profileController.userInfoModel == null
+                        ? Shimmer(
+                            duration: const Duration(seconds: 2),
+                            enabled: true,
+                            child: Container(
+                              height: 16,
+                              width: 200,
+                              decoration: BoxDecoration(
+                                color: Colors.grey[Get.find<ThemeController>().darkTheme ? 700 : 200],
+                                borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
                               ),
-                        const SizedBox(
-                            height: Dimensions.paddingSizeExtraSmall),
-                        isLoggedIn && profileController.userInfoModel != null
-                            ? Text(
-                                DateConverter.containTAndZToUTCFormat(
-                                    profileController
-                                        .userInfoModel!.createdAt!),
-                                style: robotoMedium.copyWith(
-                                    fontSize: Dimensions.fontSizeSmall,
-                                    color: Theme.of(context).cardColor),
-                              )
-                            : InkWell(
-                                onTap: () async {
-                                  if (!ResponsiveHelper.isDesktop(context)) {
-                                    Get.toNamed(RouteHelper.getSignInRoute(
-                                            Get.currentRoute))
-                                        ?.then((value) {
-                                      if (AuthHelper.isLoggedIn()) {
-                                        profileController.getUserInfo();
-                                      }
-                                    });
-                                  } else {
-                                    Get.dialog(const SignInScreen(
-                                            exitFromApp: true,
-                                            backFromThis: true))
-                                        .then((value) {
-                                      if (AuthHelper.isLoggedIn()) {
-                                        profileController.getUserInfo();
-                                      }
-                                    });
+                            ),
+                          )
+                        : Text(
+                            isLoggedIn ? '${profileController.userInfoModel?.fName} ${profileController.userInfoModel?.lName}' : 'guest_user'.tr,
+                            style: robotoBold.copyWith(fontSize: Dimensions.fontSizeExtraLarge, color: Theme.of(context).cardColor),
+                          ),
+                    const SizedBox(height: Dimensions.paddingSizeExtraSmall),
+                    isLoggedIn && profileController.userInfoModel != null
+                        ? Text(
+                            DateConverter.containTAndZToUTCFormat(profileController.userInfoModel!.createdAt!),
+                            style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).cardColor),
+                          )
+                        : InkWell(
+                            onTap: () async {
+                              if (!ResponsiveHelper.isDesktop(context)) {
+                                Get.toNamed(RouteHelper.getSignInRoute(Get.currentRoute))?.then((value) {
+                                  if (AuthHelper.isLoggedIn()) {
+                                    profileController.getUserInfo();
                                   }
-                                },
-                                child: Text(
-                                  'login_to_view_all_feature'.tr,
-                                  style: robotoMedium.copyWith(
-                                      fontSize: Dimensions.fontSizeSmall,
-                                      color: Theme.of(context).cardColor),
-                                ),
-                              ),
-                      ]),
+                                });
+                              } else {
+                                Get.dialog(const SignInScreen(exitFromApp: true, backFromThis: true)).then((value) {
+                                  if (AuthHelper.isLoggedIn()) {
+                                    profileController.getUserInfo();
+                                  }
+                                });
+                              }
+                            },
+                            child: Text(
+                              'login_to_view_all_feature'.tr,
+                              style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).cardColor),
+                            ),
+                          ),
+                  ]),
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    LanguageSelector(isHomePage: true),
+                  ],
                 ),
               ]),
             ),
@@ -145,54 +131,29 @@ class _MenuScreenState extends State<MenuScreen> {
           Expanded(
               child: SingleChildScrollView(
             child: Ink(
-              color: Get.find<ThemeController>().darkTheme
-                  ? Theme.of(context).colorScheme.background
-                  : Theme.of(context).primaryColor.withOpacity(0.1),
+              color: Get.find<ThemeController>().darkTheme ? Theme.of(context).colorScheme.background : Theme.of(context).primaryColor.withOpacity(0.1),
               padding: const EdgeInsets.only(top: Dimensions.paddingSizeLarge),
               child: Column(children: [
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: Dimensions.paddingSizeDefault),
+                    padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeDefault),
                     child: Text(
                       'general'.tr,
-                      style: robotoMedium.copyWith(
-                          fontSize: Dimensions.fontSizeDefault,
-                          color:
-                              Theme.of(context).primaryColor.withOpacity(0.5)),
+                      style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeDefault, color: Theme.of(context).primaryColor.withOpacity(0.5)),
                     ),
                   ),
                   Container(
                     decoration: BoxDecoration(
                       color: Theme.of(context).cardColor,
-                      borderRadius:
-                          BorderRadius.circular(Dimensions.radiusDefault),
-                      boxShadow: [
-                        BoxShadow(
-                            color: Colors.grey.withOpacity(0.1),
-                            spreadRadius: 1,
-                            blurRadius: 10,
-                            offset: const Offset(0, 1))
-                      ],
+                      borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
+                      boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.1), spreadRadius: 1, blurRadius: 10, offset: const Offset(0, 1))],
                     ),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: Dimensions.paddingSizeLarge,
-                        vertical: Dimensions.paddingSizeDefault),
+                    padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeLarge, vertical: Dimensions.paddingSizeDefault),
                     margin: const EdgeInsets.all(Dimensions.paddingSizeDefault),
                     child: Column(children: [
-                      PortionWidget(
-                          icon: Images.profileIcon,
-                          title: 'profile'.tr,
-                          route: RouteHelper.getProfileRoute()),
-                      PortionWidget(
-                          icon: Images.addressIcon,
-                          title: 'my_address'.tr,
-                          route: RouteHelper.getAddressRoute()),
-                      PortionWidget(
-                          icon: Images.languageIcon,
-                          title: 'language'.tr,
-                          onTap: () => _manageLanguageFunctionality(),
-                          route: ''),
+                      PortionWidget(icon: Images.profileIcon, title: 'profile'.tr, route: RouteHelper.getProfileRoute()),
+                      PortionWidget(icon: Images.addressIcon, title: 'my_address'.tr, route: RouteHelper.getAddressRoute()),
+                      PortionWidget(icon: Images.languageIcon, title: 'country'.tr, onTap: () => _manageCountryFunctionality(), route: ''),
                       ProfileButtonWidget(
                         icon: Icons.tonality_outlined,
                         title: 'dark_mode'.tr,
@@ -207,77 +168,48 @@ class _MenuScreenState extends State<MenuScreen> {
                 ]),
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: Dimensions.paddingSizeDefault),
+                    padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeDefault),
                     child: Text(
                       'promotional_activity'.tr,
-                      style: robotoMedium.copyWith(
-                          fontSize: Dimensions.fontSizeDefault,
-                          color:
-                              Theme.of(context).primaryColor.withOpacity(0.5)),
+                      style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeDefault, color: Theme.of(context).primaryColor.withOpacity(0.5)),
                     ),
                   ),
                   Container(
                     decoration: BoxDecoration(
                       color: Theme.of(context).cardColor,
-                      borderRadius:
-                          BorderRadius.circular(Dimensions.radiusDefault),
-                      boxShadow: [
-                        BoxShadow(
-                            color: Colors.grey.withOpacity(0.1),
-                            spreadRadius: 1,
-                            blurRadius: 10,
-                            offset: const Offset(0, 1))
-                      ],
+                      borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
+                      boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.1), spreadRadius: 1, blurRadius: 10, offset: const Offset(0, 1))],
                     ),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: Dimensions.paddingSizeLarge,
-                        vertical: Dimensions.paddingSizeDefault),
+                    padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeLarge, vertical: Dimensions.paddingSizeDefault),
                     margin: const EdgeInsets.all(Dimensions.paddingSizeDefault),
                     child: Column(children: [
-                      PortionWidget(
-                          icon: Images.couponIcon,
-                          title: 'coupon'.tr,
-                          route:
-                              RouteHelper.getCouponRoute(fromCheckout: false)),
-                      (Get.find<SplashController>()
-                                  .configModel!
-                                  .loyaltyPointStatus ==
-                              1)
+                      PortionWidget(icon: Images.couponIcon, title: 'coupon'.tr, route: RouteHelper.getCouponRoute(fromCheckout: false)),
+                      (Get.find<SplashController>().configModel!.loyaltyPointStatus == 1)
                           ? PortionWidget(
                               icon: Images.pointIcon,
                               title: 'loyalty_points'.tr,
                               route: RouteHelper.getLoyaltyRoute(),
-                              hideDivider: Get.find<SplashController>()
-                                          .configModel!
-                                          .customerWalletStatus ==
-                                      1
-                                  ? false
-                                  : true,
+                              hideDivider: Get.find<SplashController>().configModel!.customerWalletStatus == 1 ? false : true,
                               suffix: !isLoggedIn
                                   ? null
                                   : '${profileController.userInfoModel?.loyaltyPoint != null ? Get.find<ProfileController>().userInfoModel!.loyaltyPoint.toString() : '0'} ${'points'.tr}',
                             )
                           : const SizedBox(),
-                      (Get.find<SplashController>()
-                                  .configModel!
-                                  .customerWalletStatus ==
-                              1)
+                      (Get.find<SplashController>().configModel!.customerWalletStatus == 1)
                           ? PortionWidget(
                               icon: Images.walletIcon,
                               title: 'my_wallet'.tr,
                               hideDivider: true,
                               route: RouteHelper.getWalletRoute(),
-                              suffix: !isLoggedIn
-                                  ? null
-                                  : PriceConverter.convertPrice(
-                                      profileController.userInfoModel != null
-                                          ? Get.find<ProfileController>()
-                                              .userInfoModel!
-                                              .walletBalance
-                                          : 0),
+                              suffix: !isLoggedIn ? null : PriceConverter.convertPrice(profileController.userInfoModel != null ? Get.find<ProfileController>().userInfoModel!.walletBalance : 0),
                             )
                           : const SizedBox(),
+                      PortionWidget(
+                        icon: Images.shopping_bag,
+                        title: 'order'.tr,
+                        hideDivider: true,
+                        route: RouteHelper.getOrderRoute(),
+                      ),
                     ]),
                   )
                 ]),
@@ -349,86 +281,46 @@ class _MenuScreenState extends State<MenuScreen> {
                 // ]),
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: Dimensions.paddingSizeDefault),
+                    padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeDefault),
                     child: Text(
                       'help_and_support'.tr,
-                      style: robotoMedium.copyWith(
-                          fontSize: Dimensions.fontSizeDefault,
-                          color:
-                              Theme.of(context).primaryColor.withOpacity(0.5)),
+                      style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeDefault, color: Theme.of(context).primaryColor.withOpacity(0.5)),
                     ),
                   ),
                   Container(
                     decoration: BoxDecoration(
                       color: Theme.of(context).cardColor,
-                      borderRadius:
-                          BorderRadius.circular(Dimensions.radiusDefault),
-                      boxShadow: [
-                        BoxShadow(
-                            color: Colors.grey.withOpacity(0.1),
-                            spreadRadius: 1,
-                            blurRadius: 10,
-                            offset: const Offset(0, 1))
-                      ],
+                      borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
+                      boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.1), spreadRadius: 1, blurRadius: 10, offset: const Offset(0, 1))],
                     ),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: Dimensions.paddingSizeLarge,
-                        vertical: Dimensions.paddingSizeDefault),
+                    padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeLarge, vertical: Dimensions.paddingSizeDefault),
                     margin: const EdgeInsets.all(Dimensions.paddingSizeDefault),
                     child: Column(children: [
-                      PortionWidget(
-                          icon: Images.chatIcon,
-                          title: 'live_chat'.tr,
-                          route: RouteHelper.getConversationRoute()),
-                      PortionWidget(
-                          icon: Images.helpIcon,
-                          title: 'help_and_support'.tr,
-                          route: RouteHelper.getSupportRoute()),
-                      PortionWidget(
-                          icon: Images.aboutIcon,
-                          title: 'about_us'.tr,
-                          route: RouteHelper.getHtmlRoute('about-us')),
-                      PortionWidget(
-                          icon: Images.termsIcon,
-                          title: 'terms_conditions'.tr,
-                          route:
-                              RouteHelper.getHtmlRoute('terms-and-condition')),
-                      PortionWidget(
-                          icon: Images.privacyIcon,
-                          title: 'privacy_policy'.tr,
-                          route: RouteHelper.getHtmlRoute('privacy-policy')),
-                      (Get.find<SplashController>()
-                                  .configModel!
-                                  .refundPolicyStatus ==
-                              1)
+                      PortionWidget(icon: Images.chatIcon, title: 'live_chat'.tr, route: RouteHelper.getConversationRoute()),
+                      PortionWidget(icon: Images.helpIcon, title: 'help_and_support'.tr, route: RouteHelper.getSupportRoute()),
+                      PortionWidget(icon: Images.aboutIcon, title: 'about_us'.tr, route: RouteHelper.getHtmlRoute('about-us')),
+                      PortionWidget(icon: Images.termsIcon, title: 'terms_conditions'.tr, route: RouteHelper.getHtmlRoute('terms-and-condition')),
+                      PortionWidget(icon: Images.privacyIcon, title: 'privacy_policy'.tr, route: RouteHelper.getHtmlRoute('privacy-policy')),
+                      (Get.find<SplashController>().configModel!.refundPolicyStatus == 1)
                           ? PortionWidget(
                               icon: Images.refundIcon,
                               title: 'refund_policy'.tr,
                               route: RouteHelper.getHtmlRoute('refund-policy'),
                             )
                           : const SizedBox(),
-                      (Get.find<SplashController>()
-                                  .configModel!
-                                  .cancellationPolicyStatus ==
-                              1)
+                      (Get.find<SplashController>().configModel!.cancellationPolicyStatus == 1)
                           ? PortionWidget(
                               icon: Images.cancelationIcon,
                               title: 'cancellation_policy'.tr,
-                              route: RouteHelper.getHtmlRoute(
-                                  'cancellation-policy'),
+                              route: RouteHelper.getHtmlRoute('cancellation-policy'),
                             )
                           : const SizedBox(),
-                      (Get.find<SplashController>()
-                                  .configModel!
-                                  .shippingPolicyStatus ==
-                              1)
+                      (Get.find<SplashController>().configModel!.shippingPolicyStatus == 1)
                           ? PortionWidget(
                               icon: Images.shippingIcon,
                               title: 'shipping_policy'.tr,
                               hideDivider: true,
-                              route:
-                                  RouteHelper.getHtmlRoute('shipping-policy'),
+                              route: RouteHelper.getHtmlRoute('shipping-policy'),
                             )
                           : const SizedBox(),
                     ]),
@@ -443,47 +335,33 @@ class _MenuScreenState extends State<MenuScreen> {
                               description: 'are_you_sure_to_logout'.tr,
                               isLogOut: true,
                               onYesPressed: () async {
-                                Get.find<ProfileController>()
-                                    .setForceFullyUserEmpty();
+                                Get.find<ProfileController>().setForceFullyUserEmpty();
                                 Get.find<AuthController>().socialLogout();
                                 Get.find<CartController>().clearCartList();
-                                Get.find<FavouriteController>()
-                                    .removeFavourites();
-                                await Get.find<AuthController>()
-                                    .clearSharedData();
+                                Get.find<FavouriteController>().removeFavourites();
+                                await Get.find<AuthController>().clearSharedData();
                                 Get.offAllNamed(RouteHelper.getInitialRoute());
                               }),
                           useSafeArea: false);
                     } else {
                       Get.find<FavouriteController>().removeFavourites();
-                      await Get.toNamed(
-                          RouteHelper.getSignInRoute(Get.currentRoute));
+                      await Get.toNamed(RouteHelper.getSignInRoute(Get.currentRoute));
                       if (AuthHelper.isLoggedIn()) {
                         profileController.getUserInfo();
                       }
                     }
                   },
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: Dimensions.paddingSizeSmall),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(2),
-                            decoration: const BoxDecoration(
-                                shape: BoxShape.circle, color: Colors.red),
-                            child: Icon(Icons.power_settings_new_sharp,
-                                size: 14, color: Theme.of(context).cardColor),
-                          ),
-                          const SizedBox(
-                              width: Dimensions.paddingSizeExtraSmall),
-                          Text(
-                              Get.find<AuthController>().isLoggedIn()
-                                  ? 'logout'.tr
-                                  : 'sign_in'.tr,
-                              style: robotoMedium)
-                        ]),
+                    padding: const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeSmall),
+                    child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                      Container(
+                        padding: const EdgeInsets.all(2),
+                        decoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.red),
+                        child: Icon(Icons.power_settings_new_sharp, size: 14, color: Theme.of(context).cardColor),
+                      ),
+                      const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+                      Text(Get.find<AuthController>().isLoggedIn() ? 'logout'.tr : 'sign_in'.tr, style: robotoMedium)
+                    ]),
                   ),
                 ),
                 const SizedBox(height: Dimensions.paddingSizeOverLarge)
@@ -505,18 +383,35 @@ class _MenuScreenState extends State<MenuScreen> {
       context: Get.context!,
       backgroundColor: Colors.white,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(Dimensions.radiusExtraLarge),
-            topRight: Radius.circular(Dimensions.radiusExtraLarge)),
+        borderRadius: BorderRadius.only(topLeft: Radius.circular(Dimensions.radiusExtraLarge), topRight: Radius.circular(Dimensions.radiusExtraLarge)),
       ),
       builder: (context) {
         return ConstrainedBox(
-          constraints: BoxConstraints(
-              maxHeight: MediaQuery.of(context).size.height * 0.8),
+          constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.8),
           child: const LanguageBottomSheetWidget(),
         );
       },
-    ).then((value) => Get.find<LocalizationController>().setLanguage(
-        Get.find<LocalizationController>().getCacheLocaleFromSharedPref()));
+    ).then((value) => Get.find<LocalizationController>().setLanguage(Get.find<LocalizationController>().getCacheLocaleFromSharedPref()));
+  }
+
+  _manageCountryFunctionality() {
+    // Get.find<CountryController>().saveCacheCountry(null);
+    // Get.find<CountryController>().searchSelectedCountry();
+
+    showModalBottomSheet(
+      isScrollControlled: true,
+      useRootNavigator: true,
+      context: Get.context!,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(topLeft: Radius.circular(Dimensions.radiusExtraLarge), topRight: Radius.circular(Dimensions.radiusExtraLarge)),
+      ),
+      builder: (context) {
+        return ConstrainedBox(
+          constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.8),
+          child: const CountryBottomSheetWidget(),
+        );
+      },
+    ).then((value) => Get.find<CountryController>().setCountry());
   }
 }

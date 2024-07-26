@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:stackfood_multivendor/api/api_client.dart';
 import 'package:stackfood_multivendor/features/address/domain/models/address_model.dart';
 import 'package:stackfood_multivendor/features/language/domain/repository/language_repository_interface.dart';
@@ -10,14 +12,19 @@ import 'package:shared_preferences/shared_preferences.dart';
 class LanguageRepository implements LanguageRepositoryInterface {
   final ApiClient apiClient;
   final SharedPreferences sharedPreferences;
-  LanguageRepository({required this.apiClient, required this.sharedPreferences});
+
+  LanguageRepository({required this.apiClient, required this.sharedPreferences}) {
+    _getDeviceId();
+  }
+
+  String _deviceId = '';
 
   @override
   AddressModel? getAddressFormSharedPref() {
     AddressModel? addressModel;
     try {
       addressModel = AddressModel.fromJson(jsonDecode(sharedPreferences.getString(AppConstants.userAddress)!));
-    }catch(e) {
+    } catch (e) {
       debugPrint('Did not get shared Preferences address . Note: $e');
     }
     return addressModel;
@@ -26,10 +33,14 @@ class LanguageRepository implements LanguageRepositoryInterface {
   @override
   void updateHeader(AddressModel? addressModel, Locale locale) {
     apiClient.updateHeader(
-      sharedPreferences.getString(AppConstants.token), addressModel?.zoneIds,
-      locale.languageCode, addressModel?.latitude,
+      sharedPreferences.getString(AppConstants.token),
+      addressModel?.zoneIds,
+      locale.languageCode,
+      addressModel?.latitude,
       addressModel?.longitude,
+      _deviceId,
     );
+    apiClient.postData(AppConstants.deviceSettingsUri, {});
   }
 
   @override
@@ -81,4 +92,21 @@ class LanguageRepository implements LanguageRepositoryInterface {
     throw UnimplementedError();
   }
 
+  Future<void> _getDeviceId() async {
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    String deviceId;
+
+    if (Platform.isAndroid) {
+      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+      deviceId = androidInfo.id ?? 'Unknown';
+    } else if (Platform.isIOS) {
+      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+      deviceId = iosInfo.identifierForVendor ?? 'Unknown';
+    } else {
+      deviceId = 'Unknown';
+    }
+    sharedPreferences.setString(AppConstants.deviceId, deviceId);
+
+    _deviceId = deviceId;
+  }
 }

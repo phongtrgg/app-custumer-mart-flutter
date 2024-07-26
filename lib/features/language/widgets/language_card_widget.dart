@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:stackfood_multivendor/features/language/controllers/localization_controller.dart';
 import 'package:stackfood_multivendor/features/language/domain/models/language_model.dart';
 import 'package:stackfood_multivendor/util/app_constants.dart';
@@ -6,45 +7,81 @@ import 'package:stackfood_multivendor/util/dimensions.dart';
 import 'package:stackfood_multivendor/util/styles.dart';
 
 class LanguageCardWidget extends StatelessWidget {
-  final LanguageModel languageModel;
-  final LocalizationController localizationController;
+  final languageModel;
+  final localizationController;
   final int index;
   final bool fromBottomSheet;
+  final bool? country;
   final bool fromWeb;
-  const LanguageCardWidget({super.key, required this.languageModel, required this.localizationController, required this.index, this.fromBottomSheet = false, this.fromWeb = false});
+
+  const LanguageCardWidget(
+      {super.key, required this.languageModel, required this.localizationController, required this.index, this.fromBottomSheet = false, this.fromWeb = false, this.country = false});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        localizationController.setLanguage(Locale(
-          AppConstants.languages[index].languageCode!,
-          AppConstants.languages[index].countryCode,
-        ), fromBottomSheet: fromBottomSheet);
-        localizationController.setSelectLanguageIndex(index);
+        country == false
+            ? localizationController.setLanguage(
+                Locale(
+                  AppConstants.languages[index].languageCode!,
+                  AppConstants.languages[index].countryCode,
+                ),
+                fromBottomSheet: fromBottomSheet)
+            : localizationController.setCountry(fromBottomSheet: fromBottomSheet);
+        country == false ? localizationController.setSelectLanguageIndex(index) : localizationController.setSelectCountryIndex(index);
       },
       child: Container(
         height: 70,
         padding: const EdgeInsets.all(Dimensions.paddingSizeLarge),
-        decoration: !fromWeb ? BoxDecoration(
-          color: localizationController.selectedLanguageIndex == index ? Theme.of(context).primaryColor.withOpacity(0.05) : null,
-          borderRadius: BorderRadius.circular(Dimensions.radiusLarge),
-          border: localizationController.selectedLanguageIndex == index ? Border.all(color: Theme.of(context).primaryColor.withOpacity(0.2)) : null,
-        ) : BoxDecoration(
-          color: localizationController.selectedLanguageIndex == index ? Theme.of(context).primaryColor.withOpacity(0.05) : Theme.of(context).cardColor,
-          borderRadius: BorderRadius.circular(Dimensions.radiusLarge),
-          border: Border.all(color: localizationController.selectedLanguageIndex == index ? Theme.of(context).primaryColor.withOpacity(0.2) : Theme.of(context).disabledColor.withOpacity(0.3)),
-        ),
+        decoration: !fromWeb
+            ? BoxDecoration(
+                color: country == false
+                    ? localizationController.selectedLanguageIndex == index
+                        ? Theme.of(context).primaryColor.withOpacity(0.05)
+                        : null
+                    : localizationController.selectedCountryIndex == index
+                        ? Theme.of(context).primaryColor.withOpacity(0.05)
+                        : null,
+                borderRadius: BorderRadius.circular(Dimensions.radiusLarge),
+                border: country == false
+                    ? localizationController.selectedLanguageIndex == index
+                        ? Border.all(color: Theme.of(context).primaryColor.withOpacity(0.2))
+                        : null
+                    : localizationController.selectedCountryIndex == index
+                        ? Border.all(color: Theme.of(context).primaryColor.withOpacity(0.2))
+                        : null,
+              )
+            : BoxDecoration(
+                color: country == false
+                    ? localizationController.selectedLanguageIndex == index
+                        ? Theme.of(context).primaryColor.withOpacity(0.05)
+                        : Theme.of(context).cardColor
+                    : localizationController.selectedCountryIndex == index
+                        ? Theme.of(context).primaryColor.withOpacity(0.05)
+                        : Theme.of(context).cardColor,
+                borderRadius: BorderRadius.circular(Dimensions.radiusLarge),
+                border: Border.all(
+                    color: country == false
+                        ? localizationController.selectedLanguageIndex == index
+                            ? Theme.of(context).primaryColor.withOpacity(0.2)
+                            : Theme.of(context).disabledColor.withOpacity(0.3)
+                        : localizationController.selectedCountryIndex == index
+                            ? Theme.of(context).primaryColor.withOpacity(0.2)
+                            : Theme.of(context).disabledColor.withOpacity(0.3)),
+              ),
         child: Row(children: [
-
-          Image.asset(languageModel.imageUrl!, width: 36, height: 36),
+          country == false ? Image.asset(languageModel.imageUrl!, width: 36, height: 36) : Image.network(languageModel.imageUrl!, width: 36, height: 36),
           const SizedBox(width: Dimensions.paddingSizeSmall),
-
-          Text(languageModel.languageName!, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeLarge)),
+          Text(country == false ? languageModel.languageName! : '${languageModel.regionName!}'.tr, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeLarge)),
           const Spacer(),
-
-          localizationController.selectedLanguageIndex == index ? Icon(Icons.check_circle, color: Theme.of(context).primaryColor, size: 25) : const SizedBox(),
-
+          country == true
+              ? localizationController.selectedCountryIndex == index
+                  ? Icon(Icons.check_circle, color: Theme.of(context).primaryColor, size: 25)
+                  : const SizedBox()
+              : localizationController.selectedLanguageIndex == index
+                  ? Icon(Icons.check_circle, color: Theme.of(context).primaryColor, size: 25)
+                  : const SizedBox()
         ]),
       ),
     );

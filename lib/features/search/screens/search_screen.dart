@@ -20,7 +20,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class SearchScreen extends StatefulWidget {
-  const SearchScreen({super.key});
+  bool? category = false;
+  SearchScreen({super.key, this.category});
 
   @override
   SearchScreenState createState() => SearchScreenState();
@@ -71,7 +72,10 @@ class SearchScreenState extends State<SearchScreen> {
           anchorController.text = '';
           setState(() {});
         } else {
-          Future.delayed(const Duration(milliseconds: 100), () => Get.back());
+          widget.category == false
+              ? Future.delayed(
+                  const Duration(milliseconds: 100), () => Get.back())
+              : Get.toNamed(RouteHelper.getCategoryRoute());
         }
       },
       child: Scaffold(
@@ -120,7 +124,10 @@ class SearchScreenState extends State<SearchScreen> {
                                   if (anchorController.text.isNotEmpty) {
                                     anchorController.text = '';
                                   } else {
-                                    anchorController.closeView('');
+                                    widget.category == false
+                                        ? anchorController.closeView('')
+                                        : Get.toNamed(
+                                            RouteHelper.getCategoryRoute());
                                   }
                                 },
                                 icon: const Icon(Icons.clear),

@@ -17,8 +17,7 @@ class OrderScreen extends StatefulWidget {
   OrderScreenState createState() => OrderScreenState();
 }
 
-class OrderScreenState extends State<OrderScreen>
-    with TickerProviderStateMixin {
+class OrderScreenState extends State<OrderScreen> with TickerProviderStateMixin {
   TabController? _tabController;
 
   @override
@@ -32,8 +31,7 @@ class OrderScreenState extends State<OrderScreen>
   void initCall() {
     if (AuthHelper.isLoggedIn()) {
       Get.find<OrderController>().getRunningOrders(1, notify: false);
-      Get.find<OrderController>()
-          .getRunningSubscriptionOrders(1, notify: false);
+      Get.find<OrderController>().getRunningSubscriptionOrders(1, notify: false);
       Get.find<OrderController>().getHistoryOrders(1, notify: false);
       // Get.find<OrderController>().getSubscriptions(1, notify: false);
     }
@@ -44,8 +42,10 @@ class OrderScreenState extends State<OrderScreen>
     bool isLoggedIn = AuthHelper.isLoggedIn();
     return Scaffold(
       appBar: CustomAppBarWidget(
-          title: 'my_orders'.tr,
-          isBackButtonExist: ResponsiveHelper.isDesktop(context)),
+        title: 'my_orders'.tr,
+        isBackButtonExist: true,
+        // isBackButtonExist: ResponsiveHelper.isDesktop(context)
+      ),
       endDrawer: const MenuDrawerWidget(),
       endDrawerEnableOpenDragGesture: false,
       body: isLoggedIn
@@ -53,48 +53,32 @@ class OrderScreenState extends State<OrderScreen>
               builder: (orderController) {
                 return Column(children: [
                   Container(
-                    color: ResponsiveHelper.isDesktop(context)
-                        ? Theme.of(context).primaryColor.withOpacity(0.1)
-                        : Colors.transparent,
+                    color: ResponsiveHelper.isDesktop(context) ? Theme.of(context).primaryColor.withOpacity(0.1) : Colors.transparent,
                     child: Column(
                       children: [
                         ResponsiveHelper.isDesktop(context)
                             ? Center(
                                 child: Padding(
-                                padding: const EdgeInsets.only(
-                                    top: Dimensions.paddingSizeSmall),
-                                child:
-                                    Text('my_orders'.tr, style: robotoMedium),
+                                padding: const EdgeInsets.only(top: Dimensions.paddingSizeSmall),
+                                child: Text('my_orders'.tr, style: robotoMedium),
                               ))
                             : const SizedBox(),
                         Center(
                           child: SizedBox(
                             width: Dimensions.webMaxWidth,
                             child: Align(
-                              alignment: ResponsiveHelper.isDesktop(context)
-                                  ? Alignment.centerLeft
-                                  : Alignment.center,
+                              alignment: ResponsiveHelper.isDesktop(context) ? Alignment.centerLeft : Alignment.center,
                               child: Container(
-                                width: ResponsiveHelper.isDesktop(context)
-                                    ? 350
-                                    : Dimensions.webMaxWidth,
-                                color: ResponsiveHelper.isDesktop(context)
-                                    ? Colors.transparent
-                                    : Theme.of(context).cardColor,
+                                width: ResponsiveHelper.isDesktop(context) ? 350 : Dimensions.webMaxWidth,
+                                color: ResponsiveHelper.isDesktop(context) ? Colors.transparent : Theme.of(context).cardColor,
                                 child: TabBar(
                                   controller: _tabController,
-                                  indicatorColor:
-                                      Theme.of(context).primaryColor,
+                                  indicatorColor: Theme.of(context).primaryColor,
                                   indicatorWeight: 3,
                                   labelColor: Theme.of(context).primaryColor,
-                                  unselectedLabelColor:
-                                      Theme.of(context).disabledColor,
-                                  unselectedLabelStyle: robotoRegular.copyWith(
-                                      color: Theme.of(context).disabledColor,
-                                      fontSize: Dimensions.fontSizeSmall),
-                                  labelStyle: robotoBold.copyWith(
-                                      fontSize: Dimensions.fontSizeSmall,
-                                      color: Theme.of(context).primaryColor),
+                                  unselectedLabelColor: Theme.of(context).disabledColor,
+                                  unselectedLabelStyle: robotoRegular.copyWith(color: Theme.of(context).disabledColor, fontSize: Dimensions.fontSizeSmall),
+                                  labelStyle: robotoBold.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).primaryColor),
                                   tabs: [
                                     Tab(text: 'running'.tr),
                                     Tab(text: 'subscription'.tr),

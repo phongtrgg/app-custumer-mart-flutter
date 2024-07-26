@@ -42,12 +42,6 @@ class SplashController extends GetxController implements GetxService {
     Response response = await splashServiceInterface.getConfigData();
     bool isSuccess = false;
     _configModel = splashServiceInterface.prepareConfigData(response);
-    // ignore: avoid_print
-    print(
-        '~~~~~~~~~~~~~~~~~~~~~~~~~~~CHECK RESPOENE CONFIG~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
-    print(_configModel?.baseUrls!.categoryImageUrl);
-    print(
-        '~~~~~~~~~~~~~~~~~~~~~~~~~~~CHECK RESPOENE CONFIG~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
     isSuccess = _configModel != null;
     update();
     return isSuccess;
