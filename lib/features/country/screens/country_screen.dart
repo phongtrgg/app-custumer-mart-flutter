@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:stackfood_multivendor/features/country/controller/countryController.dart';
-import 'package:stackfood_multivendor/features/country/widgets/CountryListWidget.dart';
+import 'package:stackfood_multivendor/features/country/controller/country_controller.dart';
+import 'package:stackfood_multivendor/features/country/widgets/country_list_widget.dart';
 import 'package:stackfood_multivendor/helper/route_helper.dart';
 import 'package:stackfood_multivendor/util/dimensions.dart';
 
@@ -31,17 +31,21 @@ class _CountryScreenState extends State<CountryScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                const SizedBox(height: 40),
                 // Content for the screen
                 Text(
                   'choose a country'.tr,
-                  style: TextStyle(
-                    fontSize: Dimensions.fontSizeExtraLarge,
+                  style: const TextStyle(
+                    fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 Text(
                   'country wishing to use the service'.tr,
-                  style: TextStyle(fontSize: Dimensions.fontSizeDefault, color: Colors.grey),
+                  style: TextStyle(
+                    fontSize: Dimensions.fontSizeDefault,
+                    color: Colors.grey,
+                  ),
                 ),
                 const SizedBox(height: Dimensions.paddingSizeLarge),
                 CountryListWidget(
@@ -54,6 +58,19 @@ class _CountryScreenState extends State<CountryScreen> {
             top: Dimensions.paddingSizeExtraOverLarge,
             right: Dimensions.paddingSizeLarge,
             child: LanguageSelector(),
+          ),
+          Positioned(
+            top: Dimensions.paddingSizeExtraOverLarge,
+            left: 0,
+            right: 0,
+            child: Center(
+              child: Text(
+                'language'.tr,
+                style: const TextStyle(
+                  fontSize: 20,
+                ),
+              ),
+            ),
           ),
         ],
       ),

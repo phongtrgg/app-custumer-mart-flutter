@@ -11,7 +11,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class OrderScreen extends StatefulWidget {
-  const OrderScreen({super.key});
+  final String? status;
+
+  const OrderScreen({super.key, this.status});
 
   @override
   OrderScreenState createState() => OrderScreenState();
@@ -42,7 +44,7 @@ class OrderScreenState extends State<OrderScreen> with TickerProviderStateMixin 
     bool isLoggedIn = AuthHelper.isLoggedIn();
     return Scaffold(
       appBar: CustomAppBarWidget(
-        title: 'my_orders'.tr,
+        title: widget.status != null ? widget.status!.tr : 'my_orders'.tr,
         isBackButtonExist: true,
         // isBackButtonExist: ResponsiveHelper.isDesktop(context)
       ),
@@ -60,7 +62,7 @@ class OrderScreenState extends State<OrderScreen> with TickerProviderStateMixin 
                             ? Center(
                                 child: Padding(
                                 padding: const EdgeInsets.only(top: Dimensions.paddingSizeSmall),
-                                child: Text('my_orders'.tr, style: robotoMedium),
+                                child: widget.status != null ? Text(widget.status!.tr, style: robotoMedium) : Text('my_orders'.tr, style: robotoMedium),
                               ))
                             : const SizedBox(),
                         Center(
@@ -80,9 +82,10 @@ class OrderScreenState extends State<OrderScreen> with TickerProviderStateMixin 
                                   unselectedLabelStyle: robotoRegular.copyWith(color: Theme.of(context).disabledColor, fontSize: Dimensions.fontSizeSmall),
                                   labelStyle: robotoBold.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).primaryColor),
                                   tabs: [
-                                    Tab(text: 'running'.tr),
-                                    Tab(text: 'subscription'.tr),
-                                    Tab(text: 'history'.tr),
+                                    widget.status != null ? Tab(text: widget.status?.tr) : Tab(text: 'running'.tr),
+                                    widget.status != null ? SizedBox() : Tab(text: 'subscription'.tr),
+                                    widget.status != null ? SizedBox() : Tab(text: 'history'.tr),
+                                    // order_history
                                   ],
                                 ),
                               ),
@@ -95,8 +98,15 @@ class OrderScreenState extends State<OrderScreen> with TickerProviderStateMixin 
                   Expanded(
                       child: TabBarView(
                     controller: _tabController,
-                    children: const [
-                      OrderViewWidget(isRunning: true),
+                    children: [
+                      widget.status != 'order_history'
+                          ? OrderViewWidget(
+                              isRunning: true,
+                              status: widget.status != null ? widget.status : null,
+                            )
+                          : widget.status == 'order_history'
+                              ? OrderViewWidget(isRunning: false)
+                              : SizedBox(),
                       OrderViewWidget(isRunning: false, isSubscription: true),
                       OrderViewWidget(isRunning: false),
                     ],

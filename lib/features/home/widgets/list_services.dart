@@ -29,18 +29,10 @@ class _ListServicesWidgetState extends State<ListServicesWidget> {
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Padding(
             padding: EdgeInsets.only(
-              top: ResponsiveHelper.isMobile(context)
-                  ? Dimensions.paddingSizeSmall
-                  : Dimensions.paddingSizeOverLarge,
-              left: Get.find<LocalizationController>().isLtr
-                  ? Dimensions.paddingSizeExtraSmall
-                  : 0,
-              right: Get.find<LocalizationController>().isLtr
-                  ? 0
-                  : Dimensions.paddingSizeExtraSmall,
-              bottom: ResponsiveHelper.isMobile(context)
-                  ? Dimensions.paddingSizeDefault
-                  : Dimensions.paddingSizeOverLarge,
+              top: ResponsiveHelper.isMobile(context) ? Dimensions.paddingSizeSmall : Dimensions.paddingSizeOverLarge,
+              left: Get.find<LocalizationController>().isLtr ? Dimensions.paddingSizeExtraSmall : 0,
+              right: Get.find<LocalizationController>().isLtr ? 0 : Dimensions.paddingSizeExtraSmall,
+              bottom: ResponsiveHelper.isMobile(context) ? Dimensions.paddingSizeDefault : Dimensions.paddingSizeOverLarge,
             ),
             child: ResponsiveHelper.isDesktop(context)
                 ? Text('services vtmart'.tr,
@@ -61,62 +53,45 @@ class _ListServicesWidgetState extends State<ListServicesWidget> {
                       ),
                       const SizedBox(width: Dimensions.paddingSizeDefault),
                       Padding(
-                        padding: const EdgeInsets.only(
-                            right: Dimensions.paddingSizeDefault),
+                        padding: const EdgeInsets.only(right: Dimensions.paddingSizeDefault),
                         child: ArrowIconButtonWidget(
-                            onTap: () => Get.toNamed(
-                                RouteHelper.getPopularFoodRoute(true))),
+                            onTap: () => {
+                                  categoryController.getSubCategoryList(categoryController.servicesList![0].id.toString()),
+                                  categoryController.setCategoryIndexAndTitle(categoryController.servicesList![0].id!, categoryController.servicesList![0].name!),
+                                  categoryController.setSelectedCategoryIndex(0),
+                                  Get.toNamed(RouteHelper.getCategoryRoute('service')),
+                                }),
                       )
                     ],
                   ),
           ),
           SizedBox(
             height: ResponsiveHelper.isMobile(context) ? 120 : 170,
-            child: categoryController.categoryList != null
+            child: categoryController.servicesList != null
                 ? ListView.builder(
-                    physics: ResponsiveHelper.isMobile(context)
-                        ? const BouncingScrollPhysics()
-                        : const NeverScrollableScrollPhysics(),
+                    physics: ResponsiveHelper.isMobile(context) ? const BouncingScrollPhysics() : const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
-                    padding: const EdgeInsets.only(
-                        left: Dimensions.paddingSizeDefault),
-                    itemCount: categoryController.categoryList!.length > 10
-                        ? 10
-                        : categoryController.categoryList!.length,
+                    padding: const EdgeInsets.only(left: Dimensions.paddingSizeDefault),
+                    itemCount: categoryController.servicesList!.length > 10 ? 10 : categoryController.servicesList!.length,
                     itemBuilder: (context, index) {
                       if (index == 9) {
                         return ResponsiveHelper.isDesktop(context)
                             ? Padding(
-                                padding: const EdgeInsets.only(
-                                    bottom: Dimensions.paddingSizeSmall,
-                                    top: Dimensions.paddingSizeSmall),
+                                padding: const EdgeInsets.only(bottom: Dimensions.paddingSizeSmall, top: Dimensions.paddingSizeSmall),
                                 child: Container(
                                   width: 70,
                                   padding: const EdgeInsets.only(
-                                      left: Dimensions.paddingSizeExtraSmall,
-                                      right: Dimensions.paddingSizeExtraSmall,
-                                      top: Dimensions.paddingSizeSmall,
-                                      bottom: Dimensions.paddingSizeSmall),
+                                      left: Dimensions.paddingSizeExtraSmall, right: Dimensions.paddingSizeExtraSmall, top: Dimensions.paddingSizeSmall, bottom: Dimensions.paddingSizeSmall),
                                   child: Align(
                                     alignment: Alignment.centerRight,
                                     child: InkWell(
                                       hoverColor: Colors.transparent,
                                       onTap: () => {
-                                        categoryController.getSubCategoryList(
-                                            categoryController
-                                                .categoryList![0].id
-                                                .toString()),
-                                        categoryController
-                                            .setCategoryIndexAndTitle(
-                                                categoryController
-                                                    .categoryList![0].id!,
-                                                categoryController
-                                                    .categoryList![0].name!),
-                                        categoryController
-                                            .setSelectedCategoryIndex(0),
-                                        Get.toNamed(
-                                            RouteHelper.getCategoryRoute()),
+                                        categoryController.getSubCategoryList(categoryController.servicesList![0].id.toString()),
+                                        categoryController.setCategoryIndexAndTitle(categoryController.servicesList![0].id!, categoryController.servicesList![0].name!),
+                                        categoryController.setSelectedCategoryIndex(0),
+                                        Get.toNamed(RouteHelper.getCategoryRoute('service')),
                                       },
                                       child: Container(
                                         height: 40,
@@ -124,14 +99,9 @@ class _ListServicesWidgetState extends State<ListServicesWidget> {
                                         decoration: BoxDecoration(
                                           shape: BoxShape.circle,
                                           color: Theme.of(context).cardColor,
-                                          border: Border.all(
-                                              color: Theme.of(context)
-                                                  .primaryColor
-                                                  .withOpacity(0.3)),
+                                          border: Border.all(color: Theme.of(context).primaryColor.withOpacity(0.3)),
                                         ),
-                                        child: Icon(Icons.arrow_forward,
-                                            color:
-                                                Theme.of(context).primaryColor),
+                                        child: Icon(Icons.arrow_forward, color: Theme.of(context).primaryColor),
                                       ),
                                     ),
                                   ),
@@ -140,53 +110,35 @@ class _ListServicesWidgetState extends State<ListServicesWidget> {
                             : const SizedBox();
                       }
                       return Padding(
-                        padding: const EdgeInsets.only(
-                            bottom: Dimensions.paddingSizeSmall,
-                            right: Dimensions.paddingSizeDefault),
+                        padding: const EdgeInsets.only(bottom: Dimensions.paddingSizeSmall, right: Dimensions.paddingSizeDefault),
                         child: Container(
                           width: ResponsiveHelper.isMobile(context) ? 70 : 100,
                           height: ResponsiveHelper.isMobile(context) ? 70 : 100,
                           decoration: BoxDecoration(
                             color: Colors.transparent,
-                            borderRadius:
-                                BorderRadius.circular(Dimensions.radiusSmall),
+                            borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
                           ),
                           child: CustomInkWellWidget(
                             onTap: () => {
-                              categoryController.getSubCategoryList(
-                                  categoryController.categoryList![index].id
-                                      .toString()),
-                              categoryController.setCategoryIndexAndTitle(
-                                  categoryController.categoryList![index].id!,
-                                  categoryController
-                                      .categoryList![index].name!),
-                              categoryController
-                                  .setSelectedCategoryIndex(index),
-                              Get.toNamed(RouteHelper.getCategoryRoute()),
+                              categoryController.getSubCategoryList(categoryController.servicesList![index].id.toString()),
+                              categoryController.setCategoryIndexAndTitle(categoryController.servicesList![index].id!, categoryController.servicesList![index].name!),
+                              categoryController.setSelectedCategoryIndex(index),
+                              Get.toNamed(RouteHelper.getCategoryRoute('service')),
                             },
                             radius: Dimensions.radiusSmall,
                             child: Column(children: [
                               Container(
                                 padding: const EdgeInsets.all(2),
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(
-                                      Dimensions.radiusDefault),
-                                  color: Theme.of(context)
-                                      .disabledColor
-                                      .withOpacity(0.2),
+                                  borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
+                                  color: Theme.of(context).disabledColor.withOpacity(0.2),
                                 ),
                                 child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(
-                                      Dimensions.radiusDefault),
+                                  borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
                                   child: CustomImageWidget(
-                                    image:
-                                        '${categoryController.categoryList![index].image}',
-                                    height: ResponsiveHelper.isMobile(context)
-                                        ? 70
-                                        : 100,
-                                    width: ResponsiveHelper.isMobile(context)
-                                        ? 70
-                                        : 100,
+                                    image: '${categoryController.servicesList![index].image}',
+                                    height: ResponsiveHelper.isMobile(context) ? 70 : 100,
+                                    width: ResponsiveHelper.isMobile(context) ? 70 : 100,
                                     // resize: ResponsiveHelper.isMobile(context)
                                     //     ? true
                                     //     : false,
@@ -197,13 +149,10 @@ class _ListServicesWidgetState extends State<ListServicesWidget> {
                                   ),
                                 ),
                               ),
-                              SizedBox(
-                                  height: ResponsiveHelper.isMobile(context)
-                                      ? Dimensions.paddingSizeDefault
-                                      : Dimensions.paddingSizeLarge),
+                              SizedBox(height: ResponsiveHelper.isMobile(context) ? Dimensions.paddingSizeDefault : Dimensions.paddingSizeLarge),
                               Expanded(
                                   child: Text(
-                                categoryController.categoryList![index].name!,
+                                categoryController.servicesList![index].name!,
                                 style: robotoMedium.copyWith(
                                   fontSize: Dimensions.fontSizeSmall,
                                 ),
@@ -217,8 +166,7 @@ class _ListServicesWidgetState extends State<ListServicesWidget> {
                       );
                     },
                   )
-                : WebWhatOnYourMindViewShimmer(
-                    categoryController: categoryController),
+                : WebWhatOnYourMindViewShimmer(categoryController: categoryController),
           ),
         ]),
       );
@@ -228,8 +176,8 @@ class _ListServicesWidgetState extends State<ListServicesWidget> {
 
 class WebWhatOnYourMindViewShimmer extends StatelessWidget {
   final CategoryController categoryController;
-  const WebWhatOnYourMindViewShimmer(
-      {super.key, required this.categoryController});
+
+  const WebWhatOnYourMindViewShimmer({super.key, required this.categoryController});
 
   @override
   Widget build(BuildContext context) {
@@ -242,35 +190,23 @@ class WebWhatOnYourMindViewShimmer extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
           return Padding(
-            padding: const EdgeInsets.only(
-                bottom: Dimensions.paddingSizeSmall,
-                right: Dimensions.paddingSizeSmall,
-                top: Dimensions.paddingSizeSmall),
+            padding: const EdgeInsets.only(bottom: Dimensions.paddingSizeSmall, right: Dimensions.paddingSizeSmall, top: Dimensions.paddingSizeSmall),
             child: Container(
               width: ResponsiveHelper.isMobile(context) ? 70 : 108,
               height: ResponsiveHelper.isMobile(context) ? 70 : 100,
               padding: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
-              margin: EdgeInsets.only(
-                  top: ResponsiveHelper.isMobile(context)
-                      ? 0
-                      : Dimensions.paddingSizeSmall),
+              margin: EdgeInsets.only(top: ResponsiveHelper.isMobile(context) ? 0 : Dimensions.paddingSizeSmall),
               child: Shimmer(
                 duration: const Duration(seconds: 2),
-                enabled: categoryController.categoryList == null,
+                enabled: categoryController.servicesList == null,
                 child: Column(children: [
                   Container(
-                    decoration: BoxDecoration(
-                        borderRadius:
-                            BorderRadius.circular(Dimensions.radiusSmall),
-                        color: Colors.grey[300]),
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(Dimensions.radiusSmall), color: Colors.grey[300]),
                     height: ResponsiveHelper.isMobile(context) ? 70 : 80,
                     width: 70,
                   ),
                   const SizedBox(height: Dimensions.paddingSizeSmall),
-                  Container(
-                      height: ResponsiveHelper.isMobile(context) ? 10 : 15,
-                      width: 150,
-                      color: Colors.grey[300]),
+                  Container(height: ResponsiveHelper.isMobile(context) ? 10 : 15, width: 150, color: Colors.grey[300]),
                 ]),
               ),
             ),

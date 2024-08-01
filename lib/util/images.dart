@@ -207,6 +207,7 @@ class Images {
   static const String orderMenuIcon = 'assets/image/order_menu_icon.png';
   static const String favouriteIcon = 'assets/image/favourite_icon.svg';
   static const String unFavouriteIcon = 'assets/image/unfavourite_icon.svg';
+  static const String favourite = 'assets/image/favourite.jpg';
   static const String halalIcon = 'assets/image/halal_icon.png';
   static const String houseIcon = 'assets/image/house_icon.png';
   static const String officeIcon = 'assets/image/office_icon.png';

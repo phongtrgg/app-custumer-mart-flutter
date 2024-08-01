@@ -145,8 +145,9 @@ class SplashScreenState extends State<SplashScreen> {
           AppConstants.languages[Get.find<LocalizationController>().selectedLanguageIndex].countryCode,
         ));
       }
-      Get.offNamed(RouteHelper.getCountryRoute());
-      // Get.offNamed(RouteHelper.getLanguageRoute('splash'));
+      // Get.offNamed(RouteHelper.getOnBoardingRoute());
+      // Get.offNamed(RouteHelper.getCountryRoute());
+      Get.offNamed(RouteHelper.getLanguageRoute('splash'));
     } else {
       Get.offNamed(RouteHelper.getOnBoardingRoute());
     }

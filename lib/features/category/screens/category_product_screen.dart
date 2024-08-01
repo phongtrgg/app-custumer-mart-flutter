@@ -20,15 +20,14 @@ class CategoryProductScreen extends StatefulWidget {
   final String? categoryID;
   final String categoryName;
   final int? subCategoryID;
-  const CategoryProductScreen(
-      {super.key, required this.categoryID, required this.categoryName, this.subCategoryID});
+
+  const CategoryProductScreen({super.key, required this.categoryID, required this.categoryName, this.subCategoryID});
 
   @override
   CategoryProductScreenState createState() => CategoryProductScreenState();
 }
 
-class CategoryProductScreenState extends State<CategoryProductScreen>
-    with TickerProviderStateMixin {
+class CategoryProductScreenState extends State<CategoryProductScreen> with TickerProviderStateMixin {
   final ScrollController scrollController = ScrollController();
   final ScrollController subCategoryScrollController = ScrollController();
   final ScrollController subCategoryChildrenScrollController = ScrollController();
@@ -43,22 +42,13 @@ class CategoryProductScreenState extends State<CategoryProductScreen>
     _tabController = TabController(length: 2, initialIndex: 0, vsync: this);
     // Get.find<CategoryController>().getSubCategoryList(widget.categoryID);
     scrollController.addListener(() {
-      if (scrollController.position.pixels ==
-              scrollController.position.maxScrollExtent &&
-          Get.find<CategoryController>().categoryProductList != null &&
-          !Get.find<CategoryController>().isLoading) {
+      if (scrollController.position.pixels == scrollController.position.maxScrollExtent && Get.find<CategoryController>().categoryProductList != null && !Get.find<CategoryController>().isLoading) {
         int pageSize = (Get.find<CategoryController>().pageSize! / 10).ceil();
         if (Get.find<CategoryController>().offset < pageSize) {
           debugPrint('end of the page');
           Get.find<CategoryController>().showBottomLoader();
           Get.find<CategoryController>().getCategoryProductList(
-            Get.find<CategoryController>().subCategoryIndex == 0
-                ? widget.categoryID
-                : Get.find<CategoryController>()
-                    .subCategoryList![
-                        Get.find<CategoryController>().subCategoryIndex]
-                    .id
-                    .toString(),
+            Get.find<CategoryController>().subCategoryIndex == 0 ? widget.categoryID : Get.find<CategoryController>().subCategoryList![Get.find<CategoryController>().subCategoryIndex].id.toString(),
             Get.find<CategoryController>().offset + 1,
             Get.find<CategoryController>().type,
             false,
@@ -67,23 +57,15 @@ class CategoryProductScreenState extends State<CategoryProductScreen>
       }
     });
     restaurantScrollController.addListener(() {
-      if (restaurantScrollController.position.pixels ==
-              restaurantScrollController.position.maxScrollExtent &&
+      if (restaurantScrollController.position.pixels == restaurantScrollController.position.maxScrollExtent &&
           Get.find<CategoryController>().categoryRestaurantList != null &&
           !Get.find<CategoryController>().isLoading) {
-        int pageSize =
-            (Get.find<CategoryController>().restaurantPageSize! / 10).ceil();
+        int pageSize = (Get.find<CategoryController>().restaurantPageSize! / 10).ceil();
         if (Get.find<CategoryController>().offset < pageSize) {
           debugPrint('end of the page');
           Get.find<CategoryController>().showBottomLoader();
           Get.find<CategoryController>().getCategoryRestaurantList(
-            Get.find<CategoryController>().subCategoryIndex == 0
-                ? widget.categoryID
-                : Get.find<CategoryController>()
-                    .subCategoryList![
-                        Get.find<CategoryController>().subCategoryIndex]
-                    .id
-                    .toString(),
+            Get.find<CategoryController>().subCategoryIndex == 0 ? widget.categoryID : Get.find<CategoryController>().subCategoryList![Get.find<CategoryController>().subCategoryIndex].id.toString(),
             Get.find<CategoryController>().offset + 1,
             Get.find<CategoryController>().type,
             false,
@@ -92,19 +74,20 @@ class CategoryProductScreenState extends State<CategoryProductScreen>
       }
     });
   }
+
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
     Get.find<CategoryController>().clearSubCategoryChildrenList;
   }
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<CategoryController>(builder: (catController) {
       List<Product>? products;
       List<Restaurant>? restaurants;
-      if (catController.categoryProductList != null &&
-          catController.searchProductList != null) {
+      if (catController.categoryProductList != null && catController.searchProductList != null) {
         products = [];
         if (catController.isSearching) {
           products.addAll(catController.searchProductList!);
@@ -112,8 +95,7 @@ class CategoryProductScreenState extends State<CategoryProductScreen>
           products.addAll(catController.categoryProductList!);
         }
       }
-      if (catController.categoryRestaurantList != null &&
-          catController.searchRestaurantList != null) {
+      if (catController.categoryRestaurantList != null && catController.searchRestaurantList != null) {
         restaurants = [];
         if (catController.isSearching) {
           restaurants.addAll(catController.searchRestaurantList!);
@@ -141,18 +123,10 @@ class CategoryProductScreenState extends State<CategoryProductScreen>
                             hintText: 'Search...',
                             border: InputBorder.none,
                           ),
-                          style: robotoRegular.copyWith(
-                              fontSize: Dimensions.fontSizeLarge),
-                          onSubmitted: (String query) =>
-                              catController.searchData(
+                          style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeLarge),
+                          onSubmitted: (String query) => catController.searchData(
                             query,
-                            catController.subCategoryIndex == 0
-                                ? widget.categoryID
-                                : catController
-                                    .subCategoryList![
-                                        catController.subCategoryIndex]
-                                    .id
-                                    .toString(),
+                            catController.subCategoryIndex == 0 ? widget.categoryID : catController.subCategoryList![catController.subCategoryIndex].id.toString(),
                             catController.type,
                           ),
                         )
@@ -179,17 +153,13 @@ class CategoryProductScreenState extends State<CategoryProductScreen>
                     IconButton(
                       onPressed: () => catController.toggleSearch(),
                       icon: Icon(
-                        catController.isSearching
-                            ? Icons.close_sharp
-                            : Icons.search,
+                        catController.isSearching ? Icons.close_sharp : Icons.search,
                         color: Theme.of(context).textTheme.bodyLarge!.color,
                       ),
                     ),
                     IconButton(
                       onPressed: () => Get.toNamed(RouteHelper.getCartRoute()),
-                      icon: CartWidget(
-                          color: Theme.of(context).textTheme.bodyLarge!.color,
-                          size: 25),
+                      icon: CartWidget(color: Theme.of(context).textTheme.bodyLarge!.color, size: 25),
                     ),
                     // VegFilterWidget(
                     //     type: catController.type,
@@ -242,12 +212,11 @@ class CategoryProductScreenState extends State<CategoryProductScreen>
           endDrawer: const MenuDrawerWidget(),
           endDrawerEnableOpenDragGesture: false,
           body: Column(children: [
-            const SizedBox(height:Dimensions.paddingSizeExtraSmall),
-            (catController.subCategoryList != null && catController.subCategoryList!.length>1&&
-                    !catController.isSearching)
+            const SizedBox(height: Dimensions.paddingSizeExtraSmall),
+            (catController.subCategoryList != null && catController.subCategoryList!.length > 1 && !catController.isSearching)
                 ?
-            // sub category
-                  Center(
+                // sub category
+                Center(
                     child: SizedBox(
                       width: Dimensions.webMaxWidth,
                       child: GetBuilder<CategoryController>(
@@ -262,32 +231,24 @@ class CategoryProductScreenState extends State<CategoryProductScreen>
                               itemBuilder: (context, index) {
                                 return InkWell(
                                   onTap: () {
-                                    catController.setSubCategoryIndex(index, catController.subCategoryList![index].id.toString());
-                                    catController
-                                        .setSubCategoryChildrenIndex(
-                                        index,
-                                        Get.find<CategoryController>()
-                                            .subCategoryIndex
-                                            .toString());
-                                    // if(index==0){
-                                    //   Get.find<CategoryController>().clearSubCategoryChildrenList;
-                                    // }
+                                    Get.find<CategoryController>().setSubCategoryIndex(
+                                      index,
+                                      Get.find<CategoryController>().categoryIndex.toString(),
+                                    );
+                                    Get.find<CategoryController>().getSubCategoryChildrenList(
+                                      Get.find<CategoryController>().subCategoryList![index].id.toString(),
+                                    );
                                   },
                                   child: Container(
                                     width: 80,
                                     height: 80,
-                                    decoration: BoxDecoration(
-                                     color: index == catController.subCategoryIndex
-                                             ? Theme.of(context).primaryColor.withOpacity(0.1)
-                                             : Theme.of(context).cardColor
-                                    ),
+                                    decoration: BoxDecoration(color: index == catController.subCategoryIndex ? Theme.of(context).primaryColor.withOpacity(0.1) : Theme.of(context).cardColor),
                                     alignment: Alignment.center,
                                     child: Column(
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
                                         ClipRRect(
-                                          borderRadius: BorderRadius.circular(
-                                              Dimensions.radiusSmall),
+                                          borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
                                           child: CustomImageWidget(
                                             height: 40,
                                             width: 40,
@@ -299,8 +260,7 @@ class CategoryProductScreenState extends State<CategoryProductScreen>
                                         Text(
                                           catController.subCategoryList![index].name!,
                                           textAlign: TextAlign.center,
-                                          style: robotoMedium.copyWith(
-                                              fontSize: Dimensions.fontSizeExtraSmall),
+                                          style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeExtraSmall),
                                           maxLines: 2,
                                           overflow: TextOverflow.ellipsis,
                                         ),
@@ -316,106 +276,86 @@ class CategoryProductScreenState extends State<CategoryProductScreen>
                     ),
                   )
                 : const SizedBox(),
-            const SizedBox(height:Dimensions.paddingSizeExtraSmall),
+            const SizedBox(height: Dimensions.paddingSizeExtraSmall),
             // sub category children
-             (catController.subCategoryChildrenList != null && catController.subCategoryChildrenList!.length>1&&
-                !catController.isSearching && catController
-                 .subCategoryIndex!=0 )
-                ?
-            Center(
-              child: SizedBox(
-                width: Dimensions.webMaxWidth,
-                child: GetBuilder<CategoryController>(
-                  builder: (catController) {
-                    return SizedBox(
-                      height: 80,
-                      child: ListView.builder(
-                        controller: subCategoryChildrenScrollController,
-                        scrollDirection: Axis.horizontal,
-                        physics: const BouncingScrollPhysics(),
-                        itemCount: catController.subCategoryChildrenList!.length,
-                        itemBuilder: (context, index) {
-                          bool isSelected =
-                              index == catController.selectedCategoryChildrenIndex;
+            (catController.subCategoryChildrenList != null && catController.subCategoryChildrenList!.length > 1 && !catController.isSearching && catController.subCategoryIndex != 0)
+                ? Center(
+                    child: SizedBox(
+                      width: Dimensions.webMaxWidth,
+                      child: GetBuilder<CategoryController>(
+                        builder: (catController) {
+                          return SizedBox(
+                            height: 80,
+                            child: ListView.builder(
+                              controller: subCategoryChildrenScrollController,
+                              scrollDirection: Axis.horizontal,
+                              physics: const BouncingScrollPhysics(),
+                              itemCount: catController.subCategoryChildrenList!.length,
+                              itemBuilder: (context, index) {
+                                bool isSelected = index == catController.selectedCategoryChildrenIndex;
 
-                          return  index !=0 ? InkWell(
-                            onTap: () {
-                              catController.setSubCategoryChildrenIndex(index, widget.categoryID);
-                              catController.setSelectedCategoryChildrenIndex(index);
-                            },
-                            child: Container(
-                              width: 80,
-                              height: 80,
-                              decoration: BoxDecoration(
-                                  color: isSelected
-                                      ? Theme.of(context).primaryColor.withOpacity(0.1)
-                                      : Theme.of(context).cardColor
-                              ),
-                              alignment: Alignment.center,
-                              child:
-
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(
-                                        Dimensions.radiusSmall),
-                                    child: CustomImageWidget(
-                                      height: 40,
-                                      width: 40,
-                                      fit: BoxFit.cover,
-                                      image: '${catController.subCategoryChildrenList![index].image}',
-                                    ),
-                                  ),
-                                  const SizedBox(height: Dimensions.paddingSizeExtraSmall),
-                                  Text(
-                                    catController.subCategoryChildrenList![index].name!,
-                                    textAlign: TextAlign.center,
-                                    style: robotoMedium.copyWith(
-                                        fontSize: Dimensions.fontSizeExtraSmall),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ],
-                              ),
+                                return index != 0
+                                    ? InkWell(
+                                        onTap: () {
+                                          catController.setSubCategoryChildrenIndex(index, widget.categoryID);
+                                          catController.setSelectedCategoryChildrenIndex(index);
+                                        },
+                                        child: Container(
+                                          width: 80,
+                                          height: 80,
+                                          decoration: BoxDecoration(color: isSelected ? Theme.of(context).primaryColor.withOpacity(0.1) : Theme.of(context).cardColor),
+                                          alignment: Alignment.center,
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              ClipRRect(
+                                                borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
+                                                child: CustomImageWidget(
+                                                  height: 40,
+                                                  width: 40,
+                                                  fit: BoxFit.cover,
+                                                  image: '${catController.subCategoryChildrenList![index].image}',
+                                                ),
+                                              ),
+                                              const SizedBox(height: Dimensions.paddingSizeExtraSmall),
+                                              Text(
+                                                catController.subCategoryChildrenList![index].name!,
+                                                textAlign: TextAlign.center,
+                                                style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeExtraSmall),
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      )
+                                    : const SizedBox();
+                              },
                             ),
-                          ):const SizedBox();
+                          );
                         },
                       ),
-                    );
-                  },
-                ),
-              ),
-            )
+                    ),
+                  )
                 : const SizedBox(),
-            const SizedBox(height:Dimensions.paddingSizeExtraSmall),
+            const SizedBox(height: Dimensions.paddingSizeExtraSmall),
             Center(
                 child: Container(
               width: Dimensions.webMaxWidth,
               color: Theme.of(context).cardColor,
               child: Align(
-                alignment: ResponsiveHelper.isDesktop(context)
-                    ? Alignment.centerLeft
-                    : Alignment.center,
+                alignment: ResponsiveHelper.isDesktop(context) ? Alignment.centerLeft : Alignment.center,
                 child: Container(
-                  width: ResponsiveHelper.isDesktop(context)
-                      ? 350
-                      : Dimensions.webMaxWidth,
-                  color: ResponsiveHelper.isDesktop(context)
-                      ? Colors.transparent
-                      : Theme.of(context).cardColor,
+                  width: ResponsiveHelper.isDesktop(context) ? 350 : Dimensions.webMaxWidth,
+                  color: ResponsiveHelper.isDesktop(context) ? Colors.transparent : Theme.of(context).cardColor,
                   child: TabBar(
                     controller: _tabController,
                     indicatorColor: Theme.of(context).primaryColor,
                     indicatorWeight: 3,
                     labelColor: Theme.of(context).primaryColor,
                     unselectedLabelColor: Theme.of(context).disabledColor,
-                    unselectedLabelStyle: robotoRegular.copyWith(
-                        color: Theme.of(context).disabledColor,
-                        fontSize: Dimensions.fontSizeSmall),
-                    labelStyle: robotoBold.copyWith(
-                        fontSize: Dimensions.fontSizeSmall,
-                        color: Theme.of(context).primaryColor),
+                    unselectedLabelStyle: robotoRegular.copyWith(color: Theme.of(context).disabledColor, fontSize: Dimensions.fontSizeSmall),
+                    labelStyle: robotoBold.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).primaryColor),
                     tabs: [
                       Tab(text: 'food'.tr),
                       Tab(text: 'restaurants'.tr),
@@ -428,46 +368,25 @@ class CategoryProductScreenState extends State<CategoryProductScreen>
                 child: NotificationListener(
               onNotification: (dynamic scrollNotification) {
                 if (scrollNotification is ScrollEndNotification) {
-                  if ((_tabController!.index == 1 &&
-                          !catController.isRestaurant) ||
-                      _tabController!.index == 0 &&
-                          catController.isRestaurant) {
+                  if ((_tabController!.index == 1 && !catController.isRestaurant) || _tabController!.index == 0 && catController.isRestaurant) {
                     catController.setRestaurant(_tabController!.index == 1);
                     if (catController.isSearching) {
                       catController.searchData(
                         catController.searchText,
-                        catController.subCategoryIndex == 0
-                            ? widget.categoryID
-                            : catController
-                                .subCategoryList![
-                                    catController.subCategoryIndex]
-                                .id
-                                .toString(),
+                        catController.subCategoryIndex == 0 ? widget.categoryID : catController.subCategoryList![catController.subCategoryIndex].id.toString(),
                         catController.type,
                       );
                     } else {
                       if (_tabController!.index == 1) {
                         catController.getCategoryRestaurantList(
-                          catController.subCategoryIndex == 0
-                              ? widget.categoryID
-                              : catController
-                                  .subCategoryList![
-                                      catController.subCategoryIndex]
-                                  .id
-                                  .toString(),
+                          catController.subCategoryIndex == 0 ? widget.categoryID : catController.subCategoryList![catController.subCategoryIndex].id.toString(),
                           1,
                           catController.type,
                           false,
                         );
                       } else {
                         catController.getCategoryProductList(
-                          catController.subCategoryIndex == 0
-                              ? widget.categoryID
-                              : catController
-                                  .subCategoryList![
-                                      catController.subCategoryIndex]
-                                  .id
-                                  .toString(),
+                          catController.subCategoryIndex == 0 ? widget.categoryID : catController.subCategoryList![catController.subCategoryIndex].id.toString(),
                           1,
                           catController.type,
                           false,
@@ -498,13 +417,8 @@ class CategoryProductScreenState extends State<CategoryProductScreen>
                               catController.isLoading
                                   ? Center(
                                       child: Padding(
-                                        padding: const EdgeInsets.all(
-                                            Dimensions.paddingSizeSmall),
-                                        child: CircularProgressIndicator(
-                                            valueColor:
-                                                AlwaysStoppedAnimation<Color>(
-                                                    Theme.of(context)
-                                                        .primaryColor)),
+                                        padding: const EdgeInsets.all(Dimensions.paddingSizeSmall),
+                                        child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor)),
                                       ),
                                     )
                                   : const SizedBox(),
@@ -531,13 +445,8 @@ class CategoryProductScreenState extends State<CategoryProductScreen>
                               catController.isLoading
                                   ? Center(
                                       child: Padding(
-                                        padding: const EdgeInsets.all(
-                                            Dimensions.paddingSizeSmall),
-                                        child: CircularProgressIndicator(
-                                            valueColor:
-                                                AlwaysStoppedAnimation<Color>(
-                                                    Theme.of(context)
-                                                        .primaryColor)),
+                                        padding: const EdgeInsets.all(Dimensions.paddingSizeSmall),
+                                        child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor)),
                                       ),
                                     )
                                   : const SizedBox(),

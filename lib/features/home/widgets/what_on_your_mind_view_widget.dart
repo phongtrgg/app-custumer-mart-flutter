@@ -16,8 +16,7 @@ class WhatOnYourMindViewWidget extends StatefulWidget {
   const WhatOnYourMindViewWidget({super.key});
 
   @override
-  State<WhatOnYourMindViewWidget> createState() =>
-      _WhatOnYourMindViewWidgetState();
+  State<WhatOnYourMindViewWidget> createState() => _WhatOnYourMindViewWidgetState();
 }
 
 class _WhatOnYourMindViewWidgetState extends State<WhatOnYourMindViewWidget> {
@@ -31,25 +30,13 @@ class _WhatOnYourMindViewWidgetState extends State<WhatOnYourMindViewWidget> {
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Padding(
             padding: EdgeInsets.only(
-              top: ResponsiveHelper.isMobile(context)
-                  ? Dimensions.paddingSizeSmall
-                  : Dimensions.paddingSizeOverLarge,
-              left: Get.find<LocalizationController>().isLtr
-                  ? Dimensions.paddingSizeExtraSmall
-                  : 0,
-              right: Get.find<LocalizationController>().isLtr
-                  ? 0
-                  : Dimensions.paddingSizeExtraSmall,
-              bottom: ResponsiveHelper.isMobile(context)
-                  ? Dimensions.paddingSizeDefault
-                  : Dimensions.paddingSizeOverLarge,
+              top: ResponsiveHelper.isMobile(context) ? Dimensions.paddingSizeSmall : Dimensions.paddingSizeOverLarge,
+              left: Get.find<LocalizationController>().isLtr ? Dimensions.paddingSizeExtraSmall : 0,
+              right: Get.find<LocalizationController>().isLtr ? 0 : Dimensions.paddingSizeExtraSmall,
+              bottom: ResponsiveHelper.isMobile(context) ? Dimensions.paddingSizeDefault : Dimensions.paddingSizeOverLarge,
             ),
             child: ResponsiveHelper.isDesktop(context)
-                ? Text('what_on_your_mind'.tr,
-                    style: robotoMedium.copyWith(
-                        color: Theme.of(context).secondaryHeaderColor,
-                        fontSize: Dimensions.fontSizeLarge,
-                        fontWeight: FontWeight.w600))
+                ? Text('what_on_your_mind'.tr, style: robotoMedium.copyWith(color: Theme.of(context).secondaryHeaderColor, fontSize: Dimensions.fontSizeLarge, fontWeight: FontWeight.w600))
                 : Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -64,20 +51,16 @@ class _WhatOnYourMindViewWidgetState extends State<WhatOnYourMindViewWidget> {
                       const SizedBox(width: Dimensions.paddingSizeDefault),
                       TextButton(
                         onPressed: () {
-                          categoryController.getSubCategoryList(
-                              categoryController.categoryList![0].id
-                                  .toString());
-                          categoryController.setCategoryIndexAndTitle(
-                              categoryController.categoryList![0].id!,
-                              categoryController.categoryList![0].name!);
+                          categoryController.getSubCategoryList(categoryController.categoryList![0].id.toString());
+                          categoryController.setCategoryIndexAndTitle(categoryController.categoryList![0].id!, categoryController.categoryList![0].name!);
                           categoryController.setSelectedCategoryIndex(0);
-                          Get.toNamed(RouteHelper.getCategoryRoute());
+                          Get.toNamed(RouteHelper.getCategoryRoute('category'));
                         },
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(
-                              'Xem tất cả',
+                              'view_all'.tr,
                               style: TextStyle(
                                 color: Theme.of(context).secondaryHeaderColor,
                                 fontSize: Dimensions.fontSizeExtraSmall,
@@ -139,7 +122,7 @@ class _WhatOnYourMindViewWidgetState extends State<WhatOnYourMindViewWidget> {
           //                               categoryController
           //                                   .setSelectedCategoryIndex(0),
           //                               Get.toNamed(
-          //                                   RouteHelper.getCategoryRoute()),
+          //                                   RouteHelper.getCategoryRoute('category')),
           //                             },
           //                             child: Container(
           //                               height: 40,
@@ -183,7 +166,7 @@ class _WhatOnYourMindViewWidgetState extends State<WhatOnYourMindViewWidget> {
           //                         categoryController.categoryList![index].id!,
           //                         categoryController.categoryList![index].name!),
           //                     categoryController.setSelectedCategoryIndex(index),
-          //                     Get.toNamed(RouteHelper.getCategoryRoute()),
+          //                     Get.toNamed(RouteHelper.getCategoryRoute('category')),
           //                     // Get.toNamed(RouteHelper.getCategoryProductRoute(
           //                     //     categoryController.categoryList![index].id,
           //                     //     categoryController.categoryList![index].name!,
@@ -255,65 +238,41 @@ class _WhatOnYourMindViewWidgetState extends State<WhatOnYourMindViewWidget> {
                       GridView.builder(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
-                        padding: const EdgeInsets.only(
-                            left: Dimensions.paddingSizeDefault),
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
+                        padding: const EdgeInsets.only(left: Dimensions.paddingSizeDefault),
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 4,
                           mainAxisSpacing: Dimensions.paddingSizeDefault,
                           crossAxisSpacing: Dimensions.paddingSizeDefault,
                           childAspectRatio: 1,
                         ),
-                        itemCount: _showAll
-                            ? categoryController.categoryList!.length
-                            : (categoryController.categoryList!.length > 8
-                                ? 8
-                                : categoryController.categoryList!.length),
+                        itemCount: _showAll ? categoryController.categoryList!.length : (categoryController.categoryList!.length > 8 ? 8 : categoryController.categoryList!.length),
                         itemBuilder: (context, index) {
                           return Container(
                             decoration: BoxDecoration(
                               color: Colors.transparent,
-                              borderRadius:
-                                  BorderRadius.circular(Dimensions.radiusSmall),
+                              borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
                             ),
                             child: CustomInkWellWidget(
                               onTap: () => {
-                                categoryController.getSubCategoryList(
-                                    categoryController.categoryList![index].id
-                                        .toString()),
-                                categoryController.setCategoryIndexAndTitle(
-                                    categoryController.categoryList![index].id!,
-                                    categoryController
-                                        .categoryList![index].name!),
-                                categoryController
-                                    .setSelectedCategoryIndex(index),
-                                Get.toNamed(RouteHelper.getCategoryRoute()),
+                                categoryController.getSubCategoryList(categoryController.categoryList![index].id.toString()),
+                                categoryController.setCategoryIndexAndTitle(categoryController.categoryList![index].id!, categoryController.categoryList![index].name!),
+                                categoryController.setSelectedCategoryIndex(index),
+                                Get.toNamed(RouteHelper.getCategoryRoute('category')),
                               },
                               radius: Dimensions.radiusSmall,
                               child: Column(
                                 children: [
                                   Container(
                                     decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(
-                                          Dimensions.radiusDefault),
-                                      color: Theme.of(context)
-                                          .disabledColor
-                                          .withOpacity(0.2),
+                                      borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
+                                      color: Theme.of(context).disabledColor.withOpacity(0.2),
                                     ),
                                     child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(
-                                          Dimensions.radiusDefault),
+                                      borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
                                       child: CustomImageWidget(
-                                        image:
-                                            '${categoryController.categoryList![index].image}',
-                                        height:
-                                            ResponsiveHelper.isMobile(context)
-                                                ? 50
-                                                : 100,
-                                        width:
-                                            ResponsiveHelper.isMobile(context)
-                                                ? 50
-                                                : 100,
+                                        image: '${categoryController.categoryList![index].image}',
+                                        height: ResponsiveHelper.isMobile(context) ? 50 : 100,
+                                        width: ResponsiveHelper.isMobile(context) ? 50 : 100,
                                         // resize:
                                         //     ResponsiveHelper.isMobile(context),
                                         // minHeight: 70,
@@ -325,8 +284,7 @@ class _WhatOnYourMindViewWidgetState extends State<WhatOnYourMindViewWidget> {
                                   ),
                                   Expanded(
                                     child: Text(
-                                      categoryController
-                                          .categoryList![index].name!,
+                                      categoryController.categoryList![index].name!,
                                       style: robotoMedium.copyWith(
                                         fontSize: Dimensions.fontSizeSmall,
                                         color: Theme.of(context).cardColor,
@@ -359,9 +317,7 @@ class _WhatOnYourMindViewWidgetState extends State<WhatOnYourMindViewWidget> {
                                 ),
                               ),
                               Icon(
-                                _showAll
-                                    ? Icons.arrow_drop_up_sharp
-                                    : Icons.arrow_drop_down_sharp,
+                                _showAll ? Icons.arrow_drop_up_sharp : Icons.arrow_drop_down_sharp,
                                 color: Theme.of(context).secondaryHeaderColor,
                                 size: 20,
                               ),
@@ -370,8 +326,7 @@ class _WhatOnYourMindViewWidgetState extends State<WhatOnYourMindViewWidget> {
                         ),
                     ],
                   )
-                : WebWhatOnYourMindViewShimmer(
-                    categoryController: categoryController),
+                : WebWhatOnYourMindViewShimmer(categoryController: categoryController),
           ),
         ]),
       );
@@ -381,8 +336,8 @@ class _WhatOnYourMindViewWidgetState extends State<WhatOnYourMindViewWidget> {
 
 class WebWhatOnYourMindViewShimmer extends StatelessWidget {
   final CategoryController categoryController;
-  const WebWhatOnYourMindViewShimmer(
-      {super.key, required this.categoryController});
+
+  const WebWhatOnYourMindViewShimmer({super.key, required this.categoryController});
 
   @override
   Widget build(BuildContext context) {
@@ -395,35 +350,23 @@ class WebWhatOnYourMindViewShimmer extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
           return Padding(
-            padding: const EdgeInsets.only(
-                bottom: Dimensions.paddingSizeSmall,
-                right: Dimensions.paddingSizeSmall,
-                top: Dimensions.paddingSizeSmall),
+            padding: const EdgeInsets.only(bottom: Dimensions.paddingSizeSmall, right: Dimensions.paddingSizeSmall, top: Dimensions.paddingSizeSmall),
             child: Container(
               width: ResponsiveHelper.isMobile(context) ? 70 : 108,
               height: ResponsiveHelper.isMobile(context) ? 70 : 100,
               padding: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
-              margin: EdgeInsets.only(
-                  top: ResponsiveHelper.isMobile(context)
-                      ? 0
-                      : Dimensions.paddingSizeSmall),
+              margin: EdgeInsets.only(top: ResponsiveHelper.isMobile(context) ? 0 : Dimensions.paddingSizeSmall),
               child: Shimmer(
                 duration: const Duration(seconds: 2),
                 enabled: categoryController.categoryList == null,
                 child: Column(children: [
                   Container(
-                    decoration: BoxDecoration(
-                        borderRadius:
-                            BorderRadius.circular(Dimensions.radiusSmall),
-                        color: Colors.grey[300]),
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(Dimensions.radiusSmall), color: Colors.grey[300]),
                     height: ResponsiveHelper.isMobile(context) ? 70 : 80,
                     width: 70,
                   ),
                   const SizedBox(height: Dimensions.paddingSizeSmall),
-                  Container(
-                      height: ResponsiveHelper.isMobile(context) ? 10 : 15,
-                      width: 150,
-                      color: Colors.grey[300]),
+                  Container(height: ResponsiveHelper.isMobile(context) ? 10 : 15, width: 150, color: Colors.grey[300]),
                 ]),
               ),
             ),

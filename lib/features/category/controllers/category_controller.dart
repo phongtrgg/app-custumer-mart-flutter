@@ -6,73 +6,102 @@ import 'package:get/get.dart';
 
 class CategoryController extends GetxController implements GetxService {
   final CategoryServiceInterface categoryServiceInterface;
+
   CategoryController({required this.categoryServiceInterface});
 
   List<CategoryModel>? _categoryList;
+
   List<CategoryModel>? get categoryList => _categoryList;
 
+  List<CategoryModel>? _servicesList;
+
+  List<CategoryModel>? get servicesList => _servicesList;
+
   List<CategoryModel>? _subCategoryList;
+
   List<CategoryModel>? get subCategoryList => _subCategoryList;
 
   List<Product>? _categoryProductList;
+
   List<Product>? get categoryProductList => _categoryProductList;
 
   List<Restaurant>? _categoryRestaurantList;
+
   List<Restaurant>? get categoryRestaurantList => _categoryRestaurantList;
 
   List<Product>? _searchProductList = [];
+
   List<Product>? get searchProductList => _searchProductList;
 
   List<Restaurant>? _searchRestaurantList = [];
+
   List<Restaurant>? get searchRestaurantList => _searchRestaurantList;
 
   // List<bool>? _interestCategorySelectedList;
   // List<bool>? get interestCategorySelectedList => _interestCategorySelectedList;
 
   bool _isLoading = false;
+
   bool get isLoading => _isLoading;
 
   int? _pageSize;
+
   int? get pageSize => _pageSize;
 
   int? _restaurantPageSize;
+
   int? get restaurantPageSize => _restaurantPageSize;
 
   bool _isSearching = false;
+
   bool get isSearching => _isSearching;
 
-  int _categoryIndex=0;
+  int _categoryIndex = 0;
+
   int get categoryIndex => _categoryIndex;
 
   String? _categoryTitle;
+
   String get categoryTitle => _categoryTitle ?? '';
 
   int _subCategoryIndex = 0;
+
   int get subCategoryIndex => _subCategoryIndex;
 
   String _type = 'all';
+
   String get type => _type;
 
   bool _isRestaurant = false;
+
   bool get isRestaurant => _isRestaurant;
 
   String? _searchText = '';
+
   String? get searchText => _searchText;
 
   int _offset = 1;
+
   int get offset => _offset;
 
-  int _selectedCategoryIndex=0;
+  int _selectedCategoryIndex = 0;
+
   int get selectedCategoryIndex => _selectedCategoryIndex;
 
   // String? _restResultText = '';
   // String? _foodResultText = '';
 
-
   Future<void> getCategoryList(bool reload) async {
-    if(_categoryList == null || reload) {
+    if (_categoryList == null || reload) {
       _categoryList = await categoryServiceInterface.getCategoryList(reload, _categoryList);
       // _interestCategorySelectedList = categoryServiceInterface.processCategorySelectedList(_categoryList);
+      update();
+    }
+  }
+
+  Future<void> getServicesList(bool reload) async {
+    if (_servicesList == null || reload) {
+      _servicesList = await categoryServiceInterface.getServicesList(reload, _servicesList);
       update();
     }
   }
@@ -83,43 +112,47 @@ class CategoryController extends GetxController implements GetxService {
     _categoryProductList = null;
     _isRestaurant = false;
     _subCategoryList = await categoryServiceInterface.getSubCategoryList(categoryID);
-    if(_subCategoryList != null) {
+    _subCategoryChildrenList = await categoryServiceInterface.getSubCategoryChildrenList(categoryID);
+    if (_subCategoryList != null && _subCategoryChildrenList != null) {
       getCategoryProductList(categoryID, 1, 'all', false);
     }
   }
-  void setSubCategorySelector(int index){
+
+  void setSubCategorySelector(int index) {
     _subCategoryIndex = index;
   }
+
   void setSubCategoryIndex(int index, String? categoryID) {
     _subCategoryIndex = index;
-    if(_isRestaurant) {
+    if (_isRestaurant) {
       getCategoryRestaurantList(_subCategoryIndex == 0 ? categoryID : _subCategoryList![index].id.toString(), 1, _type, true);
-    }else {
+    } else {
       getCategoryProductList(_subCategoryIndex == 0 ? categoryID : _subCategoryList![index].id.toString(), 1, _type, true);
     }
     clearSubCategoryChildrenList();
-    getSubCategoryChildrenList(categoryID);
     update();
   }
+
   void setCategoryIndexAndTitle(int index, String? title) {
     _categoryIndex = index;
     _categoryTitle = title;
     update();
   }
+
   void getCategoryProductList(String? categoryID, int offset, String type, bool notify) async {
     _offset = offset;
-    if(offset == 1) {
-      if(_type == type) {
+    if (offset == 1) {
+      if (_type == type) {
         _isSearching = false;
       }
       _type = type;
-      if(notify) {
+      if (notify) {
         update();
       }
       _categoryProductList = null;
     }
     ProductModel? productModel = await categoryServiceInterface.getCategoryProductList(categoryID, offset, type);
-    if(productModel != null) {
+    if (productModel != null) {
       if (offset == 1) {
         _categoryProductList = [];
       }
@@ -132,18 +165,18 @@ class CategoryController extends GetxController implements GetxService {
 
   void getCategoryRestaurantList(String? categoryID, int offset, String type, bool notify) async {
     _offset = offset;
-    if(offset == 1) {
-      if(_type == type) {
+    if (offset == 1) {
+      if (_type == type) {
         _isSearching = false;
       }
       _type = type;
-      if(notify) {
+      if (notify) {
         update();
       }
       _categoryRestaurantList = null;
     }
     RestaurantModel? restaurantModel = await categoryServiceInterface.getCategoryRestaurantList(categoryID, offset, type);
-    if(restaurantModel != null) {
+    if (restaurantModel != null) {
       if (offset == 1) {
         _categoryRestaurantList = [];
       }
@@ -155,7 +188,7 @@ class CategoryController extends GetxController implements GetxService {
   }
 
   void searchData(String? query, String? categoryID, String type) async {
-    if((_isRestaurant && query!.isNotEmpty /*&& query != _restResultText*/) || (!_isRestaurant && query!.isNotEmpty/* && query != _foodResultText*/)) {
+    if ((_isRestaurant && query!.isNotEmpty /*&& query != _restResultText*/) || (!_isRestaurant && query!.isNotEmpty /* && query != _foodResultText*/)) {
       _searchText = query;
       _type = type;
       if (_isRestaurant) {
@@ -193,7 +226,7 @@ class CategoryController extends GetxController implements GetxService {
   void toggleSearch() {
     _isSearching = !_isSearching;
     _searchProductList = [];
-    if(_categoryProductList != null) {
+    if (_categoryProductList != null) {
       _searchProductList!.addAll(_categoryProductList!);
     }
     update();
@@ -227,14 +260,20 @@ class CategoryController extends GetxController implements GetxService {
     _selectedCategoryIndex = index;
     update();
   }
+
 // category Children 3
   int _subCategoryChildrenIndex = 0;
+
   int get subCategoryChildrenIndex => _subCategoryChildrenIndex;
   List<CategoryModel>? _subCategoryChildrenList;
+
   List<CategoryModel>? get subCategoryChildrenList => _subCategoryChildrenList;
+
   //lưu lại vị trí index đã chọn
-  int _selectedCategoryChildrenIndex=0;
+  int _selectedCategoryChildrenIndex = 0;
+
   int get selectedCategoryChildrenIndex => _selectedCategoryChildrenIndex;
+
 //call lần đầu để lấy danh sách category 3
   void getSubCategoryChildrenList(String? categoryID) async {
     _subCategoryChildrenIndex = 0;
@@ -242,11 +281,12 @@ class CategoryController extends GetxController implements GetxService {
     _categoryProductList = null;
     _isRestaurant = false;
     _subCategoryChildrenList = await categoryServiceInterface.getSubCategoryChildrenList(categoryID);
-    if(_subCategoryChildrenList != null) {
+    if (_subCategoryChildrenList != null) {
       getCategoryProductList(categoryID, 1, 'all', false);
     }
     update();
   }
+
   //chọn sang cate 3 khác sẽ gọi đến hàm này sẽ lọc trong danh sách cate 3 cũ và render đúng theo ID
   //**lưu ý chỉ sài khi đã có danh sách _subCategoryChildrenList
   void setSubCategoryChildrenIndex(int index, String? categoryID) {
@@ -259,20 +299,22 @@ class CategoryController extends GetxController implements GetxService {
       update();
       return;
     }
-    if(_isRestaurant) {
+    if (_isRestaurant) {
       getCategoryRestaurantList(_subCategoryChildrenIndex == 0 ? categoryID : _subCategoryChildrenList![index].id.toString(), 1, _type, true);
-    }else {
+    } else {
       getCategoryProductList(_subCategoryChildrenIndex == 0 ? categoryID : _subCategoryChildrenList![index].id.toString(), 1, _type, true);
     }
     update();
   }
+
   //lưu lại index đang chọn để style
   setSelectedCategoryChildrenIndex(int index) {
     _selectedCategoryChildrenIndex = index;
     update();
   }
+
   //xoá bỏ category tầng 3
-  void clearSubCategoryChildrenList(){
+  void clearSubCategoryChildrenList() {
     _selectedCategoryChildrenIndex = 0;
     _subCategoryChildrenList?.clear();
   }

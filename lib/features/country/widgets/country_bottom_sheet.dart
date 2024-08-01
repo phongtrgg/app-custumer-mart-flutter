@@ -7,7 +7,7 @@ import 'package:stackfood_multivendor/util/app_constants.dart';
 import 'package:stackfood_multivendor/util/dimensions.dart';
 import 'package:stackfood_multivendor/util/styles.dart';
 
-import '../controller/countryController.dart';
+import '../controller/country_controller.dart';
 
 class CountryBottomSheetWidget extends StatefulWidget {
   const CountryBottomSheetWidget({super.key});
@@ -48,7 +48,7 @@ class _CountryBottomSheetWidgetState extends State<CountryBottomSheetWidget> {
           Flexible(
             child: SingleChildScrollView(
               child: ListView.builder(
-                itemCount: countryController.country.length,
+                itemCount: countryController.country.length > 2 ? 2 : countryController.country.length,
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeLarge),

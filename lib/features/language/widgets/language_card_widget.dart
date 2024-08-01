@@ -71,7 +71,14 @@ class LanguageCardWidget extends StatelessWidget {
                             : Theme.of(context).disabledColor.withOpacity(0.3)),
               ),
         child: Row(children: [
-          country == false ? Image.asset(languageModel.imageUrl!, width: 36, height: 36) : Image.network(languageModel.imageUrl!, width: 36, height: 36),
+          languageModel.imageUrl != null
+              ? country == false
+                  ? Image.asset(languageModel.imageUrl!, width: 36, height: 36)
+                  : Image.network(languageModel.imageUrl!, width: 36, height: 36)
+              : const Icon(
+                  Icons.error,
+                  size: 36,
+                ),
           const SizedBox(width: Dimensions.paddingSizeSmall),
           Text(country == false ? languageModel.languageName! : '${languageModel.regionName!}'.tr, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeLarge)),
           const Spacer(),

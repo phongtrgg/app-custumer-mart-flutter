@@ -19,16 +19,13 @@ class CategoryWidget1 extends StatelessWidget {
     ScrollController scrollController = ScrollController();
 
     return GetBuilder<CategoryController>(builder: (categoryController) {
-      return (categoryController.categoryList != null &&
-              categoryController.categoryList!.isEmpty)
+      return (categoryController.categoryList != null && categoryController.categoryList!.isEmpty)
           ? const SizedBox()
           : Column(
               children: [
                 Padding(
                   padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                  child: TitleWidget(
-                      title: 'categories'.tr,
-                      onTap: () => Get.toNamed(RouteHelper.getCategoryRoute())),
+                  child: TitleWidget(title: 'categories'.tr, onTap: () => Get.toNamed(RouteHelper.getCategoryRoute('category'))),
                 ),
                 Row(
                   children: [
@@ -38,48 +35,29 @@ class CategoryWidget1 extends StatelessWidget {
                         child: categoryController.categoryList != null
                             ? ListView.builder(
                                 controller: scrollController,
-                                itemCount:
-                                    categoryController.categoryList!.length > 15
-                                        ? 15
-                                        : categoryController
-                                            .categoryList!.length,
-                                padding: const EdgeInsets.only(
-                                    left: Dimensions.paddingSizeSmall),
+                                itemCount: categoryController.categoryList!.length > 15 ? 15 : categoryController.categoryList!.length,
+                                padding: const EdgeInsets.only(left: Dimensions.paddingSizeSmall),
                                 physics: const BouncingScrollPhysics(),
                                 scrollDirection: Axis.horizontal,
                                 itemBuilder: (context, index) {
                                   return Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 1),
+                                    padding: const EdgeInsets.symmetric(horizontal: 1),
                                     child: InkWell(
-                                      onTap: () => Get.toNamed(
-                                          RouteHelper.getCategoryProductRoute(
-                                        categoryController
-                                            .categoryList![index].id,
-                                        categoryController
-                                            .categoryList![index].name!,null
-                                      )),
+                                      onTap: () => Get.toNamed(RouteHelper.getCategoryProductRoute(categoryController.categoryList![index].id, categoryController.categoryList![index].name!, null)),
                                       child: SizedBox(
                                         width: 75,
                                         child: Container(
                                           height: 65,
                                           width: 75,
                                           margin: EdgeInsets.only(
-                                            left: index == 0
-                                                ? 0
-                                                : Dimensions
-                                                    .paddingSizeExtraSmall,
-                                            right: Dimensions
-                                                .paddingSizeExtraSmall,
+                                            left: index == 0 ? 0 : Dimensions.paddingSizeExtraSmall,
+                                            right: Dimensions.paddingSizeExtraSmall,
                                           ),
                                           child: Stack(children: [
                                             ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      Dimensions.radiusSmall),
+                                              borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
                                               child: CustomImageWidget(
-                                                image:
-                                                    '${categoryController.categoryList![index].image}',
+                                                image: '${categoryController.categoryList![index].image}',
                                                 height: 65,
                                                 width: 75,
                                                 fit: BoxFit.cover,
@@ -90,30 +68,17 @@ class CategoryWidget1 extends StatelessWidget {
                                                 left: 0,
                                                 right: 0,
                                                 child: Container(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(vertical: 2),
+                                                  padding: const EdgeInsets.symmetric(vertical: 2),
                                                   decoration: BoxDecoration(
-                                                    borderRadius: const BorderRadius
-                                                        .vertical(
-                                                        bottom: Radius.circular(
-                                                            Dimensions
-                                                                .radiusSmall)),
-                                                    color: Theme.of(context)
-                                                        .primaryColor
-                                                        .withOpacity(0.8),
+                                                    borderRadius: const BorderRadius.vertical(bottom: Radius.circular(Dimensions.radiusSmall)),
+                                                    color: Theme.of(context).primaryColor.withOpacity(0.8),
                                                   ),
                                                   child: Text(
-                                                    categoryController
-                                                        .categoryList![index]
-                                                        .name!,
+                                                    categoryController.categoryList![index].name!,
                                                     maxLines: 1,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
+                                                    overflow: TextOverflow.ellipsis,
                                                     textAlign: TextAlign.center,
-                                                    style: robotoMedium.copyWith(
-                                                        fontSize: Dimensions
-                                                            .fontSizeExtraSmall,
-                                                        color: Colors.white),
+                                                    style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeExtraSmall, color: Colors.white),
                                                   ),
                                                 )),
                                           ]),
@@ -123,8 +88,7 @@ class CategoryWidget1 extends StatelessWidget {
                                   );
                                 },
                               )
-                            : CategoryShimmer(
-                                categoryController: categoryController),
+                            : CategoryShimmer(categoryController: categoryController),
                       ),
                     ),
                     ResponsiveHelper.isMobile(context)
@@ -141,25 +105,17 @@ class CategoryWidget1 extends StatelessWidget {
                                                   height: 550,
                                                   width: 600,
                                                   child: CategoryPopUpWidget(
-                                                    categoryController:
-                                                        categoryController,
+                                                    categoryController: categoryController,
                                                   ),
                                                 ),
                                               ));
                                     },
                                     child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          right: Dimensions.paddingSizeSmall),
+                                      padding: const EdgeInsets.only(right: Dimensions.paddingSizeSmall),
                                       child: CircleAvatar(
                                         radius: 35,
-                                        backgroundColor:
-                                            Theme.of(context).primaryColor,
-                                        child: Text('view_all'.tr,
-                                            style: TextStyle(
-                                                fontSize: Dimensions
-                                                    .paddingSizeDefault,
-                                                color: Theme.of(context)
-                                                    .cardColor)),
+                                        backgroundColor: Theme.of(context).primaryColor,
+                                        child: Text('view_all'.tr, style: TextStyle(fontSize: Dimensions.paddingSizeDefault, color: Theme.of(context).cardColor)),
                                       ),
                                     ),
                                   ),
@@ -168,8 +124,7 @@ class CategoryWidget1 extends StatelessWidget {
                                   )
                                 ],
                               )
-                            : CategoryAllShimmer(
-                                categoryController: categoryController)
+                            : CategoryAllShimmer(categoryController: categoryController)
                   ],
                 ),
               ],
@@ -180,6 +135,7 @@ class CategoryWidget1 extends StatelessWidget {
 
 class CategoryShimmer extends StatelessWidget {
   final CategoryController categoryController;
+
   const CategoryShimmer({super.key, required this.categoryController});
 
   @override
@@ -212,8 +168,7 @@ class CategoryShimmer extends StatelessWidget {
                     width: 65,
                     decoration: BoxDecoration(
                       color: Colors.grey[300],
-                      borderRadius:
-                          BorderRadius.circular(Dimensions.radiusSmall),
+                      borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
                     ),
                   ),
                 ),
@@ -228,6 +183,7 @@ class CategoryShimmer extends StatelessWidget {
 
 class CategoryAllShimmer extends StatelessWidget {
   final CategoryController categoryController;
+
   const CategoryAllShimmer({super.key, required this.categoryController});
 
   @override

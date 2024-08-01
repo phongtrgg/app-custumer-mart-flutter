@@ -44,7 +44,7 @@ class CategoryRepository implements CategoryRepositoryInterface {
     List<CategoryModel>? subCategoryList;
     Response response = await apiClient.getData('${AppConstants.subCategoryUri}$parentID');
     if (response.statusCode == 200) {
-      subCategoryList= [];
+      subCategoryList = [];
       subCategoryList.add(CategoryModel(id: int.parse(parentID!), name: 'all'.tr));
       response.body.forEach((category) => subCategoryList!.add(CategoryModel.fromJson(category)));
     }
@@ -56,7 +56,7 @@ class CategoryRepository implements CategoryRepositoryInterface {
     List<CategoryModel>? subCategoryChidrenList;
     Response response = await apiClient.getData('${AppConstants.subCategoryChildrenUri}$parentID');
     if (response.statusCode == 200) {
-      subCategoryChidrenList= [];
+      subCategoryChidrenList = [];
       subCategoryChidrenList.add(CategoryModel(id: int.parse(parentID!), name: 'all'.tr));
       response.body.forEach((category) => subCategoryChidrenList!.add(CategoryModel.fromJson(category)));
     }
@@ -110,5 +110,18 @@ class CategoryRepository implements CategoryRepositoryInterface {
   @override
   Future update(Map<String, dynamic> body, int? id) {
     throw UnimplementedError();
+  }
+
+  @override
+  Future<List<CategoryModel>?> getListServices({int? offset}) async {
+    List<CategoryModel>? categoryList;
+    Response response = await apiClient.getData(AppConstants.servicesUri);
+    if (response.statusCode == 200) {
+      categoryList = [];
+      response.body.forEach((category) {
+        categoryList!.add(CategoryModel.fromJson(category));
+      });
+    }
+    return categoryList;
   }
 }

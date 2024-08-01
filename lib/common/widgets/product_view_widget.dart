@@ -24,6 +24,7 @@ class ProductViewWidget extends StatelessWidget {
   final bool? isWebRestaurant;
   final bool? fromFavorite;
   final bool? fromSearch;
+
   const ProductViewWidget(
       {super.key,
       required this.restaurants,
@@ -63,48 +64,38 @@ class ProductViewWidget extends StatelessWidget {
                   key: UniqueKey(),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisSpacing: Dimensions.paddingSizeLarge,
-                    mainAxisSpacing:
-                        ResponsiveHelper.isDesktop(context) && !isWebRestaurant!
+                    mainAxisSpacing: ResponsiveHelper.isDesktop(context) && !isWebRestaurant!
+                        ? Dimensions.paddingSizeLarge
+                        : isWebRestaurant!
                             ? Dimensions.paddingSizeLarge
-                            : isWebRestaurant!
-                                ? Dimensions.paddingSizeLarge
-                                : 0.01,
+                            : 0.01,
                     //childAspectRatio: ResponsiveHelper.isDesktop(context) && !isWebRestaurant! ? 3 : isWebRestaurant! ? 1.5 : showTheme1Restaurant ? 1.9 : 3.3,
-                    mainAxisExtent:
-                        ResponsiveHelper.isDesktop(context) && !isWebRestaurant!
-                            ? 142
-                            : isWebRestaurant!
-                                ? 280
-                                : showTheme1Restaurant
-                                    ? 200
-                                    : 150,
-                    crossAxisCount:
-                        ResponsiveHelper.isMobile(context) && !isWebRestaurant!
-                            ? 1
-                            : isWebRestaurant!
-                                ? 4
-                                : 3,
+                    mainAxisExtent: ResponsiveHelper.isDesktop(context) && !isWebRestaurant!
+                        ? 142
+                        : isWebRestaurant!
+                            ? 280
+                            : showTheme1Restaurant
+                                ? 200
+                                : 150,
+                    crossAxisCount: ResponsiveHelper.isMobile(context) && !isWebRestaurant!
+                        ? 1
+                        : isWebRestaurant!
+                            ? 4
+                            : 3,
                   ),
-                  physics: isScrollable
-                      ? const BouncingScrollPhysics()
-                      : const NeverScrollableScrollPhysics(),
+                  physics: isScrollable ? const BouncingScrollPhysics() : const NeverScrollableScrollPhysics(),
                   shrinkWrap: isScrollable ? false : true,
                   itemCount: length,
                   padding: padding,
                   itemBuilder: (context, index) {
                     return showTheme1Restaurant
-                        ? RestaurantWidget(
-                            restaurant: restaurants![index],
-                            index: index,
-                            inStore: inRestaurantPage)
+                        ? RestaurantWidget(restaurant: restaurants![index], index: index, inStore: inRestaurantPage)
                         : isWebRestaurant!
-                            ? WebRestaurantWidget(
-                                restaurant: restaurants![index])
+                            ? WebRestaurantWidget(restaurant: restaurants![index])
                             : ProductWidget(
                                 isRestaurant: isRestaurant,
                                 product: isRestaurant ? null : products![index],
-                                restaurant:
-                                    isRestaurant ? restaurants![index] : null,
+                                restaurant: isRestaurant ? restaurants![index] : null,
                                 index: index,
                                 length: length,
                                 isCampaign: isCampaign,
@@ -116,37 +107,28 @@ class ProductViewWidget extends StatelessWidget {
                   isEmptyRestaurant: isRestaurant ? true : false,
                   isEmptyWishlist: fromFavorite! ? true : false,
                   isEmptySearchFood: fromSearch! ? true : false,
-                  title: noDataText ??
-                      (isRestaurant
-                          ? 'there_is_no_restaurant'.tr
-                          : 'there_is_no_food'.tr),
+                  title: noDataText ?? (isRestaurant ? 'there_is_no_restaurant'.tr : 'there_is_no_food'.tr),
                 )
           : GridView.builder(
               key: UniqueKey(),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisSpacing: Dimensions.paddingSizeLarge,
-                mainAxisSpacing: ResponsiveHelper.isDesktop(context)
-                    ? Dimensions.paddingSizeLarge
-                    : 0.01,
+                mainAxisSpacing: ResponsiveHelper.isDesktop(context) ? Dimensions.paddingSizeLarge : 0.01,
                 //childAspectRatio: ResponsiveHelper.isDesktop(context) && !isWebRestaurant! ? 3 : isWebRestaurant! ? 1.5 : showTheme1Restaurant ? 1.9 : 3.3,
-                mainAxisExtent:
-                    ResponsiveHelper.isDesktop(context) && !isWebRestaurant!
-                        ? 140
-                        : isWebRestaurant!
-                            ? 280
-                            : showTheme1Restaurant
-                                ? 250
-                                : 122,
-                crossAxisCount:
-                    ResponsiveHelper.isMobile(context) && !isWebRestaurant!
-                        ? 1
-                        : isWebRestaurant!
-                            ? 4
-                            : 3,
+                mainAxisExtent: ResponsiveHelper.isDesktop(context) && !isWebRestaurant!
+                    ? 140
+                    : isWebRestaurant!
+                        ? 280
+                        : showTheme1Restaurant
+                            ? 250
+                            : 122,
+                crossAxisCount: ResponsiveHelper.isMobile(context) && !isWebRestaurant!
+                    ? 1
+                    : isWebRestaurant!
+                        ? 4
+                        : 3,
               ),
-              physics: isScrollable
-                  ? const BouncingScrollPhysics()
-                  : const NeverScrollableScrollPhysics(),
+              physics: isScrollable ? const BouncingScrollPhysics() : const NeverScrollableScrollPhysics(),
               shrinkWrap: isScrollable ? false : true,
               itemCount: shimmerLength,
               padding: padding,
@@ -155,10 +137,7 @@ class ProductViewWidget extends StatelessWidget {
                     ? RestaurantShimmer(isEnable: isNull)
                     : isWebRestaurant!
                         ? const WebRestaurantShimmer()
-                        : ProductShimmer(
-                            isEnabled: isNull,
-                            isRestaurant: isRestaurant,
-                            hasDivider: index != shimmerLength - 1);
+                        : ProductShimmer(isEnabled: isNull, isRestaurant: isRestaurant, hasDivider: index != shimmerLength - 1);
               },
             ),
     ]);

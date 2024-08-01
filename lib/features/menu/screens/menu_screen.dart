@@ -23,9 +23,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
-import '../../country/controller/countryController.dart';
+import '../../country/controller/country_controller.dart';
 import '../../country/widgets/country_bottom_sheet.dart';
+import '../../favourite/screens/favourite_screen.dart';
 import '../../language/widgets/language_selector.dart';
+import '../widgets/menu_order_grid.dart';
 
 class MenuScreen extends StatefulWidget {
   const MenuScreen({super.key});
@@ -153,7 +155,10 @@ class _MenuScreenState extends State<MenuScreen> {
                     child: Column(children: [
                       PortionWidget(icon: Images.profileIcon, title: 'profile'.tr, route: RouteHelper.getProfileRoute()),
                       PortionWidget(icon: Images.addressIcon, title: 'my_address'.tr, route: RouteHelper.getAddressRoute()),
-                      PortionWidget(icon: Images.languageIcon, title: 'country'.tr, onTap: () => _manageCountryFunctionality(), route: ''),
+                      PortionWidget(icon: Images.languageIcon, title: 'language'.tr, onTap: () => _manageLanguageFunctionality(), route: ''),
+                      Get.find<CountryController>().country.isEmpty
+                          ? const SizedBox()
+                          : PortionWidget(icon: Images.languageIcon, title: 'country'.tr, onTap: () => _manageCountryFunctionality(), route: ''),
                       ProfileButtonWidget(
                         icon: Icons.tonality_outlined,
                         title: 'dark_mode'.tr,
@@ -167,13 +172,13 @@ class _MenuScreenState extends State<MenuScreen> {
                   ),
                 ]),
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeDefault),
-                    child: Text(
-                      'promotional_activity'.tr,
-                      style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeDefault, color: Theme.of(context).primaryColor.withOpacity(0.5)),
-                    ),
-                  ),
+                  // Padding(
+                  //   padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeDefault),
+                  //   child: Text(
+                  //     'promotional_activity'.tr,
+                  //     style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeDefault, color: Theme.of(context).primaryColor.withOpacity(0.5)),
+                  //   ),
+                  // ),
                   Container(
                     decoration: BoxDecoration(
                       color: Theme.of(context).cardColor,
@@ -199,17 +204,72 @@ class _MenuScreenState extends State<MenuScreen> {
                           ? PortionWidget(
                               icon: Images.walletIcon,
                               title: 'my_wallet'.tr,
-                              hideDivider: true,
                               route: RouteHelper.getWalletRoute(),
                               suffix: !isLoggedIn ? null : PriceConverter.convertPrice(profileController.userInfoModel != null ? Get.find<ProfileController>().userInfoModel!.walletBalance : 0),
                             )
                           : const SizedBox(),
+                      // PortionWidget(
+                      //   icon: Images.shopping_bag,
+                      //   title: 'order'.tr,
+                      //   route: RouteHelper.getOrderRoute(),
+                      // ),
                       PortionWidget(
-                        icon: Images.shopping_bag,
-                        title: 'order'.tr,
-                        hideDivider: true,
-                        route: RouteHelper.getOrderRoute(),
+                        icon: 'favourite',
+                        title: 'favourite'.tr,
+                        isImage: false,
+                        route: RouteHelper.getFavouriteRoute(),
                       ),
+                    ]),
+                  )
+                ]),
+                //order
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).cardColor,
+                      borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
+                      boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.1), spreadRadius: 1, blurRadius: 10, offset: const Offset(0, 1))],
+                    ),
+                    margin: const EdgeInsets.all(Dimensions.paddingSizeDefault),
+                    child: Column(children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: Dimensions.paddingSizeDefault),
+                            child: Text(
+                              'order'.tr,
+                              style: TextStyle(
+                                fontSize: Dimensions.fontSizeLarge,
+                              ),
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Get.toNamed(RouteHelper.getOrderRoute());
+                            },
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  'view_all'.tr,
+                                  style: TextStyle(
+                                    fontSize: Dimensions.fontSizeSmall,
+                                    color: Theme.of(context).primaryColor,
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.arrow_right_sharp,
+                                  color: Theme.of(context).primaryColor,
+                                  size: 20,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      const MenuOrderGrid(),
+                      const SizedBox(height: Dimensions.paddingSizeOverLarge),
                     ]),
                   )
                 ]),

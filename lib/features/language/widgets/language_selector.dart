@@ -73,7 +73,6 @@ class _LanguageSelectorState extends State<LanguageSelector> {
                           fit: BoxFit.cover,
                         ),
                       ),
-                      // SizedBox(width: 8),
                       Icon(
                         Icons.arrow_drop_down,
                         color: widget.isHomePage != false ? Colors.grey : Colors.white,

@@ -12,8 +12,17 @@ class CategoryService implements CategoryServiceInterface {
 
   @override
   Future<List<CategoryModel>?> getCategoryList(bool reload, List<CategoryModel>? fetchedCategoryList) async {
-    if(fetchedCategoryList == null || reload) {
+    if (fetchedCategoryList == null || reload) {
       return await categoryRepositoryInterface.getList();
+    } else {
+      return fetchedCategoryList;
+    }
+  }
+
+  @override
+  Future<List<CategoryModel>?> getServicesList(bool reload, List<CategoryModel>? fetchedCategoryList) async {
+    if (fetchedCategoryList == null || reload) {
+      return await categoryRepositoryInterface.getListServices();
     } else {
       return fetchedCategoryList;
     }
@@ -43,5 +52,4 @@ class CategoryService implements CategoryServiceInterface {
   Future<Response> getSearchData(String? query, String? categoryID, bool isRestaurant, String type) async {
     return await categoryRepositoryInterface.getSearchData(query, categoryID, isRestaurant, type);
   }
-
 }

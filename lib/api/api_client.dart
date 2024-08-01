@@ -220,9 +220,9 @@ class ApiClient extends GetxService {
       response0 = Response(statusCode: 0, statusText: noInternetMessage);
     }
     if (kDebugMode) {
-      debugPrint('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
+      debugPrint('~~~~~~~~~~~~~~~~~~~~~~~~~~~~CHECK RESPONSE~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
       debugPrint('====> API Response: [${response0.statusCode}] $uri\n${response0.body}');
-      debugPrint('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
+      debugPrint('~~~~~~~~~~~~~~~~~~~~~~~~~~~~CHECK RESPONSE~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
     }
     if (handleError) {
       if (response0.statusCode == 200) {

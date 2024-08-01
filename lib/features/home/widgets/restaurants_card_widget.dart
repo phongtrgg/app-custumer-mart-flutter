@@ -23,15 +23,14 @@ import 'package:shimmer_animation/shimmer_animation.dart';
 class RestaurantsCardWidget extends StatelessWidget {
   final Restaurant restaurant;
   final bool? isNewOnStackFood;
-  const RestaurantsCardWidget(
-      {super.key, this.isNewOnStackFood, required this.restaurant});
+
+  const RestaurantsCardWidget({super.key, this.isNewOnStackFood, required this.restaurant});
 
   @override
   Widget build(BuildContext context) {
     bool isAvailable = restaurant.open == 1 && restaurant.active!;
     double distance = Get.find<RestaurantController>().getRestaurantDistance(
-      LatLng(double.parse(restaurant.latitude!),
-          double.parse(restaurant.longitude!)),
+      LatLng(double.parse(restaurant.latitude!), double.parse(restaurant.longitude!)),
     );
     return Stack(
       children: [
@@ -46,13 +45,7 @@ class RestaurantsCardWidget extends StatelessWidget {
           decoration: BoxDecoration(
             color: Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
-            boxShadow: [
-              BoxShadow(
-                  color: Colors.grey.withOpacity(0.1),
-                  spreadRadius: 0,
-                  blurRadius: 10,
-                  offset: const Offset(0, 1))
-            ],
+            boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.1), spreadRadius: 0, blurRadius: 10, offset: const Offset(0, 1))],
           ),
           child: CustomInkWellWidget(
             onTap: () {
@@ -77,15 +70,11 @@ class RestaurantsCardWidget extends StatelessWidget {
                             height: isNewOnStackFood! ? 95 : 65,
                             width: isNewOnStackFood! ? 95 : 65,
                             decoration: BoxDecoration(
-                              color: Theme.of(context)
-                                  .primaryColor
-                                  .withOpacity(0.2),
-                              borderRadius:
-                                  BorderRadius.circular(Dimensions.radiusSmall),
+                              color: Theme.of(context).primaryColor.withOpacity(0.2),
+                              borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
                             ),
                             child: ClipRRect(
-                              borderRadius:
-                                  BorderRadius.circular(Dimensions.radiusSmall),
+                              borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
                               child: CustomImageWidget(
                                 image: '${restaurant.logo}',
                                 fit: BoxFit.cover,
@@ -93,15 +82,13 @@ class RestaurantsCardWidget extends StatelessWidget {
                                 width: isNewOnStackFood! ? 95 : 65,
                                 isRestaurant: true,
                                 resize: true,
-                                minWidth:isNewOnStackFood! ? 95 : 65 ,
-                                minHeight:isNewOnStackFood! ? 95 : 65 ,
+                                minWidth: isNewOnStackFood! ? 95 : 65,
+                                minHeight: isNewOnStackFood! ? 95 : 65,
                                 quality: 100,
                               ),
                             ),
                           ),
-                          isAvailable
-                              ? const SizedBox()
-                              : const NotAvailableWidget(isRestaurant: true),
+                          isAvailable ? const SizedBox() : const NotAvailableWidget(isRestaurant: true),
                         ],
                       ),
                       const SizedBox(width: Dimensions.paddingSizeSmall),
@@ -114,100 +101,51 @@ class RestaurantsCardWidget extends StatelessWidget {
                               restaurant.name!,
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
-                              style: robotoMedium.copyWith(
-                                  fontWeight: FontWeight.w600),
+                              style: robotoMedium.copyWith(fontWeight: FontWeight.w600),
                             ),
-                            SizedBox(
-                                height: isNewOnStackFood!
-                                    ? Dimensions.paddingSizeSmall
-                                    : Dimensions.paddingSizeExtraSmall),
+                            SizedBox(height: isNewOnStackFood! ? Dimensions.paddingSizeSmall : Dimensions.paddingSizeExtraSmall),
                             Text(
                               restaurant.address!,
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
-                              style: robotoRegular.copyWith(
-                                  fontSize: Dimensions.fontSizeSmall,
-                                  color: Theme.of(context).disabledColor),
+                              style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).disabledColor),
                             ),
-                            SizedBox(
-                                height: isNewOnStackFood!
-                                    ? Dimensions.paddingSizeSmall
-                                    : Dimensions.paddingSizeExtraSmall),
-                            Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  isNewOnStackFood!
-                                      ? restaurant.freeDelivery!
-                                          ? ImageWithTextRowWidget(
-                                              widget: Image.asset(
-                                                  Images.deliveryIcon,
-                                                  height: 20,
-                                                  width: 20),
-                                              text: 'free'.tr,
-                                              style: robotoRegular.copyWith(
-                                                  fontSize:
-                                                      Dimensions.fontSizeSmall),
-                                            )
-                                          : const SizedBox()
-                                      : IconWithTextRowWidget(
-                                          icon: Icons.star_border,
-                                          text: restaurant.avgRating!
-                                              .toStringAsFixed(1),
-                                          style: robotoBold.copyWith(
-                                              fontSize:
-                                                  Dimensions.fontSizeSmall)),
-                                  isNewOnStackFood!
-                                      ? const SizedBox(
-                                          width:
-                                              Dimensions.paddingSizeExtraSmall)
-                                      : const SizedBox(
-                                          width: Dimensions.paddingSizeSmall),
-                                  isNewOnStackFood!
+                            SizedBox(height: isNewOnStackFood! ? Dimensions.paddingSizeSmall : Dimensions.paddingSizeExtraSmall),
+                            Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                              isNewOnStackFood!
+                                  ? restaurant.freeDelivery!
                                       ? ImageWithTextRowWidget(
-                                          widget: Image.asset(Images.distanceKm,
-                                              height: 20, width: 20),
-                                          text:
-                                              '${distance > 100 ? '100+' : distance.toStringAsFixed(2)} ${'km'.tr}',
-                                          style: robotoRegular.copyWith(
-                                              fontSize:
-                                                  Dimensions.fontSizeSmall),
+                                          widget: Image.asset(Images.deliveryIcon, height: 20, width: 20),
+                                          text: 'free'.tr,
+                                          style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall),
                                         )
-                                      : restaurant.freeDelivery!
-                                          ? ImageWithTextRowWidget(
-                                              widget: Image.asset(
-                                                  Images.deliveryIcon,
-                                                  height: 20,
-                                                  width: 20),
-                                              text: 'free'.tr,
-                                              style: robotoRegular.copyWith(
-                                                  fontSize:
-                                                      Dimensions.fontSizeSmall))
-                                          : const SizedBox(),
-                                  isNewOnStackFood!
-                                      ? const SizedBox(
-                                          width:
-                                              Dimensions.paddingSizeExtraSmall)
-                                      : restaurant.freeDelivery!
-                                          ? const SizedBox(
-                                              width:
-                                                  Dimensions.paddingSizeSmall)
-                                          : const SizedBox(),
-                                  isNewOnStackFood!
+                                      : const SizedBox()
+                                  : IconWithTextRowWidget(icon: Icons.star_border, text: restaurant.avgRating!.toStringAsFixed(1), style: robotoBold.copyWith(fontSize: Dimensions.fontSizeSmall)),
+                              isNewOnStackFood! ? const SizedBox(width: Dimensions.paddingSizeExtraSmall) : const SizedBox(width: Dimensions.paddingSizeSmall),
+                              isNewOnStackFood!
+                                  ? ImageWithTextRowWidget(
+                                      widget: Image.asset(Images.distanceKm, height: 20, width: 20),
+                                      text: '${distance > 100 ? '100+' : distance.toStringAsFixed(2)} ${'km'.tr}',
+                                      style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall),
+                                    )
+                                  : restaurant.freeDelivery!
                                       ? ImageWithTextRowWidget(
-                                          widget: Image.asset(Images.itemCount,
-                                              height: 20, width: 20),
-                                          text: '${restaurant.foodsCount}',
-                                          style: robotoRegular.copyWith(
-                                              fontSize:
-                                                  Dimensions.fontSizeSmall))
-                                      : IconWithTextRowWidget(
-                                          icon: Icons.access_time_outlined,
-                                          text: restaurant.deliveryTime!,
-                                          style: robotoRegular.copyWith(
-                                              fontSize:
-                                                  Dimensions.fontSizeSmall),
-                                        ),
-                                ]),
+                                          widget: Image.asset(Images.deliveryIcon, height: 20, width: 20), text: 'free'.tr, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall))
+                                      : const SizedBox(),
+                              isNewOnStackFood!
+                                  ? const SizedBox(width: Dimensions.paddingSizeExtraSmall)
+                                  : restaurant.freeDelivery!
+                                      ? const SizedBox(width: Dimensions.paddingSizeSmall)
+                                      : const SizedBox(),
+                              isNewOnStackFood!
+                                  ? ImageWithTextRowWidget(
+                                      widget: Image.asset(Images.itemCount, height: 20, width: 20), text: '${restaurant.foodsCount}', style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall))
+                                  : IconWithTextRowWidget(
+                                      icon: Icons.access_time_outlined,
+                                      text: restaurant.deliveryTime!,
+                                      style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall),
+                                    ),
+                            ]),
                           ],
                         ),
                       ),
@@ -215,96 +153,67 @@ class RestaurantsCardWidget extends StatelessWidget {
                   ),
                   isNewOnStackFood!
                       ? const SizedBox()
-                      : Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                              restaurant.foods != null &&
-                                      restaurant.foods!.isNotEmpty
-                                  ? Expanded(
-                                      child: Stack(children: [
-                                        OverFlowContainerWidget(
-                                            image: restaurant.foods![0].image ??
-                                                ''),
-                                        restaurant.foods!.length > 1
-                                            ? Positioned(
-                                                left: 22,
-                                                bottom: 0,
-                                                child: OverFlowContainerWidget(
-                                                    image: restaurant
-                                                            .foods![1].image ??
-                                                        ''),
-                                              )
-                                            : const SizedBox(),
-                                        restaurant.foods!.length > 2
-                                            ? Positioned(
-                                                left: 42,
-                                                bottom: 0,
-                                                child: OverFlowContainerWidget(
-                                                    image: restaurant
-                                                            .foods![2].image ??
-                                                        ''),
-                                              )
-                                            : const SizedBox(),
-                                        restaurant.foods!.length > 4
-                                            ? Positioned(
-                                                left: 82,
-                                                bottom: 0,
-                                                child: Container(
-                                                  padding: const EdgeInsets.all(
-                                                      Dimensions
-                                                          .paddingSizeExtraSmall),
-                                                  height: 30,
-                                                  width: 80,
-                                                  decoration: BoxDecoration(
-                                                    color: Theme.of(context)
-                                                        .primaryColor
-                                                        .withOpacity(0.1),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            50),
+                      : Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                          restaurant.foods != null && restaurant.foods!.isNotEmpty
+                              ? Expanded(
+                                  child: Stack(children: [
+                                    OverFlowContainerWidget(image: restaurant.foods![0].image ?? ''),
+                                    restaurant.foods!.length > 1
+                                        ? Positioned(
+                                            left: 22,
+                                            bottom: 0,
+                                            child: OverFlowContainerWidget(image: restaurant.foods![1].image ?? ''),
+                                          )
+                                        : const SizedBox(),
+                                    restaurant.foods!.length > 2
+                                        ? Positioned(
+                                            left: 42,
+                                            bottom: 0,
+                                            child: OverFlowContainerWidget(image: restaurant.foods![2].image ?? ''),
+                                          )
+                                        : const SizedBox(),
+                                    restaurant.foods!.length > 4
+                                        ? Positioned(
+                                            left: 82,
+                                            bottom: 0,
+                                            child: Container(
+                                              padding: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
+                                              height: 30,
+                                              width: 80,
+                                              decoration: BoxDecoration(
+                                                color: Theme.of(context).primaryColor.withOpacity(0.1),
+                                                borderRadius: BorderRadius.circular(50),
+                                              ),
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    '${restaurant.foodsCount! > 11 ? '12 +' : restaurant.foodsCount!} ',
+                                                    style: robotoBold.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).primaryColor),
                                                   ),
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      Text(
-                                                        '${restaurant.foodsCount! > 11 ? '12 +' : restaurant.foodsCount!} ',
-                                                        style: robotoBold.copyWith(
-                                                            fontSize: Dimensions
-                                                                .fontSizeSmall,
-                                                            color: Theme.of(
-                                                                    context)
-                                                                .primaryColor),
-                                                      ),
-                                                      // Text('items'.tr,
-                                                      //     style: robotoRegular.copyWith(
-                                                      //         fontSize: 10,
-                                                      //         color: Theme.of(
-                                                      //                 context)
-                                                      //             .primaryColor)),
-                                                    ],
-                                                  ),
-                                                ),
-                                              )
-                                            : const SizedBox(),
-                                        restaurant.foods!.length > 3
-                                            ? Positioned(
-                                                left: 62,
-                                                bottom: 0,
-                                                child: OverFlowContainerWidget(
-                                                    image: restaurant
-                                                            .foods![3].image ??
-                                                        ''),
-                                              )
-                                            : const SizedBox(),
-                                      ]),
-                                    )
-                                  : const SizedBox(),
-                              Icon(Icons.arrow_forward,
-                                  color: Theme.of(context).primaryColor,
-                                  size: 20),
-                            ]),
+                                                  // Text('items'.tr,
+                                                  //     style: robotoRegular.copyWith(
+                                                  //         fontSize: 10,
+                                                  //         color: Theme.of(
+                                                  //                 context)
+                                                  //             .primaryColor)),
+                                                ],
+                                              ),
+                                            ),
+                                          )
+                                        : const SizedBox(),
+                                    restaurant.foods!.length > 3
+                                        ? Positioned(
+                                            left: 62,
+                                            bottom: 0,
+                                            child: OverFlowContainerWidget(image: restaurant.foods![3].image ?? ''),
+                                          )
+                                        : const SizedBox(),
+                                  ]),
+                                )
+                              : const SizedBox(),
+                          Icon(Icons.arrow_forward, color: Theme.of(context).primaryColor, size: 20),
+                        ]),
                 ],
               ),
             ),
@@ -313,10 +222,8 @@ class RestaurantsCardWidget extends StatelessWidget {
         Positioned(
           top: 10,
           right: 10,
-          child:
-              GetBuilder<FavouriteController>(builder: (favouriteController) {
-            bool isWished =
-                favouriteController.wishRestIdList.contains(restaurant.id);
+          child: GetBuilder<FavouriteController>(builder: (favouriteController) {
+            bool isWished = favouriteController.wishRestIdList.contains(restaurant.id);
             return CustomFavouriteWidget(
               isWished: isWished,
               isRestaurant: true,
@@ -331,6 +238,7 @@ class RestaurantsCardWidget extends StatelessWidget {
 
 class RestaurantsCardShimmer extends StatelessWidget {
   final bool? isNewOnStackFood;
+
   const RestaurantsCardShimmer({super.key, this.isNewOnStackFood});
 
   @override
@@ -354,129 +262,85 @@ class RestaurantsCardShimmer extends StatelessWidget {
               ),
               itemBuilder: (context, index) {
                 return Padding(
-                  padding: const EdgeInsets.only(
-                      left: Dimensions.paddingSizeDefault),
+                  padding: const EdgeInsets.only(left: Dimensions.paddingSizeDefault),
                   child: Shimmer(
                     duration: const Duration(seconds: 2),
                     enabled: true,
                     child: Container(
                       width: 380,
                       height: 80,
-                      padding:
-                          const EdgeInsets.all(Dimensions.paddingSizeDefault),
+                      padding: const EdgeInsets.all(Dimensions.paddingSizeDefault),
                       decoration: BoxDecoration(
                         color: Theme.of(context).cardColor,
-                        borderRadius:
-                            BorderRadius.circular(Dimensions.radiusDefault),
+                        borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
                       ),
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                        Row(
                           children: [
-                            Row(
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.all(
-                                      Dimensions.paddingSizeExtraSmall),
+                            Container(
+                              padding: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
+                              height: 80,
+                              width: 80,
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).primaryColor.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
+                                child: Container(
+                                  color: Colors.grey[Get.find<ThemeController>().darkTheme ? 700 : 300],
                                   height: 80,
                                   width: 80,
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context)
-                                        .primaryColor
-                                        .withOpacity(0.1),
-                                    borderRadius: BorderRadius.circular(
-                                        Dimensions.radiusSmall),
-                                  ),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(
-                                        Dimensions.radiusSmall),
-                                    child: Container(
-                                      color: Colors.grey[
-                                          Get.find<ThemeController>().darkTheme
-                                              ? 700
-                                              : 300],
-                                      height: 80,
-                                      width: 80,
-                                    ),
-                                  ),
                                 ),
-                                const SizedBox(
-                                    width: Dimensions.paddingSizeDefault),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                              ),
+                            ),
+                            const SizedBox(width: Dimensions.paddingSizeDefault),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
+                                    height: 15,
+                                    width: 100,
+                                    color: Colors.grey[Get.find<ThemeController>().darkTheme ? 700 : 300],
+                                  ),
+                                  const SizedBox(height: Dimensions.paddingSizeSmall),
+                                  Container(
+                                    height: 15,
+                                    width: 200,
+                                    color: Colors.grey[Get.find<ThemeController>().darkTheme ? 700 : 300],
+                                  ),
+                                  const SizedBox(height: Dimensions.paddingSizeSmall),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Container(
                                         height: 15,
-                                        width: 100,
-                                        color: Colors.grey[
-                                            Get.find<ThemeController>()
-                                                    .darkTheme
-                                                ? 700
-                                                : 300],
+                                        width: 50,
+                                        color: Colors.grey[Get.find<ThemeController>().darkTheme ? 700 : 300],
                                       ),
-                                      const SizedBox(
-                                          height: Dimensions.paddingSizeSmall),
+                                      const SizedBox(width: Dimensions.paddingSizeSmall),
                                       Container(
                                         height: 15,
-                                        width: 200,
-                                        color: Colors.grey[
-                                            Get.find<ThemeController>()
-                                                    .darkTheme
-                                                ? 700
-                                                : 300],
+                                        width: 50,
+                                        color: Colors.grey[Get.find<ThemeController>().darkTheme ? 700 : 300],
                                       ),
-                                      const SizedBox(
-                                          height: Dimensions.paddingSizeSmall),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          Container(
-                                            height: 15,
-                                            width: 50,
-                                            color: Colors.grey[
-                                                Get.find<ThemeController>()
-                                                        .darkTheme
-                                                    ? 700
-                                                    : 300],
-                                          ),
-                                          const SizedBox(
-                                              width:
-                                                  Dimensions.paddingSizeSmall),
-                                          Container(
-                                            height: 15,
-                                            width: 50,
-                                            color: Colors.grey[
-                                                Get.find<ThemeController>()
-                                                        .darkTheme
-                                                    ? 700
-                                                    : 300],
-                                          ),
-                                          const SizedBox(
-                                              width:
-                                                  Dimensions.paddingSizeSmall),
-                                          Container(
-                                            height: 15,
-                                            width: 50,
-                                            color: Colors.grey[
-                                                Get.find<ThemeController>()
-                                                        .darkTheme
-                                                    ? 700
-                                                    : 300],
-                                          ),
-                                        ],
+                                      const SizedBox(width: Dimensions.paddingSizeSmall),
+                                      Container(
+                                        height: 15,
+                                        width: 50,
+                                        color: Colors.grey[Get.find<ThemeController>().darkTheme ? 700 : 300],
                                       ),
                                     ],
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                            const SizedBox(height: Dimensions.paddingSizeSmall),
-                          ]),
+                          ],
+                        ),
+                        const SizedBox(height: Dimensions.paddingSizeSmall),
+                      ]),
                     ),
                   ),
                 );
@@ -488,129 +352,85 @@ class RestaurantsCardShimmer extends StatelessWidget {
               physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (context, index) {
                 return Padding(
-                  padding: const EdgeInsets.only(
-                      left: Dimensions.paddingSizeDefault),
+                  padding: const EdgeInsets.only(left: Dimensions.paddingSizeDefault),
                   child: Shimmer(
                     duration: const Duration(seconds: 2),
                     enabled: true,
                     child: Container(
                       width: 355,
                       height: 80,
-                      padding:
-                          const EdgeInsets.all(Dimensions.paddingSizeDefault),
+                      padding: const EdgeInsets.all(Dimensions.paddingSizeDefault),
                       decoration: BoxDecoration(
                         color: Theme.of(context).cardColor,
-                        borderRadius:
-                            BorderRadius.circular(Dimensions.radiusDefault),
+                        borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
                       ),
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                        Row(
                           children: [
-                            Row(
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.all(
-                                      Dimensions.paddingSizeExtraSmall),
+                            Container(
+                              padding: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
+                              height: 80,
+                              width: 80,
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).primaryColor.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
+                                child: Container(
+                                  color: Colors.grey[Get.find<ThemeController>().darkTheme ? 700 : 300],
                                   height: 80,
                                   width: 80,
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context)
-                                        .primaryColor
-                                        .withOpacity(0.1),
-                                    borderRadius: BorderRadius.circular(
-                                        Dimensions.radiusSmall),
-                                  ),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(
-                                        Dimensions.radiusSmall),
-                                    child: Container(
-                                      color: Colors.grey[
-                                          Get.find<ThemeController>().darkTheme
-                                              ? 700
-                                              : 300],
-                                      height: 80,
-                                      width: 80,
-                                    ),
-                                  ),
                                 ),
-                                const SizedBox(
-                                    width: Dimensions.paddingSizeDefault),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                              ),
+                            ),
+                            const SizedBox(width: Dimensions.paddingSizeDefault),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
+                                    height: 15,
+                                    width: 100,
+                                    color: Colors.grey[Get.find<ThemeController>().darkTheme ? 700 : 300],
+                                  ),
+                                  const SizedBox(height: Dimensions.paddingSizeSmall),
+                                  Container(
+                                    height: 15,
+                                    width: 200,
+                                    color: Colors.grey[Get.find<ThemeController>().darkTheme ? 700 : 300],
+                                  ),
+                                  const SizedBox(height: Dimensions.paddingSizeSmall),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Container(
                                         height: 15,
-                                        width: 100,
-                                        color: Colors.grey[
-                                            Get.find<ThemeController>()
-                                                    .darkTheme
-                                                ? 700
-                                                : 300],
+                                        width: 50,
+                                        color: Colors.grey[Get.find<ThemeController>().darkTheme ? 700 : 300],
                                       ),
-                                      const SizedBox(
-                                          height: Dimensions.paddingSizeSmall),
+                                      const SizedBox(width: Dimensions.paddingSizeSmall),
                                       Container(
                                         height: 15,
-                                        width: 200,
-                                        color: Colors.grey[
-                                            Get.find<ThemeController>()
-                                                    .darkTheme
-                                                ? 700
-                                                : 300],
+                                        width: 50,
+                                        color: Colors.grey[Get.find<ThemeController>().darkTheme ? 700 : 300],
                                       ),
-                                      const SizedBox(
-                                          height: Dimensions.paddingSizeSmall),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          Container(
-                                            height: 15,
-                                            width: 50,
-                                            color: Colors.grey[
-                                                Get.find<ThemeController>()
-                                                        .darkTheme
-                                                    ? 700
-                                                    : 300],
-                                          ),
-                                          const SizedBox(
-                                              width:
-                                                  Dimensions.paddingSizeSmall),
-                                          Container(
-                                            height: 15,
-                                            width: 50,
-                                            color: Colors.grey[
-                                                Get.find<ThemeController>()
-                                                        .darkTheme
-                                                    ? 700
-                                                    : 300],
-                                          ),
-                                          const SizedBox(
-                                              width:
-                                                  Dimensions.paddingSizeSmall),
-                                          Container(
-                                            height: 15,
-                                            width: 50,
-                                            color: Colors.grey[
-                                                Get.find<ThemeController>()
-                                                        .darkTheme
-                                                    ? 700
-                                                    : 300],
-                                          ),
-                                        ],
+                                      const SizedBox(width: Dimensions.paddingSizeSmall),
+                                      Container(
+                                        height: 15,
+                                        width: 50,
+                                        color: Colors.grey[Get.find<ThemeController>().darkTheme ? 700 : 300],
                                       ),
                                     ],
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                            //const SizedBox(height: Dimensions.paddingSizeSmall),
-                          ]),
+                          ],
+                        ),
+                        //const SizedBox(height: Dimensions.paddingSizeSmall),
+                      ]),
                     ),
                   ),
                 );

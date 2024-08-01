@@ -1,8 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:stackfood_multivendor/features/category/controllers/category_controller.dart';
 import 'package:stackfood_multivendor/features/restaurant/controllers/restaurant_controller.dart';
-import 'package:stackfood_multivendor/features/search/controllers/search_controller.dart'
-    as search;
+import 'package:stackfood_multivendor/features/search/controllers/search_controller.dart' as search;
 import 'package:stackfood_multivendor/helper/responsive_helper.dart';
 import 'package:stackfood_multivendor/helper/route_helper.dart';
 import 'package:stackfood_multivendor/util/dimensions.dart';
@@ -17,16 +16,14 @@ import 'package:get/get.dart';
 class RestaurantProductSearchScreen extends StatefulWidget {
   final String? storeID;
   bool? category = false;
-  RestaurantProductSearchScreen(
-      {super.key, required this.storeID, this.category});
+
+  RestaurantProductSearchScreen({super.key, required this.storeID, this.category});
 
   @override
-  State<RestaurantProductSearchScreen> createState() =>
-      _RestaurantProductSearchScreenState();
+  State<RestaurantProductSearchScreen> createState() => _RestaurantProductSearchScreenState();
 }
 
-class _RestaurantProductSearchScreenState
-    extends State<RestaurantProductSearchScreen> {
+class _RestaurantProductSearchScreenState extends State<RestaurantProductSearchScreen> {
   final TextEditingController _searchController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
 
@@ -53,10 +50,7 @@ class _RestaurantProductSearchScreenState
               _searchController.text = '';
               setState(() {});
             } else if (!val) {
-              widget.category == true
-                  ? Future.delayed(
-                      const Duration(milliseconds: 0), () => Get.back())
-                  : Get.toNamed(RouteHelper.getCategoryRoute());
+              widget.category == true ? Future.delayed(const Duration(milliseconds: 0), () => Get.back()) : Get.toNamed(RouteHelper.getCategoryRoute('category'));
             }
           },
           child: Scaffold(
@@ -71,9 +65,7 @@ class _RestaurantProductSearchScreenState
                 child: SizedBox(
                     width: Dimensions.webMaxWidth,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: Dimensions.paddingSizeSmall,
-                          vertical: Dimensions.paddingSizeSmall),
+                      padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeSmall, vertical: Dimensions.paddingSizeSmall),
                       child: Row(children: [
                         IconButton(
                           onPressed: () {
@@ -85,9 +77,7 @@ class _RestaurantProductSearchScreenState
                               _searchController.text = '';
                               setState(() {});
                             } else {
-                              widget.category == true
-                                  ? Get.back()
-                                  : Get.toNamed(RouteHelper.getCategoryRoute());
+                              widget.category == true ? Get.back() : Get.toNamed(RouteHelper.getCategoryRoute('category'));
                             }
                           },
                           icon: const Icon(Icons.arrow_back_ios),
@@ -96,57 +86,39 @@ class _RestaurantProductSearchScreenState
                         Expanded(
                             child: TextField(
                                 controller: _searchController,
-                                style: robotoRegular.copyWith(
-                                    fontSize: Dimensions.fontSizeLarge),
+                                style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeLarge),
                                 textInputAction: TextInputAction.search,
                                 cursorColor: Theme.of(context).primaryColor,
                                 textAlignVertical: TextAlignVertical.center,
                                 decoration: InputDecoration(
                                   hintText: 'search_item_in_store'.tr,
-                                  hintStyle: robotoRegular.copyWith(
-                                      fontSize: Dimensions.fontSizeLarge,
-                                      color: Theme.of(context).hintColor),
+                                  hintStyle: robotoRegular.copyWith(fontSize: Dimensions.fontSizeLarge, color: Theme.of(context).hintColor),
                                   isDense: true,
-                                  contentPadding: const EdgeInsets.all(
-                                      Dimensions.paddingSizeSmall),
+                                  contentPadding: const EdgeInsets.all(Dimensions.paddingSizeSmall),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(50),
-                                    borderSide: BorderSide(
-                                        color: Theme.of(context)
-                                            .primaryColor
-                                            .withOpacity(0.3),
-                                        width: 1),
+                                    borderSide: BorderSide(color: Theme.of(context).primaryColor.withOpacity(0.3), width: 1),
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(50),
-                                    borderSide: BorderSide(
-                                        color: Theme.of(context)
-                                            .primaryColor
-                                            .withOpacity(0.3),
-                                        width: 1),
+                                    borderSide: BorderSide(color: Theme.of(context).primaryColor.withOpacity(0.3), width: 1),
                                   ),
                                   suffixIcon: IconButton(
-                                    icon: const Icon(CupertinoIcons.search,
-                                        size: 25),
+                                    icon: const Icon(CupertinoIcons.search, size: 25),
                                     onPressed: () {
-                                      searchController.saveSearchHistory(
-                                          _searchController.text.trim());
-                                      Get.find<RestaurantController>()
-                                          .getRestaurantSearchProductList(
+                                      searchController.saveSearchHistory(_searchController.text.trim());
+                                      Get.find<RestaurantController>().getRestaurantSearchProductList(
                                         _searchController.text.trim(),
                                         widget.storeID,
                                         1,
-                                        Get.find<RestaurantController>()
-                                            .searchType,
+                                        Get.find<RestaurantController>().searchType,
                                       );
                                     },
                                   ),
                                 ),
                                 onSubmitted: (text) {
-                                  searchController.saveSearchHistory(
-                                      _searchController.text.trim());
-                                  Get.find<RestaurantController>()
-                                      .getRestaurantSearchProductList(
+                                  searchController.saveSearchHistory(_searchController.text.trim());
+                                  Get.find<RestaurantController>().getRestaurantSearchProductList(
                                     _searchController.text.trim(),
                                     widget.storeID,
                                     1,
@@ -170,261 +142,140 @@ class _RestaurantProductSearchScreenState
             endDrawerEnableOpenDragGesture: false,
             body: SingleChildScrollView(
               controller: _scrollController,
-              padding: ResponsiveHelper.isDesktop(context)
-                  ? null
-                  : const EdgeInsets.all(Dimensions.paddingSizeSmall),
+              padding: ResponsiveHelper.isDesktop(context) ? null : const EdgeInsets.all(Dimensions.paddingSizeSmall),
               child: Center(
                 child: SizedBox(
                   width: Dimensions.webMaxWidth,
                   child: !restaurantController.isSearching
-                      ? Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                              const SizedBox(
-                                  height: Dimensions.paddingSizeExtraSmall),
-                              searchController.historyList.isNotEmpty
-                                  ? Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                          Text('recent_search'.tr,
-                                              style: robotoMedium.copyWith(
-                                                  fontSize: Dimensions
-                                                      .fontSizeLarge)),
-                                          InkWell(
-                                            onTap: () => searchController
-                                                .clearSearchAddress(),
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: Dimensions
-                                                          .paddingSizeSmall,
-                                                      horizontal: 4),
-                                              child: Text('clear_all'.tr,
-                                                  style: robotoRegular.copyWith(
-                                                    fontSize: Dimensions
-                                                        .fontSizeSmall,
-                                                    color: Theme.of(context)
-                                                        .colorScheme
-                                                        .error,
-                                                  )),
-                                            ),
-                                          ),
-                                        ])
-                                  : const SizedBox(),
-                              SizedBox(
-                                  height:
-                                      searchController.historyList.isNotEmpty
-                                          ? Dimensions.paddingSizeExtraSmall
-                                          : 0),
-                              Wrap(
-                                children: searchController.historyList
-                                    .map((historyData) {
-                                  return Padding(
-                                    padding: const EdgeInsets.only(
-                                        right: Dimensions.paddingSizeSmall,
-                                        bottom: Dimensions.paddingSizeSmall),
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal:
-                                              Dimensions.paddingSizeSmall),
-                                      decoration: BoxDecoration(
-                                        color: Theme.of(context)
-                                            .disabledColor
-                                            .withOpacity(0.2),
-                                        borderRadius: BorderRadius.circular(
-                                            Dimensions.radiusSmall),
-                                        border: Border.all(
-                                            color: Theme.of(context)
-                                                .disabledColor
-                                                .withOpacity(0.6)),
-                                      ),
-                                      child: Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            InkWell(
-                                              onTap: () {
-                                                _searchController.text =
-                                                    historyData;
-                                                searchController
-                                                    .saveSearchHistory(
-                                                        historyData);
-                                                Get.find<RestaurantController>()
-                                                    .getRestaurantSearchProductList(
-                                                  _searchController.text.trim(),
-                                                  widget.storeID,
-                                                  1,
-                                                  Get.find<
-                                                          RestaurantController>()
-                                                      .searchType,
-                                                );
-                                              },
-                                              child: Padding(
-                                                padding: const EdgeInsets
-                                                    .symmetric(
-                                                    vertical: Dimensions
-                                                        .paddingSizeExtraSmall),
-                                                child: Text(
-                                                  historyData,
-                                                  style: robotoRegular.copyWith(
-                                                      color: Theme.of(context)
-                                                          .textTheme
-                                                          .bodyMedium!
-                                                          .color!
-                                                          .withOpacity(0.5)),
-                                                  maxLines: 1,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                ),
-                                              ),
-                                            ),
-                                            const SizedBox(
-                                                width: Dimensions
-                                                    .paddingSizeSmall),
-                                            InkWell(
-                                              onTap: () => searchController
-                                                  .removeHistory(
-                                                      searchController
-                                                          .historyList
-                                                          .indexOf(
-                                                              historyData)),
-                                              child: Padding(
-                                                padding: const EdgeInsets
-                                                    .symmetric(
-                                                    vertical: Dimensions
-                                                        .paddingSizeExtraSmall),
-                                                child: Icon(Icons.close,
-                                                    color: Theme.of(context)
-                                                        .disabledColor,
-                                                    size: 20),
-                                              ),
-                                            )
-                                          ]),
+                      ? Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                          const SizedBox(height: Dimensions.paddingSizeExtraSmall),
+                          searchController.historyList.isNotEmpty
+                              ? Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                                  Text('recent_search'.tr, style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge)),
+                                  InkWell(
+                                    onTap: () => searchController.clearSearchAddress(),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeSmall, horizontal: 4),
+                                      child: Text('clear_all'.tr,
+                                          style: robotoRegular.copyWith(
+                                            fontSize: Dimensions.fontSizeSmall,
+                                            color: Theme.of(context).colorScheme.error,
+                                          )),
                                     ),
-                                  );
-                                }).toList(),
-                              ),
-                              SizedBox(
-                                  height: searchController
-                                              .historyList.isNotEmpty &&
-                                          restaurantController.categoryList !=
-                                              null
-                                      ? Dimensions.paddingSizeLarge
-                                      : 0),
-                              (restaurantController.categoryList != null)
-                                  ? Padding(
-                                      padding: const EdgeInsets.only(
-                                          bottom:
-                                              Dimensions.paddingSizeDefault),
-                                      child: Text(
-                                        'popular'.tr,
-                                        style: robotoMedium.copyWith(
-                                            fontSize: Dimensions.fontSizeLarge),
+                                  ),
+                                ])
+                              : const SizedBox(),
+                          SizedBox(height: searchController.historyList.isNotEmpty ? Dimensions.paddingSizeExtraSmall : 0),
+                          Wrap(
+                            children: searchController.historyList.map((historyData) {
+                              return Padding(
+                                padding: const EdgeInsets.only(right: Dimensions.paddingSizeSmall, bottom: Dimensions.paddingSizeSmall),
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeSmall),
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context).disabledColor.withOpacity(0.2),
+                                    borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
+                                    border: Border.all(color: Theme.of(context).disabledColor.withOpacity(0.6)),
+                                  ),
+                                  child: Row(mainAxisSize: MainAxisSize.min, children: [
+                                    InkWell(
+                                      onTap: () {
+                                        _searchController.text = historyData;
+                                        searchController.saveSearchHistory(historyData);
+                                        Get.find<RestaurantController>().getRestaurantSearchProductList(
+                                          _searchController.text.trim(),
+                                          widget.storeID,
+                                          1,
+                                          Get.find<RestaurantController>().searchType,
+                                        );
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeExtraSmall),
+                                        child: Text(
+                                          historyData,
+                                          style: robotoRegular.copyWith(color: Theme.of(context).textTheme.bodyMedium!.color!.withOpacity(0.5)),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: Dimensions.paddingSizeSmall),
+                                    InkWell(
+                                      onTap: () => searchController.removeHistory(searchController.historyList.indexOf(historyData)),
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeExtraSmall),
+                                        child: Icon(Icons.close, color: Theme.of(context).disabledColor, size: 20),
                                       ),
                                     )
-                                  : const SizedBox(),
-                              (restaurantController.categoryList != null)
-                                  ? restaurantController
-                                          .categoryList!.isNotEmpty
-                                      ? Wrap(
-                                          children: restaurantController
-                                              .categoryList!
-                                              .map((category) {
-                                            return category.name != 'All'
-                                                ? Padding(
-                                                    padding: const EdgeInsets
-                                                        .only(
-                                                        right: Dimensions
-                                                            .paddingSizeSmall,
-                                                        bottom: Dimensions
-                                                            .paddingSizeSmall),
-                                                    child: InkWell(
-                                                      onTap: () {
-                                                        _searchController.text =
-                                                            category.name!;
-                                                        searchController
-                                                            .saveSearchHistory(
-                                                                category.name!);
-                                                        Get.find<
-                                                                RestaurantController>()
-                                                            .getRestaurantSearchProductList(
-                                                          _searchController.text
-                                                              .trim(),
-                                                          widget.storeID,
-                                                          1,
-                                                          Get.find<
-                                                                  RestaurantController>()
-                                                              .searchType,
-                                                        );
-                                                      },
-                                                      child: Container(
-                                                        padding: const EdgeInsets
-                                                            .symmetric(
-                                                            horizontal: Dimensions
-                                                                .paddingSizeSmall,
-                                                            vertical: Dimensions
-                                                                .paddingSizeSmall),
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          color:
-                                                              Theme.of(context)
-                                                                  .cardColor,
-                                                          borderRadius: BorderRadius
-                                                              .circular(Dimensions
-                                                                  .radiusSmall),
-                                                          border: Border.all(
-                                                              color: Theme.of(
-                                                                      context)
-                                                                  .disabledColor
-                                                                  .withOpacity(
-                                                                      0.6)),
-                                                        ),
-                                                        child: Text(
-                                                          category.name!,
-                                                          style: robotoMedium
-                                                              .copyWith(
-                                                                  fontSize:
-                                                                      Dimensions
-                                                                          .fontSizeSmall),
-                                                          maxLines: 1,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                        ),
-                                                      ),
+                                  ]),
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                          SizedBox(height: searchController.historyList.isNotEmpty && restaurantController.categoryList != null ? Dimensions.paddingSizeLarge : 0),
+                          (restaurantController.categoryList != null)
+                              ? Padding(
+                                  padding: const EdgeInsets.only(bottom: Dimensions.paddingSizeDefault),
+                                  child: Text(
+                                    'popular'.tr,
+                                    style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge),
+                                  ),
+                                )
+                              : const SizedBox(),
+                          (restaurantController.categoryList != null)
+                              ? restaurantController.categoryList!.isNotEmpty
+                                  ? Wrap(
+                                      children: restaurantController.categoryList!.map((category) {
+                                        return category.name != 'All'
+                                            ? Padding(
+                                                padding: const EdgeInsets.only(right: Dimensions.paddingSizeSmall, bottom: Dimensions.paddingSizeSmall),
+                                                child: InkWell(
+                                                  onTap: () {
+                                                    _searchController.text = category.name!;
+                                                    searchController.saveSearchHistory(category.name!);
+                                                    Get.find<RestaurantController>().getRestaurantSearchProductList(
+                                                      _searchController.text.trim(),
+                                                      widget.storeID,
+                                                      1,
+                                                      Get.find<RestaurantController>().searchType,
+                                                    );
+                                                  },
+                                                  child: Container(
+                                                    padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeSmall, vertical: Dimensions.paddingSizeSmall),
+                                                    decoration: BoxDecoration(
+                                                      color: Theme.of(context).cardColor,
+                                                      borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
+                                                      border: Border.all(color: Theme.of(context).disabledColor.withOpacity(0.6)),
                                                     ),
-                                                  )
-                                                : const SizedBox();
-                                          }).toList(),
-                                        )
-                                      : Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 10),
-                                          child: Text(
-                                              'no_suggestions_available'.tr))
-                                  : const SizedBox(),
-                            ])
+                                                    child: Text(
+                                                      category.name!,
+                                                      style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall),
+                                                      maxLines: 1,
+                                                      overflow: TextOverflow.ellipsis,
+                                                    ),
+                                                  ),
+                                                ),
+                                              )
+                                            : const SizedBox();
+                                      }).toList(),
+                                    )
+                                  : Padding(padding: const EdgeInsets.only(top: 10), child: Text('no_suggestions_available'.tr))
+                              : const SizedBox(),
+                        ])
                       : PaginatedListViewWidget(
                           scrollController: _scrollController,
-                          onPaginate: (int? offset) => restaurantController
-                              .getRestaurantSearchProductList(
+                          onPaginate: (int? offset) => restaurantController.getRestaurantSearchProductList(
                             restaurantController.searchText,
                             widget.storeID,
                             offset!,
                             restaurantController.searchType,
                           ),
-                          totalSize: restaurantController
-                              .restaurantSearchProductModel?.totalSize,
-                          offset: restaurantController
-                                      .restaurantSearchProductModel !=
-                                  null
-                              ? restaurantController
-                                  .restaurantSearchProductModel!.offset
-                              : 1,
+                          totalSize: restaurantController.restaurantSearchProductModel?.totalSize,
+                          offset: restaurantController.restaurantSearchProductModel != null ? restaurantController.restaurantSearchProductModel!.offset : 1,
                           productView: ProductViewWidget(
                             isRestaurant: false,
                             restaurants: null,
-                            products: restaurantController
-                                .restaurantSearchProductModel?.products,
+                            products: restaurantController.restaurantSearchProductModel?.products,
                             inRestaurantPage: true,
                           ),
                         ),

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:stackfood_multivendor/features/cart/screens/cart_screen.dart';
 import 'package:stackfood_multivendor/features/category/controllers/category_controller.dart';
+import 'package:stackfood_multivendor/features/category/enums/page_type.dart';
 import 'package:stackfood_multivendor/features/category/screens/category_screen.dart';
 import 'package:stackfood_multivendor/features/checkout/widgets/congratulation_dialogue.dart';
 import 'package:stackfood_multivendor/features/dashboard/widgets/registration_success_bottom_sheet.dart';
@@ -76,7 +77,15 @@ class DashboardScreenState extends State<DashboardScreen> {
     //   const OrderScreen(),
     //   const MenuScreen()
     // ];
-    _screens = [const CategoryScreen(), const CartScreen(fromNav: true), const HomeScreen(), const NotificationScreen(), const MenuScreen()];
+    _screens = [
+      const CategoryScreen(
+        type: PageType.category,
+      ),
+      const CartScreen(fromNav: true),
+      const HomeScreen(),
+      const NotificationScreen(),
+      const MenuScreen()
+    ];
 
     Future.delayed(const Duration(seconds: 1), () {
       setState(() {});
@@ -169,7 +178,12 @@ class DashboardScreenState extends State<DashboardScreen> {
                         _setPage(2);
                         // Get.toNamed(RouteHelper.getCartRoute());
                       },
-                      child: CartWidget(color: _pageIndex == 2 ? Theme.of(context).cardColor : Theme.of(context).disabledColor, size: 30),
+                      // child: CartWidget(color: _pageIndex == 2 ? Theme.of(context).cardColor : Theme.of(context).disabledColor, size: 30),
+                      child: Icon(
+                        Icons.home,
+                        size: 30,
+                        color: _pageIndex == 2 ? Theme.of(context).cardColor : Theme.of(context).disabledColor,
+                      ),
                     );
         }),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -200,25 +214,13 @@ class DashboardScreenState extends State<DashboardScreen> {
                                 categoryController.categoryList![0].name!,
                               );
                               categoryController.setSelectedCategoryIndex(0);
-                              Get.toNamed(RouteHelper.getCategoryRoute());
+                              Get.toNamed(RouteHelper.getCategoryRoute('category'));
                             },
                           ),
-                          BottomNavItem(
-                              // title: 'cart',
-                              // iconData: Icons.favorite,
-                              iconData: Icons.shopping_cart,
-                              isSelected: _pageIndex == 1,
-                              onTap: () => _setPage(1)),
-                          Expanded(
+                          CartWidget(onTap: () => _setPage(1), color: _pageIndex == 1 ? Theme.of(context).primaryColor : Colors.grey, size: 30),
+                          const Expanded(
                             child: Center(
-                              child:
-                                  // Text(
-                                  //   'home page'.tr,
-                                  //   style: TextStyle(
-                                  //       // fontSize: 12,
-                                  //       color: _pageIndex == 2 ? Theme.of(context).primaryColor : Colors.grey),
-                                  // ),
-                                  SizedBox(),
+                              child: SizedBox(),
                             ),
                           ),
                           BottomNavItem(

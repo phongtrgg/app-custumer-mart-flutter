@@ -6,8 +6,14 @@ import 'package:get/get_connect/http/src/response/response.dart';
 
 abstract class CategoryRepositoryInterface implements RepositoryInterface {
   Future<List<CategoryModel>?> getSubCategoryList(String? parentID);
+
   Future<List<CategoryModel>?> getSubCategoryChildrenList(String? parentID);
+
   Future<ProductModel?> getCategoryProductList(String? categoryID, int offset, String type);
+
   Future<RestaurantModel?> getCategoryRestaurantList(String? categoryID, int offset, String type);
+
   Future<Response> getSearchData(String? query, String? categoryID, bool isRestaurant, String type);
+
+  Future<dynamic> getListServices({int? offset});
 }

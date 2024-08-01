@@ -54,6 +54,7 @@ class HomeScreen extends StatefulWidget {
   static Future<void> loadData(bool reload) async {
     Get.find<HomeController>().getBannerList(reload);
     Get.find<CategoryController>().getCategoryList(reload);
+    Get.find<CategoryController>().getServicesList(reload);
     Get.find<CuisineController>().getCuisineList();
     if (Get.find<SplashController>().configModel!.popularRestaurant == 1) {
       Get.find<RestaurantController>().getPopularRestaurantList(reload, 'all', false);
@@ -112,6 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
             onRefresh: () async {
               await Get.find<HomeController>().getBannerList(true);
               await Get.find<CategoryController>().getCategoryList(true);
+              await Get.find<CategoryController>().getServicesList(true);
               await Get.find<CuisineController>().getCuisineList();
               await Get.find<RestaurantController>().getPopularRestaurantList(true, 'all', false);
               await Get.find<CampaignController>().getItemCampaignList(true);

@@ -16,6 +16,7 @@ class AppConstants {
 
   static const String baseUrl = 'https://shopmart.tomiru.com';
   static const String categoryUri = '/api/v1/categories';
+  static const String servicesUri = '/api/v1/categories/services';
   static const String bannerUri = '/api/v1/banners';
   static const String restaurantProductUri = '/api/v1/products/latest';
   static const String popularProductUri = '/api/v1/products/popular';
@@ -148,8 +149,6 @@ class AppConstants {
   // countryService
   static const String countryServiceCode = 'country_service_code';
   static const String countryServiceID = 'country_service_name_code';
-  static const String cacheCountryServiceCode = 'cache_country_service_code';
-  static const String cacheCountryServiceID = 'cache_country_service_name_code';
 
   //
   static const String cartList = 'cart_list';
@@ -218,21 +217,9 @@ class AppConstants {
   static List<LanguageModel> languages = [
     LanguageModel(imageUrl: Images.vietnam, languageName: 'Việt Nam', countryCode: 'VN', languageCode: 'vi'),
     LanguageModel(imageUrl: Images.english, languageName: 'English', countryCode: 'US', languageCode: 'en'),
-    // LanguageModel(
-    //     imageUrl: Images.arabic,
-    //     languageName: 'عربى',
-    //     countryCode: 'SA',
-    //     languageCode: 'ar'),
-    // LanguageModel(
-    //     imageUrl: Images.spanish,
-    //     languageName: 'Spanish',
-    //     countryCode: 'ES',
-    //     languageCode: 'es'),
-    // LanguageModel(
-    //     imageUrl: Images.bengali,
-    //     languageName: 'Bengali',
-    //     countryCode: 'BN',
-    //     languageCode: 'bn'),
+    // LanguageModel(imageUrl: Images.arabic, languageName: 'عربى', countryCode: 'SA', languageCode: 'ar'),
+    // LanguageModel(imageUrl: Images.spanish, languageName: 'Spanish', countryCode: 'ES', languageCode: 'es'),
+    // LanguageModel(imageUrl: Images.bengali, languageName: 'Bengali', countryCode: 'BN', languageCode: 'bn'),
   ];
 
   static List<String> joinDropdown = ['join_us', 'become_a_vendor', 'become_a_delivery_man'];

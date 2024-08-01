@@ -7,19 +7,21 @@ class CartWidget extends StatelessWidget {
   final Color? color;
   final double size;
   final bool fromRestaurant;
-  const CartWidget(
-      {super.key,
-      required this.color,
-      required this.size,
-      this.fromRestaurant = false});
+  final Function? onTap;
+
+  const CartWidget({super.key, required this.color, required this.size, this.fromRestaurant = false, this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return Stack(clipBehavior: Clip.none, children: [
-      Icon(
-        Icons.home,
-        size: size,
-        color: color,
+      IconButton(
+        iconSize: 18,
+        icon: Icon(
+          Icons.shopping_cart,
+          size: size,
+          color: color,
+        ),
+        onPressed: onTap as void Function()?,
       ),
       GetBuilder<CartController>(builder: (cartController) {
         return cartController.cartList.isNotEmpty
@@ -32,22 +34,14 @@ class CartWidget extends StatelessWidget {
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: fromRestaurant
-                        ? Theme.of(context).cardColor
-                        : Theme.of(context).primaryColor,
-                    border: Border.all(
-                        width: size < 20 ? 0.7 : 1,
-                        color: fromRestaurant
-                            ? Theme.of(context).primaryColor
-                            : Theme.of(context).cardColor),
+                    color: fromRestaurant ? Theme.of(context).cardColor : Theme.of(context).primaryColor,
+                    border: Border.all(width: size < 20 ? 0.7 : 1, color: fromRestaurant ? Theme.of(context).primaryColor : Theme.of(context).cardColor),
                   ),
                   child: Text(
                     cartController.cartList.length.toString(),
                     style: robotoRegular.copyWith(
                       fontSize: size < 20 ? size / 3 : size / 3.8,
-                      color: fromRestaurant
-                          ? Theme.of(context).primaryColor
-                          : Theme.of(context).cardColor,
+                      color: fromRestaurant ? Theme.of(context).primaryColor : Theme.of(context).cardColor,
                     ),
                   ),
                 ),
