@@ -114,7 +114,8 @@ class CategoryController extends GetxController implements GetxService {
     _subCategoryList = await categoryServiceInterface.getSubCategoryList(categoryID);
     _subCategoryChildrenList = await categoryServiceInterface.getSubCategoryChildrenList(categoryID);
     if (_subCategoryList != null && _subCategoryChildrenList != null) {
-      getCategoryProductList(categoryID, 1, 'all', false);
+      // getCategoryProductList(categoryID, 1, 'all', false);
+      setSubCategoryIndex(1, categoryID);
     }
   }
 
@@ -122,14 +123,20 @@ class CategoryController extends GetxController implements GetxService {
     _subCategoryIndex = index;
   }
 
-  void setSubCategoryIndex(int index, String? categoryID) {
+  void setSubCategoryIndex(int index, String? categoryID) async {
     _subCategoryIndex = index;
-    if (_isRestaurant) {
-      getCategoryRestaurantList(_subCategoryIndex == 0 ? categoryID : _subCategoryList![index].id.toString(), 1, _type, true);
-    } else {
-      getCategoryProductList(_subCategoryIndex == 0 ? categoryID : _subCategoryList![index].id.toString(), 1, _type, true);
-    }
     clearSubCategoryChildrenList();
+    _subCategoryChildrenList = await categoryServiceInterface.getSubCategoryChildrenList(categoryID);
+    if (_subCategoryChildrenList!.length == 0) {
+      if (_isRestaurant) {
+        getCategoryRestaurantList(_subCategoryIndex == 0 ? categoryID : _subCategoryList![index].id.toString(), 1, _type, true);
+      } else {
+        getCategoryProductList(_subCategoryIndex == 0 ? categoryID : _subCategoryList![index].id.toString(), 1, _type, true);
+      }
+    } else {
+      getSubCategoryChildrenList(_subCategoryList![index].id.toString());
+    }
+
     update();
   }
 
@@ -209,11 +216,9 @@ class CategoryController extends GetxController implements GetxService {
           }
         } else {
           if (_isRestaurant) {
-            // _restResultText = query;
             _searchRestaurantList = [];
             _searchRestaurantList!.addAll(RestaurantModel.fromJson(response.body).restaurants!);
           } else {
-            // _foodResultText = query;
             _searchProductList = [];
             _searchProductList!.addAll(ProductModel.fromJson(response.body).products!);
           }
@@ -279,9 +284,14 @@ class CategoryController extends GetxController implements GetxService {
     _subCategoryChildrenIndex = 0;
     _subCategoryChildrenList = null;
     _categoryProductList = null;
-    _isRestaurant = false;
     _subCategoryChildrenList = await categoryServiceInterface.getSubCategoryChildrenList(categoryID);
-    if (_subCategoryChildrenList != null) {
+    if (_subCategoryChildrenList!.isNotEmpty && _subCategoryIndex != 0) {
+      getCategoryProductList(categoryID, 1, 'all', false);
+    }
+
+    if (_isRestaurant) {
+      getCategoryRestaurantList(categoryID, 1, 'all', false);
+    } else {
       getCategoryProductList(categoryID, 1, 'all', false);
     }
     update();

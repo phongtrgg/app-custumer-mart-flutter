@@ -10,10 +10,13 @@ import 'package:stackfood_multivendor/common/widgets/menu_drawer_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../util/app_constants.dart';
+
 class OrderScreen extends StatefulWidget {
   final String? status;
+  final String? titlePage;
 
-  const OrderScreen({super.key, this.status});
+  const OrderScreen({super.key, this.status, this.titlePage});
 
   @override
   OrderScreenState createState() => OrderScreenState();
@@ -42,18 +45,20 @@ class OrderScreenState extends State<OrderScreen> with TickerProviderStateMixin 
   @override
   Widget build(BuildContext context) {
     bool isLoggedIn = AuthHelper.isLoggedIn();
+    bool showTabs = widget.status == null;
+
     return Scaffold(
       appBar: CustomAppBarWidget(
-        title: widget.status != null ? widget.status!.tr : 'my_orders'.tr,
+        title: widget.status != null ? widget.titlePage!.tr : 'my_orders'.tr,
         isBackButtonExist: true,
         // isBackButtonExist: ResponsiveHelper.isDesktop(context)
       ),
       endDrawer: const MenuDrawerWidget(),
       endDrawerEnableOpenDragGesture: false,
       body: isLoggedIn
-          ? GetBuilder<OrderController>(
-              builder: (orderController) {
-                return Column(children: [
+          ? Column(
+              children: [
+                if (showTabs)
                   Container(
                     color: ResponsiveHelper.isDesktop(context) ? Theme.of(context).primaryColor.withOpacity(0.1) : Colors.transparent,
                     child: Column(
@@ -61,9 +66,10 @@ class OrderScreenState extends State<OrderScreen> with TickerProviderStateMixin 
                         ResponsiveHelper.isDesktop(context)
                             ? Center(
                                 child: Padding(
-                                padding: const EdgeInsets.only(top: Dimensions.paddingSizeSmall),
-                                child: widget.status != null ? Text(widget.status!.tr, style: robotoMedium) : Text('my_orders'.tr, style: robotoMedium),
-                              ))
+                                  padding: const EdgeInsets.only(top: Dimensions.paddingSizeSmall),
+                                  child: Text(widget.titlePage != null ? widget.titlePage!.tr : 'my_orders'.tr, style: robotoMedium),
+                                ),
+                              )
                             : const SizedBox(),
                         Center(
                           child: SizedBox(
@@ -82,10 +88,9 @@ class OrderScreenState extends State<OrderScreen> with TickerProviderStateMixin 
                                   unselectedLabelStyle: robotoRegular.copyWith(color: Theme.of(context).disabledColor, fontSize: Dimensions.fontSizeSmall),
                                   labelStyle: robotoBold.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).primaryColor),
                                   tabs: [
-                                    widget.status != null ? Tab(text: widget.status?.tr) : Tab(text: 'running'.tr),
-                                    widget.status != null ? SizedBox() : Tab(text: 'subscription'.tr),
-                                    widget.status != null ? SizedBox() : Tab(text: 'history'.tr),
-                                    // order_history
+                                    Tab(text: 'running'.tr),
+                                    Tab(text: 'subscription'.tr),
+                                    Tab(text: 'history'.tr),
                                   ],
                                 ),
                               ),
@@ -95,24 +100,29 @@ class OrderScreenState extends State<OrderScreen> with TickerProviderStateMixin 
                       ],
                     ),
                   ),
+                if (showTabs)
                   Expanded(
-                      child: TabBarView(
-                    controller: _tabController,
-                    children: [
-                      widget.status != 'order_history'
+                    child: TabBarView(
+                      controller: _tabController,
+                      children: [
+                        OrderViewWidget(isRunning: true),
+                        OrderViewWidget(isRunning: false, isSubscription: true),
+                        OrderViewWidget(isRunning: false),
+                      ],
+                    ),
+                  )
+                else
+                  Expanded(
+                      child: widget.status == AppConstants.delivered || widget.status == AppConstants.cancelled || widget.status == AppConstants.refundRequested
                           ? OrderViewWidget(
-                              isRunning: true,
-                              status: widget.status != null ? widget.status : null,
+                              isRunning: false,
+                              status: widget.status,
                             )
-                          : widget.status == 'order_history'
-                              ? OrderViewWidget(isRunning: false)
-                              : SizedBox(),
-                      OrderViewWidget(isRunning: false, isSubscription: true),
-                      OrderViewWidget(isRunning: false),
-                    ],
-                  )),
-                ]);
-              },
+                          : OrderViewWidget(
+                              isRunning: true,
+                              status: widget.status,
+                            )),
+              ],
             )
           : const GuestTrackOrderInputViewWidget(),
     );

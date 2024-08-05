@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:stackfood_multivendor/features/order/controllers/order_controller.dart';
 import 'package:stackfood_multivendor/features/order/screens/order_details_screen.dart';
 import 'package:stackfood_multivendor/features/order/widgets/order_shimmer_widget.dart';
@@ -14,6 +15,8 @@ import 'package:stackfood_multivendor/common/widgets/footer_view_widget.dart';
 import 'package:stackfood_multivendor/common/widgets/no_data_screen_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../../../util/app_constants.dart';
 
 class OrderViewWidget extends StatelessWidget {
   final bool isRunning;
@@ -38,7 +41,6 @@ class OrderViewWidget extends StatelessWidget {
         bool paginate = false;
         int pageSize = 1;
         int offset = 1;
-
         // Lọc danh sách đơn hàng dựa trên tham số status
         if (orderController.runningOrderList != null && orderController.historyOrderList != null) {
           orderList = isSubscription
@@ -46,11 +48,9 @@ class OrderViewWidget extends StatelessWidget {
               : isRunning
                   ? orderController.runningOrderList
                   : orderController.historyOrderList;
-
           if (status != null) {
             orderList = orderList!.where((order) => order.orderStatus == status).toList();
           }
-
           paginate = isSubscription
               ? orderController.runningSubscriptionPaginate
               : isRunning
@@ -172,18 +172,18 @@ class OrderViewWidget extends StatelessWidget {
                                                         margin: EdgeInsets.only(bottom: ResponsiveHelper.isDesktop(context) ? Dimensions.paddingSizeOverLarge : Dimensions.paddingSizeDefault),
                                                         decoration: BoxDecoration(
                                                           borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-                                                          color: orderList[index].orderStatus == 'pending' || orderList[index].orderStatus == 'processing'
+                                                          color: orderList[index].orderStatus == AppConstants.pending || orderList[index].orderStatus == AppConstants.processing
                                                               ? Colors.blue.withOpacity(0.15)
-                                                              : orderList[index].orderStatus == 'accepted' || orderList[index].orderStatus == 'confirmed'
+                                                              : orderList[index].orderStatus == AppConstants.accepted || orderList[index].orderStatus == AppConstants.confirmed
                                                                   ? Colors.green.withOpacity(0.15)
                                                                   : Theme.of(context).primaryColor.withOpacity(0.15),
                                                         ),
                                                         child: Text(orderList[index].orderStatus!.tr,
                                                             style: robotoMedium.copyWith(
                                                               fontSize: Dimensions.fontSizeExtraSmall,
-                                                              color: orderList[index].orderStatus == 'pending' || orderList[index].orderStatus == 'processing'
+                                                              color: orderList[index].orderStatus == AppConstants.pending || orderList[index].orderStatus == AppConstants.processing
                                                                   ? Colors.blue
-                                                                  : orderList[index].orderStatus == 'accepted' || orderList[index].orderStatus == 'confirmed'
+                                                                  : orderList[index].orderStatus == AppConstants.accepted || orderList[index].orderStatus == AppConstants.confirmed
                                                                       ? Colors.green
                                                                       : Theme.of(context).primaryColor,
                                                             )),
@@ -215,12 +215,12 @@ class OrderViewWidget extends StatelessWidget {
                                                         margin: const EdgeInsets.only(bottom: Dimensions.paddingSizeOverLarge),
                                                         decoration: BoxDecoration(
                                                           borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-                                                          color: orderList[index].orderStatus == 'delivered' ? Colors.green.withOpacity(0.15) : Colors.red.withOpacity(0.15),
+                                                          color: orderList[index].orderStatus == AppConstants.delivered ? Colors.green.withOpacity(0.15) : Colors.red.withOpacity(0.15),
                                                         ),
                                                         child: Text(orderList[index].orderStatus!.tr,
                                                             style: robotoMedium.copyWith(
                                                               fontSize: Dimensions.fontSizeExtraSmall,
-                                                              color: orderList[index].orderStatus == 'delivered' ? Colors.green : Colors.red,
+                                                              color: orderList[index].orderStatus == AppConstants.delivered ? Colors.green : Colors.red,
                                                             )),
                                                       ),
                                                       Text(

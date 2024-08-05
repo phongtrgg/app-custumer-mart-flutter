@@ -229,45 +229,47 @@ class CategoryProductScreenState extends State<CategoryProductScreen> with Ticke
                               physics: const BouncingScrollPhysics(),
                               itemCount: catController.subCategoryList!.length,
                               itemBuilder: (context, index) {
-                                return InkWell(
-                                  onTap: () {
-                                    Get.find<CategoryController>().setSubCategoryIndex(
-                                      index,
-                                      Get.find<CategoryController>().categoryIndex.toString(),
-                                    );
-                                    Get.find<CategoryController>().getSubCategoryChildrenList(
-                                      Get.find<CategoryController>().subCategoryList![index].id.toString(),
-                                    );
-                                  },
-                                  child: Container(
-                                    width: 80,
-                                    height: 80,
-                                    decoration: BoxDecoration(color: index == catController.subCategoryIndex ? Theme.of(context).primaryColor.withOpacity(0.1) : Theme.of(context).cardColor),
-                                    alignment: Alignment.center,
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        ClipRRect(
-                                          borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-                                          child: CustomImageWidget(
-                                            height: 40,
-                                            width: 40,
-                                            fit: BoxFit.cover,
-                                            image: '${catController.subCategoryList![index].image}',
+                                return index != 0
+                                    ? InkWell(
+                                        onTap: () {
+                                          catController.setSubCategoryIndex(
+                                            index,
+                                            catController.categoryIndex.toString(),
+                                          );
+                                          // catController.getSubCategoryChildrenList(
+                                          //   catController.subCategoryList![index].id.toString(),
+                                          // );
+                                        },
+                                        child: Container(
+                                          width: 80,
+                                          height: 80,
+                                          decoration: BoxDecoration(color: index == catController.subCategoryIndex ? Theme.of(context).primaryColor.withOpacity(0.1) : Theme.of(context).cardColor),
+                                          alignment: Alignment.center,
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              ClipRRect(
+                                                borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
+                                                child: CustomImageWidget(
+                                                  height: 40,
+                                                  width: 40,
+                                                  fit: BoxFit.cover,
+                                                  image: '${catController.subCategoryList![index].image}',
+                                                ),
+                                              ),
+                                              const SizedBox(height: Dimensions.paddingSizeExtraSmall),
+                                              Text(
+                                                catController.subCategoryList![index].name!,
+                                                textAlign: TextAlign.center,
+                                                style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeExtraSmall),
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                        const SizedBox(height: Dimensions.paddingSizeExtraSmall),
-                                        Text(
-                                          catController.subCategoryList![index].name!,
-                                          textAlign: TextAlign.center,
-                                          style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeExtraSmall),
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                );
+                                      )
+                                    : SizedBox();
                               },
                             ),
                           );

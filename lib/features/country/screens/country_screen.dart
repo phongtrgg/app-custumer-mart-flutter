@@ -80,7 +80,7 @@ class _CountryScreenState extends State<CountryScreen> {
         return FloatingActionButton(
           onPressed: isButtonEnabled
               ? () {
-                  countryController.getCountry();
+                  // countryController.getCountry();
                   countryController.setCountry();
                   Get.offNamed(RouteHelper.getOnBoardingRoute());
                 }

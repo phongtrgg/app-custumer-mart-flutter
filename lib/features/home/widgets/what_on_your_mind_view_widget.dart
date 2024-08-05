@@ -254,10 +254,25 @@ class _WhatOnYourMindViewWidgetState extends State<WhatOnYourMindViewWidget> {
                             ),
                             child: CustomInkWellWidget(
                               onTap: () => {
-                                categoryController.getSubCategoryList(categoryController.categoryList![index].id.toString()),
-                                categoryController.setCategoryIndexAndTitle(categoryController.categoryList![index].id!, categoryController.categoryList![index].name!),
-                                categoryController.setSelectedCategoryIndex(index),
-                                Get.toNamed(RouteHelper.getCategoryRoute('category')),
+                                // categoryController.getSubCategoryList(categoryController.categoryList![index].id.toString()),
+                                // categoryController.setCategoryIndexAndTitle(categoryController.categoryList![index].id!, categoryController.categoryList![index].name!),
+                                // categoryController.setSelectedCategoryIndex(index),
+                                // Get.toNamed(RouteHelper.getCategoryRoute('category')),
+                                categoryController.getSubCategoryList(
+                                  categoryController.categoryList![index].id.toString(),
+                                ),
+                                categoryController.setCategoryIndexAndTitle(
+                                  categoryController.categoryList![index].id!,
+                                  categoryController.categoryList![index].name!,
+                                ),
+
+                                Get.toNamed(
+                                  RouteHelper.getCategoryProductRoute(
+                                    categoryController.categoryIndex,
+                                    categoryController.categoryTitle,
+                                    index,
+                                  ),
+                                ),
                               },
                               radius: Dimensions.radiusSmall,
                               child: Column(

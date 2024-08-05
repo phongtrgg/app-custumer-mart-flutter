@@ -5,7 +5,6 @@ import 'package:stackfood_multivendor/features/home/controllers/home_controller.
 import 'package:stackfood_multivendor/features/home/screens/web_home_screen.dart';
 import 'package:stackfood_multivendor/features/home/widgets/all_restaurant_filter_widget.dart';
 import 'package:stackfood_multivendor/features/home/widgets/all_restaurants_widget.dart';
-import 'package:stackfood_multivendor/features/home/widgets/bad_weather_widget.dart';
 import 'package:stackfood_multivendor/features/home/widgets/banner_view_widget.dart';
 import 'package:stackfood_multivendor/features/home/widgets/best_review_item_view_widget.dart';
 import 'package:stackfood_multivendor/features/home/widgets/cuisine_view_widget.dart';

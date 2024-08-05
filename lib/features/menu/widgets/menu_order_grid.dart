@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:stackfood_multivendor/util/app_constants.dart';
 import 'package:stackfood_multivendor/util/dimensions.dart';
 import '../../../util/images.dart';
 import '../../order/screens/order_screen.dart';
@@ -11,12 +12,12 @@ class MenuOrderGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<Map<String, String>> items = [
-      {'image': Images.trackOrderPlace, 'title': 'new_order', 'status': 'pending'},
-      {'image': Images.trackOrderAccept, 'title': 'processing', 'status': 'processing'},
-      {'image': Images.trackOrderPreparing, 'title': 'Pending delivery', 'status': 'delivered'},
-      {'image': Images.trackOrderDelivered, 'title': 'Successful order', 'status': 'order_history'},
-      {'image': Images.warning, 'title': 'order_cancelled', 'status': 'order_cancelled'},
-      {'image': Images.digitalPayment, 'title': 'refunded', 'status': 'refunded'},
+      {'image': Images.trackOrderPlace, 'title': 'new_order', 'status': AppConstants.pending},
+      {'image': Images.trackOrderAccept, 'title': 'processing', 'status': AppConstants.accepted},
+      {'image': Images.trackOrderPreparing, 'title': 'Pending delivery', 'status': AppConstants.confirmed},
+      {'image': Images.trackOrderDelivered, 'title': 'Successful order', 'status': AppConstants.delivered},
+      {'image': Images.warning, 'title': 'order_cancelled', 'status': AppConstants.cancelled},
+      {'image': Images.digitalPayment, 'title': 'refunded', 'status': AppConstants.refundRequested},
     ];
 
     return GetBuilder<ThemeController>(
@@ -38,6 +39,7 @@ class MenuOrderGrid extends StatelessWidget {
               onTap: () {
                 Get.to(() => OrderScreen(
                       status: item['status'],
+                      titlePage: item['title'],
                     ));
               },
               child: Column(

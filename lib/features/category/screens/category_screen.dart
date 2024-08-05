@@ -141,23 +141,6 @@ class _CategoryScreenState extends State<CategoryScreen> {
                   color: Colors.white,
                   size: 35,
                 ),
-                //     Column(
-                //   mainAxisAlignment: MainAxisAlignment.center,
-                //   children: [
-                //     const Icon(
-                //       Icons.home,
-                //       color: Colors.white,
-                //       size: 25,
-                //     ),
-                //     Text(
-                //       'home page'.tr,
-                //       style: TextStyle(
-                //         color: Colors.white,
-                //         fontSize: Dimensions.fontSizeExtraSmall,
-                //       ),
-                //     ),
-                //   ],
-                // ),
               ),
             ),
             backgroundColor: Theme.of(context).primaryColor,
@@ -305,161 +288,90 @@ class _CategoryScreenState extends State<CategoryScreen> {
               child: SingleChildScrollView(
                 child: GetBuilder<CategoryController>(
                   builder: (catController) {
-                    return widget.type == PageType.category
-                        ? catController.categoryList != null
-                            ? catController.subCategoryList != null
-                                ? GridView.builder(
-                                    physics: const NeverScrollableScrollPhysics(),
-                                    shrinkWrap: true,
-                                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: ResponsiveHelper.isDesktop(context)
-                                          ? 6
-                                          : ResponsiveHelper.isTab(context)
-                                              ? 3
-                                              : 2,
-                                      childAspectRatio: (1 / 1),
-                                      mainAxisSpacing: Dimensions.paddingSizeSmall,
-                                      crossAxisSpacing: Dimensions.paddingSizeSmall,
-                                    ),
-                                    padding: const EdgeInsets.all(Dimensions.paddingSizeSmall),
-                                    itemCount: catController.subCategoryList!.length,
-                                    itemBuilder: (context, index) {
-                                      var subCategory = catController.subCategoryList![index];
-                                      return InkWell(
-                                        onTap: () => {
-                                          Get.find<CategoryController>().setSubCategoryIndex(
-                                            index,
-                                            Get.find<CategoryController>().categoryIndex.toString(),
-                                          ),
-                                          Get.find<CategoryController>().getSubCategoryChildrenList(
-                                            Get.find<CategoryController>().subCategoryList![index].id.toString(),
-                                          ),
-                                          Get.toNamed(
-                                            RouteHelper.getCategoryProductRoute(
-                                              Get.find<CategoryController>().categoryIndex,
-                                              Get.find<CategoryController>().categoryTitle,
-                                              index,
-                                            ),
-                                          ),
-                                        },
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            color: Theme.of(context).cardColor,
-                                            borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: Colors.grey[Get.isDarkMode ? 800 : 200]!,
-                                                blurRadius: 5,
-                                                spreadRadius: 1,
-                                              )
-                                            ],
-                                          ),
-                                          alignment: Alignment.center,
-                                          child: Column(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            children: [
-                                              ClipRRect(
-                                                borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-                                                child: CustomImageWidget(
-                                                  height: 50,
-                                                  width: 50,
-                                                  fit: BoxFit.cover,
-                                                  image: '${subCategory.image}',
-                                                ),
-                                              ),
-                                              const SizedBox(height: Dimensions.paddingSizeExtraSmall),
-                                              Text(
-                                                subCategory.name!,
-                                                textAlign: TextAlign.center,
-                                                style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall),
-                                                maxLines: 2,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      );
-                                    },
+                    if (catController.categoryList == null || catController.subCategoryList == null) {
+                      return Container(
+                        width: double.infinity,
+                        height: MediaQuery.of(context).size.height * 0.8,
+                        alignment: Alignment.center,
+                        child: const CircularProgressIndicator(),
+                      );
+                    } else if (catController.subCategoryList!.isEmpty) {
+                      return NoDataScreen(title: 'no_category_found'.tr);
+                    } else {
+                      return GridView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: ResponsiveHelper.isDesktop(context)
+                              ? 6
+                              : ResponsiveHelper.isTab(context)
+                                  ? 3
+                                  : 2,
+                          childAspectRatio: (1 / 1),
+                          mainAxisSpacing: Dimensions.paddingSizeSmall,
+                          crossAxisSpacing: Dimensions.paddingSizeSmall,
+                        ),
+                        padding: const EdgeInsets.all(Dimensions.paddingSizeSmall),
+                        itemCount: (catController.subCategoryList!.length - 1),
+                        itemBuilder: (context, index) {
+                          var subCategory = catController.subCategoryList![index + 1];
+                          return InkWell(
+                            onTap: () => {
+                              Get.find<CategoryController>().setSubCategoryIndex(
+                                index,
+                                Get.find<CategoryController>().categoryIndex.toString(),
+                              ),
+                              Get.find<CategoryController>().getSubCategoryChildrenList(
+                                Get.find<CategoryController>().subCategoryList![index].id.toString(),
+                              ),
+                              Get.toNamed(
+                                RouteHelper.getCategoryProductRoute(
+                                  Get.find<CategoryController>().categoryIndex,
+                                  Get.find<CategoryController>().categoryTitle,
+                                  index,
+                                ),
+                              ),
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).cardColor,
+                                borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey[Get.isDarkMode ? 800 : 200]!,
+                                    blurRadius: 5,
+                                    spreadRadius: 1,
                                   )
-                                : NoDataScreen(title: 'no_category_found'.tr)
-                            : const SizedBox()
-                        : catController.servicesList != null
-                            ? catController.subCategoryList != null
-                                ? GridView.builder(
-                                    physics: const NeverScrollableScrollPhysics(),
-                                    shrinkWrap: true,
-                                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: ResponsiveHelper.isDesktop(context)
-                                          ? 6
-                                          : ResponsiveHelper.isTab(context)
-                                              ? 3
-                                              : 2,
-                                      childAspectRatio: (1 / 1),
-                                      mainAxisSpacing: Dimensions.paddingSizeSmall,
-                                      crossAxisSpacing: Dimensions.paddingSizeSmall,
+                                ],
+                              ),
+                              alignment: Alignment.center,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
+                                    child: CustomImageWidget(
+                                      height: 50,
+                                      width: 50,
+                                      fit: BoxFit.cover,
+                                      image: '${subCategory.image}',
                                     ),
-                                    padding: const EdgeInsets.all(Dimensions.paddingSizeSmall),
-                                    itemCount: catController.subCategoryList!.length,
-                                    itemBuilder: (context, index) {
-                                      var subCategory = catController.subCategoryList![index];
-                                      return InkWell(
-                                        onTap: () => {
-                                          Get.find<CategoryController>().setSubCategoryIndex(
-                                            index,
-                                            Get.find<CategoryController>().categoryIndex.toString(),
-                                          ),
-                                          Get.find<CategoryController>().getSubCategoryChildrenList(
-                                            Get.find<CategoryController>().subCategoryList![index].id.toString(),
-                                          ),
-                                          Get.toNamed(
-                                            RouteHelper.getCategoryProductRoute(
-                                              Get.find<CategoryController>().categoryIndex,
-                                              Get.find<CategoryController>().categoryTitle,
-                                              index,
-                                            ),
-                                          ),
-                                        },
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            color: Theme.of(context).cardColor,
-                                            borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: Colors.grey[Get.isDarkMode ? 800 : 200]!,
-                                                blurRadius: 5,
-                                                spreadRadius: 1,
-                                              )
-                                            ],
-                                          ),
-                                          alignment: Alignment.center,
-                                          child: Column(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            children: [
-                                              ClipRRect(
-                                                borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-                                                child: CustomImageWidget(
-                                                  height: 50,
-                                                  width: 50,
-                                                  fit: BoxFit.cover,
-                                                  image: '${subCategory.image}',
-                                                ),
-                                              ),
-                                              const SizedBox(height: Dimensions.paddingSizeExtraSmall),
-                                              Text(
-                                                subCategory.name!,
-                                                textAlign: TextAlign.center,
-                                                style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall),
-                                                maxLines: 2,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  )
-                                : NoDataScreen(title: 'no_category_found'.tr)
-                            : const SizedBox();
+                                  ),
+                                  const SizedBox(height: Dimensions.paddingSizeExtraSmall),
+                                  Text(
+                                    subCategory.name!,
+                                    textAlign: TextAlign.center,
+                                    style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    }
                   },
                 ),
               ),
